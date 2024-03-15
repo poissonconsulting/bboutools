@@ -2,3 +2,14 @@
 .Rhistory
 .RData
 .Ruserdata
+.DS_Store
+
+inst/doc
+
+docs
+notes.md
+annual_growth.csv
+annual_recruitment.csv
+annual_survival.csv
+data_survival.csv
+data_recruitment.csv
