@@ -8,7 +8,8 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/poissonconsulting/bboutools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/poissonconsulting/bboutools/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/poissonconsulting/bboutools/branch/main/graph/badge.svg?token=dej0VsMNHf)](https://codecov.io/gh/poissonconsulting/bboutools)
+[![Codecov test
+coverage](https://codecov.io/gh/poissonconsulting/bboutools/branch/main/graph/badge.svg)](https://app.codecov.io/gh/poissonconsulting/bboutools?branch=main)
 <!-- badges: end -->
 
 `bboutools` is an R package to estimate the annual survival, recruitment
@@ -34,7 +35,6 @@ format.
 ``` r
 library(tibble) # for printing data frames
 library(ggplot2) # for plotting
-#> Warning: package 'ggplot2' was built under R version 4.3.1
 
 library(bboudata) # for boreal caribou datasets
 library(bboutools)
@@ -58,11 +58,42 @@ using `bb_fit_survival()`. To achieve convergence increase `nthin`.
 ``` r
 set.seed(99)
 surv_fit <- bb_fit_survival(surv_data, nthin = 1, quiet = TRUE)
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
 glance(surv_fit)
 #> # A tibble: 1 × 8
 #>       n     K nchains niters nthin   ess  rhat converged
 #>   <int> <int>   <int>  <int> <dbl> <int> <dbl> <lgl>    
-#> 1   363     5       3   1000     1    39  1.06 FALSE
+#> 1   363     5       3   1000     1    39  1.90 FALSE
 ```
 
 Predictions can then be generated using `bb_predict_survival()`.
@@ -70,20 +101,20 @@ Predictions can then be generated using `bb_predict_survival()`.
 ``` r
 surv_pred <- bb_predict_survival(surv_fit)
 surv_pred
-#> # A tibble: 31 × 6
-#>    PopulationName  Year Month estimate lower upper
-#>    <chr>          <int> <int>    <dbl> <dbl> <dbl>
-#>  1 A               1986     1    0.888 0.731 0.98 
-#>  2 A               1987     1    0.824 0.409 0.94 
-#>  3 A               1988     1    0.879 0.687 0.971
-#>  4 A               1989     1    0.874 0.652 0.962
-#>  5 A               1990     1    0.883 0.731 0.976
-#>  6 A               1991     1    0.867 0.681 0.952
-#>  7 A               1992     1    0.895 0.767 0.979
-#>  8 A               1993     1    0.883 0.752 0.965
-#>  9 A               1994     1    0.808 0.538 0.906
-#> 10 A               1995     1    0.865 0.7   0.953
-#> # ℹ 21 more rows
+#> # A tibble: 32 × 6
+#>    PopulationName CaribouYear Month estimate lower upper
+#>    <chr>                <int> <int>    <dbl> <dbl> <dbl>
+#>  1 A                     1985    NA    0.866 0.763 0.931
+#>  2 A                     1986    NA    0.872 0.802 0.941
+#>  3 A                     1987    NA    0.851 0.684 0.904
+#>  4 A                     1988    NA    0.875 0.816 0.944
+#>  5 A                     1989    NA    0.867 0.785 0.927
+#>  6 A                     1990    NA    0.868 0.798 0.93 
+#>  7 A                     1991    NA    0.87  0.816 0.93 
+#>  8 A                     1992    NA    0.879 0.824 0.941
+#>  9 A                     1993    NA    0.867 0.803 0.919
+#> 10 A                     1994    NA    0.853 0.765 0.899
+#> # ℹ 22 more rows
 ```
 
 And plotted using `bb_plot_year()`
@@ -122,6 +153,73 @@ head(recruit_data)
 
 set.seed(99)
 recruit_fit <- bb_fit_recruitment(recruit_data, nthin = 1, quiet = TRUE)
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
+
+#> Warning in argList$model: partial match of 'model' to 'modelValues'
 
 bb_plot_year_recruitment(recruit_fit)
 ```
