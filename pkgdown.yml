@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   bbmethods: bbmethods.html
   bbtutorial: bbtutorial.html
-last_built: 2024-03-15T17:07Z
+last_built: 2024-03-15T17:24Z
 urls:
   reference: https://poissonconsulting.github.io/bboutools/reference
   article: https://poissonconsulting.github.io/bboutools/articles
