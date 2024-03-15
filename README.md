@@ -58,37 +58,6 @@ using `bb_fit_survival()`. To achieve convergence increase `nthin`.
 ``` r
 set.seed(99)
 surv_fit <- bb_fit_survival(surv_data, nthin = 1, quiet = TRUE)
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
 glance(surv_fit)
 #> # A tibble: 1 × 8
 #>       n     K nchains niters nthin   ess  rhat converged
@@ -153,73 +122,6 @@ head(recruit_data)
 
 set.seed(99)
 recruit_fit <- bb_fit_recruitment(recruit_data, nthin = 1, quiet = TRUE)
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
-
-#> Warning in argList$model: partial match of 'model' to 'modelValues'
 
 bb_plot_year_recruitment(recruit_fit)
 ```
