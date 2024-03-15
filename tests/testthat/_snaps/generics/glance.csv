@@ -1,0 +1,2 @@
+n,K,nchains,niters,nthin,ess,rhat,converged
+363,5,3,1000,10,111,1.015,FALSE
