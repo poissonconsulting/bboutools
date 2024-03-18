@@ -28,13 +28,16 @@ jobs:
     steps:
       - if: matrix.os == 'macos-latest'
         run: echo "this is a mac"
+        shell: bash
         
       - name: windows
         if: matrix.os == 'windows-latest'
         run: echo "this is a windows"
+        shell: bash
       
       - name: windows2
         if: runner.os == 'Windows'
         run: echo "this is a windows"
+        shell: bash
       
       - uses: actions/checkout@v4
