@@ -89,6 +89,7 @@ test_that("year trend only works", {
 test_that("can include_uncertain_morts", {
   # produces NaN se for some terms
   skip_on_ci()
+  set.seed(101)
   x <- bboudata::bbousurv_a
   x$MortalitiesUncertain <- pmin(x$StartTotal - x$MortalitiesCertain, rbinom(nrow(x), prob = 0.1, size = 1))
   fit <- bb_fit_survival_ml(
