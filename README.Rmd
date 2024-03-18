@@ -56,7 +56,7 @@ To achieve convergence increase `nthin`.
 
 ```{r, message=FALSE}
 set.seed(99)
-surv_fit <- bb_fit_survival(surv_data, nthin = 1, quiet = TRUE)
+surv_fit <- bb_fit_survival(surv_data, quiet = TRUE)
 glance(surv_fit)
 ```
 
@@ -77,6 +77,8 @@ The survival in each month can be plotted using `bb_plot_month()`
 bb_plot_month_survival(surv_fit)
 ```
 
+These estimates represent the annual survival rate if that month lasted the whole year.  
+
 ### Recruitment
 
 The equivalent functions for recruitment data are
@@ -86,7 +88,7 @@ recruit_data <- bboudata::bbourecruit_a
 head(recruit_data)
 
 set.seed(99)
-recruit_fit <- bb_fit_recruitment(recruit_data, nthin = 1, quiet = TRUE)
+recruit_fit <- bb_fit_recruitment(recruit_data, quiet = TRUE)
 
 bb_plot_year_recruitment(recruit_fit)
 ```
@@ -100,9 +102,17 @@ lambda <- bb_predict_growth(surv_fit, recruit_fit)
 bb_plot_year_growth(lambda)
 ```
 
+`bb_predict_population_change()` calculates the population change (%) with uncertainty as the cumulative product of population growth. 
+
+```{r}
+change <- bb_predict_population_change(surv_fit, recruit_fit)
+bb_plot_year_population_change(change)
+```
+
 ## Information
 
-Additional information is available from the [`bboutools` website](https://poissonconsulting.github.io/bboutools/).
+Additional information is available from the [`bboutools` website](https://poissonconsulting.github.io/bboutools/). 
+The ['Getting Started'](https://poissonconsulting.github.io/bboutools/articles/bbtutorial.html) and the ['Analytic Methods'](https://poissonconsulting.github.io/bboutools/articles/bbmethods.html) vignettes may be particularly useful. 
 
 There is also a [user-friendly graphical interface](https://poissonconsulting.shinyapps.io/bboushiny/), called [`bboushiny`](https://github.com/poissonconsulting/bboushiny), for non-R users.
 

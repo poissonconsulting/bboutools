@@ -57,12 +57,12 @@ using `bb_fit_survival()`. To achieve convergence increase `nthin`.
 
 ``` r
 set.seed(99)
-surv_fit <- bb_fit_survival(surv_data, nthin = 1, quiet = TRUE)
+surv_fit <- bb_fit_survival(surv_data, quiet = TRUE)
 glance(surv_fit)
 #> # A tibble: 1 × 8
 #>       n     K nchains niters nthin   ess  rhat converged
 #>   <int> <int>   <int>  <int> <dbl> <int> <dbl> <lgl>    
-#> 1   363     5       3   1000     1    39  1.90 FALSE
+#> 1   363     5       3   1000    10   120  1.03 FALSE
 ```
 
 Predictions can then be generated using `bb_predict_survival()`.
@@ -73,16 +73,16 @@ surv_pred
 #> # A tibble: 32 × 6
 #>    PopulationName CaribouYear Month estimate lower upper
 #>    <chr>                <int> <int>    <dbl> <dbl> <dbl>
-#>  1 A                     1985    NA    0.866 0.763 0.931
-#>  2 A                     1986    NA    0.872 0.802 0.941
-#>  3 A                     1987    NA    0.851 0.684 0.904
-#>  4 A                     1988    NA    0.875 0.816 0.944
-#>  5 A                     1989    NA    0.867 0.785 0.927
-#>  6 A                     1990    NA    0.868 0.798 0.93 
-#>  7 A                     1991    NA    0.87  0.816 0.93 
-#>  8 A                     1992    NA    0.879 0.824 0.941
-#>  9 A                     1993    NA    0.867 0.803 0.919
-#> 10 A                     1994    NA    0.853 0.765 0.899
+#>  1 A                     1985    NA    0.871 0.756 0.945
+#>  2 A                     1986    NA    0.88  0.788 0.954
+#>  3 A                     1987    NA    0.838 0.647 0.907
+#>  4 A                     1988    NA    0.886 0.808 0.956
+#>  5 A                     1989    NA    0.873 0.788 0.94 
+#>  6 A                     1990    NA    0.871 0.786 0.934
+#>  7 A                     1991    NA    0.877 0.803 0.935
+#>  8 A                     1992    NA    0.888 0.821 0.953
+#>  9 A                     1993    NA    0.869 0.794 0.924
+#> 10 A                     1994    NA    0.848 0.75  0.904
 #> # ℹ 22 more rows
 ```
 
@@ -103,6 +103,9 @@ bb_plot_month_survival(surv_fit)
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 
+These estimates represent the annual survival rate if that month lasted
+the whole year.
+
 ### Recruitment
 
 The equivalent functions for recruitment data are
@@ -121,7 +124,7 @@ head(recruit_data)
 #> 6 A               1990     3     9     4     1             0         0      0
 
 set.seed(99)
-recruit_fit <- bb_fit_recruitment(recruit_data, nthin = 1, quiet = TRUE)
+recruit_fit <- bb_fit_recruitment(recruit_data, quiet = TRUE)
 
 bb_plot_year_recruitment(recruit_fit)
 ```
@@ -140,10 +143,24 @@ bb_plot_year_growth(lambda)
 
 ![](man/figures/README-unnamed-chunk-8-1.png)<!-- -->
 
+`bb_predict_population_change()` calculates the population change (%)
+with uncertainty as the cumulative product of population growth.
+
+``` r
+change <- bb_predict_population_change(surv_fit, recruit_fit)
+bb_plot_year_population_change(change)
+```
+
+![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
+
 ## Information
 
 Additional information is available from the [`bboutools`
-website](https://poissonconsulting.github.io/bboutools/).
+website](https://poissonconsulting.github.io/bboutools/). The [‘Getting
+Started’](https://poissonconsulting.github.io/bboutools/articles/bbtutorial.html)
+and the [‘Analytic
+Methods’](https://poissonconsulting.github.io/bboutools/articles/bbmethods.html)
+vignettes may be particularly useful.
 
 There is also a [user-friendly graphical
 interface](https://poissonconsulting.shinyapps.io/bboushiny/), called
