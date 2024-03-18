@@ -123,12 +123,12 @@
 <p>The survival model, which includes a random effect of month, is fitted using <code><a href="reference/bb_fit_survival.html">bb_fit_survival()</a></code>. To achieve convergence increase <code>nthin</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">99</span><span class="op">)</span></span>
-<span><span class="va">surv_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">surv_data</span>, nthin <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">surv_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">surv_data</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance</a></span><span class="op">(</span><span class="va">surv_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 1 × 8</span></span>
 <span><span class="co">#&gt;       n     K nchains niters nthin   ess  rhat converged</span></span>
 <span><span class="co">#&gt;   &lt;int&gt; &lt;int&gt;   &lt;int&gt;  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;lgl&gt;    </span></span>
-<span><span class="co">#&gt; 1   363     5       3   1000     1    39  1.90 FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   363     5       3   1000    10   120  1.03 FALSE</span></span></code></pre></div>
 <p>Predictions can then be generated using <code><a href="reference/bb_predict_survival.html">bb_predict_survival()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">surv_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_predict_survival.html">bb_predict_survival</a></span><span class="op">(</span><span class="va">surv_fit</span><span class="op">)</span></span>
@@ -136,16 +136,16 @@
 <span><span class="co">#&gt; # A tibble: 32 × 6</span></span>
 <span><span class="co">#&gt;    PopulationName CaribouYear Month estimate lower upper</span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;                &lt;int&gt; &lt;int&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 A                     1985    NA    0.866 0.763 0.931</span></span>
-<span><span class="co">#&gt;  2 A                     1986    NA    0.872 0.802 0.941</span></span>
-<span><span class="co">#&gt;  3 A                     1987    NA    0.851 0.684 0.904</span></span>
-<span><span class="co">#&gt;  4 A                     1988    NA    0.875 0.816 0.944</span></span>
-<span><span class="co">#&gt;  5 A                     1989    NA    0.867 0.785 0.927</span></span>
-<span><span class="co">#&gt;  6 A                     1990    NA    0.868 0.798 0.93 </span></span>
-<span><span class="co">#&gt;  7 A                     1991    NA    0.87  0.816 0.93 </span></span>
-<span><span class="co">#&gt;  8 A                     1992    NA    0.879 0.824 0.941</span></span>
-<span><span class="co">#&gt;  9 A                     1993    NA    0.867 0.803 0.919</span></span>
-<span><span class="co">#&gt; 10 A                     1994    NA    0.853 0.765 0.899</span></span>
+<span><span class="co">#&gt;  1 A                     1985    NA    0.871 0.756 0.945</span></span>
+<span><span class="co">#&gt;  2 A                     1986    NA    0.88  0.788 0.954</span></span>
+<span><span class="co">#&gt;  3 A                     1987    NA    0.838 0.647 0.907</span></span>
+<span><span class="co">#&gt;  4 A                     1988    NA    0.886 0.808 0.956</span></span>
+<span><span class="co">#&gt;  5 A                     1989    NA    0.873 0.788 0.94 </span></span>
+<span><span class="co">#&gt;  6 A                     1990    NA    0.871 0.786 0.934</span></span>
+<span><span class="co">#&gt;  7 A                     1991    NA    0.877 0.803 0.935</span></span>
+<span><span class="co">#&gt;  8 A                     1992    NA    0.888 0.821 0.953</span></span>
+<span><span class="co">#&gt;  9 A                     1993    NA    0.869 0.794 0.924</span></span>
+<span><span class="co">#&gt; 10 A                     1994    NA    0.848 0.75  0.904</span></span>
 <span><span class="co">#&gt; # ℹ 22 more rows</span></span></code></pre></div>
 <p>And plotted using <code><a href="reference/bb_plot_year.html">bb_plot_year()</a></code></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -156,6 +156,7 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/bb_plot_month_survival.html">bb_plot_month_survival</a></span><span class="op">(</span><span class="va">surv_fit</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png"><!-- --></p>
+<p>These estimates represent the annual survival rate if that month lasted the whole year.</p>
 </div>
 <div class="section level3">
 <h3 id="recruitment">Recruitment<a class="anchor" aria-label="anchor" href="#recruitment"></a>
@@ -175,7 +176,7 @@
 <span><span class="co">#&gt; 6 A               1990     3     9     4     1             0         0      0</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">99</span><span class="op">)</span></span>
-<span><span class="va">recruit_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">recruit_data</span>, nthin <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">recruit_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">recruit_data</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/bb_plot_year_recruitment.html">bb_plot_year_recruitment</a></span><span class="op">(</span><span class="va">recruit_fit</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-7-1.png"><!-- --></p>
@@ -188,12 +189,17 @@
 <code class="sourceCode R"><span><span class="va">lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_predict_growth.html">bb_predict_growth</a></span><span class="op">(</span><span class="va">surv_fit</span>, <span class="va">recruit_fit</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/bb_plot_year_growth.html">bb_plot_year_growth</a></span><span class="op">(</span><span class="va">lambda</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-8-1.png"><!-- --></p>
+<p><code><a href="reference/bb_predict_population_change.html">bb_predict_population_change()</a></code> calculates the population change (%) with uncertainty as the cumulative product of population growth.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">change</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_predict_population_change.html">bb_predict_population_change</a></span><span class="op">(</span><span class="va">surv_fit</span>, <span class="va">recruit_fit</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/bb_plot_year_population_change.html">bb_plot_year_population_change</a></span><span class="op">(</span><span class="va">change</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-9-1.png"><!-- --></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="information">Information<a class="anchor" aria-label="anchor" href="#information"></a>
 </h2>
-<p>Additional information is available from the <a href="https://poissonconsulting.github.io/bboutools/"><code>bboutools</code> website</a>.</p>
+<p>Additional information is available from the <a href="https://poissonconsulting.github.io/bboutools/"><code>bboutools</code> website</a>. The <a href="https://poissonconsulting.github.io/bboutools/articles/bbtutorial.html">‘Getting Started’</a> and the <a href="https://poissonconsulting.github.io/bboutools/articles/bbmethods.html">‘Analytic Methods’</a> vignettes may be particularly useful.</p>
 <p>There is also a <a href="https://poissonconsulting.shinyapps.io/bboushiny/" class="external-link">user-friendly graphical interface</a>, called <a href="https://github.com/poissonconsulting/bboushiny" class="external-link"><code>bboushiny</code></a>, for non-R users.</p>
 </div>
 <div class="section level2">
