@@ -29,7 +29,7 @@ run_nimble_ml <- function(model, inits, prior_inits, quiet) {
   verbose <- nimbleOptions("verbose")
   nimbleOptions(verbose = FALSE)
 
-  cmodel <- compileNimble(model)
+  cmodel <- compileNimble(model, resetFunctions = TRUE)
   params <- setupMargNodes(model)$paramNodes
   chk_subset(names(inits), params, x_name = "Names in `inits`")
   
@@ -44,7 +44,7 @@ run_nimble_ml <- function(model, inits, prior_inits, quiet) {
     laplace <- buildLaplace(model)
   }
 
-  claplace <- compileNimble(laplace, project = model)
+  claplace <- compileNimble(laplace, project = model, resetFunctions = TRUE)
 
   inits_default <- rep(1, length(params))
   names(inits_default) <- params
