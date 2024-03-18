@@ -95,7 +95,8 @@ The function `bb_fit_recruitment()` fits a Bayesian recruitment model.
 The start month of the biological year (i.e., 'caribou year') can be set with the `year_start` argument.
 By default, the start month is April. 
  
-The adult female proportion can either be fixed or estimated from counts of cows and bulls.
+The adult female proportion can either be fixed or estimated from counts of cows and bulls (i.e., `Cows ~ Binomial(adult_female_proportion, Cows + Bulls)`). 
+
 If the user provides a value to `adult_female_proportion`, it is fixed.
 The default value is 0.65, which accounts for higher mortality of males [@smith_2004].
 If `adult_female_proportion = NULL`, the adult female proportion is estimated.
@@ -143,6 +144,8 @@ The user can exclude individual random effect estimates from coefficient output.
 ```{r}
 tidy(recruitment, include_random_effects = FALSE)
 ```
+
+Keep in mind that any reference to 'Year' or 'Annual' in these summary outputs represent the caribou year, which can be set by the user.  
 
 ### Priors
 In general, weakly informative priors are used by default [@gelman_prior_2017, @mcelreath_statistical_2016]. 
