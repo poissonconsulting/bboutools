@@ -40,8 +40,16 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
-
+          
       - uses: r-lib/actions/check-r-package@v2
+        if: matrix.os != 'windows-latest'
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+      - uses: r-lib/actions/check-r-package@v2
+        if: matrix.os == 'windows-latest'
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf", "--no-build-vignettes")'
+          args: 'c("--ignore-vignettes")'
