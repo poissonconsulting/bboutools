@@ -123,7 +123,7 @@ bb_predict_lambda <- function(survival,
                               conf_level = 0.95,
                               estimate = median,
                               sig_fig = 3) {
-  lifecycle::deprecate_soft("v0.0.1", "bb_predict_lambda()", "bb_growth_lambda()")
+  lifecycle::deprecate_soft("v0.0.1", "bb_predict_lambda()", "bb_predict_growth()")
   bb_predict_growth(survival, recruitment,
                     conf_level = conf_level,
                     estimate = estimate,
