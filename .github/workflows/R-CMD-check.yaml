@@ -28,8 +28,8 @@ jobs:
     steps:
       - if: matrix.os == 'macos-latest'
         run: echo "this is a mac"
+        uses: actions/checkout@v4
         
       - if: matrix.os == 'windows-latest'
         run: echo "this is a windows"
-      
-     
+        uses: actions/checkout@v4
