@@ -145,6 +145,8 @@ The user can exclude individual random effect estimates from coefficient output.
 tidy(recruitment, include_random_effects = FALSE)
 ```
 
+Keep in mind that any reference to 'Year' or 'Annual' in these summary outputs represent the caribou year, which can be set by the user.  
+
 ### Priors
 In general, weakly informative priors are used by default [@gelman_prior_2017, @mcelreath_statistical_2016]. 
 The user can change the priors by providing a named vector to `priors`. 
