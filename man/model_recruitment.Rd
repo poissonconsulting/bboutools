@@ -23,7 +23,8 @@ model_recruitment(
 Year trend cannot be fit if there is also a fixed year effect (as opposed to random effect).}
 
 \item{adult_female_proportion}{A number between 0 and 1 of the expected proportion of adults that are female.
-If NULL, a prior of dbeta(65, 35) is used. This prior can also be changed via the \code{priors} argument.}
+If NULL, the proportion is estimated from the data (i.e., \code{Cows ~ Binomial(adult_female_proportion, Cows + Bulls)}) and a prior of dbeta(65, 35) is used.
+This prior can be changed via the \code{priors} argument.}
 
 \item{yearling_female_proportion}{A number between 0 and 1 of the expected proportion of yearlings that are female.}
 

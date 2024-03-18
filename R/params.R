@@ -14,7 +14,8 @@
 #' @param include_uncertain_morts A flag indicating whether to include uncertain mortalities in total mortalities.
 #' @param yearling_female_proportion A number between 0 and 1 of the expected proportion of yearlings that are female.
 #' @param adult_female_proportion A number between 0 and 1 of the expected proportion of adults that are female.
-#' If NULL, a prior of dbeta(65, 35) is used. This prior can also be changed via the `priors` argument.
+#' If NULL, the proportion is estimated from the data (i.e., `Cows ~ Binomial(adult_female_proportion, Cows + Bulls)`) and a prior of dbeta(65, 35) is used. 
+#' This prior can be changed via the `priors` argument.
 #' @param year A flag indicating whether to predict by year.
 #' @param month A flag indicating whether to predict by month.
 #' @param nthin A whole number of the thinning rate.
