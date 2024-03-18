@@ -29,7 +29,12 @@ jobs:
       - if: matrix.os == 'macos-latest'
         run: echo "this is a mac"
         
-      - if: matrix.os == 'windows-latest'
+      - name: windows
+        if: matrix.os == 'windows-latest'
+        run: echo "this is a windows"
+      
+      - name: windows2
+        if: runner.os == 'Windows'
         run: echo "this is a windows"
       
       - uses: actions/checkout@v4
