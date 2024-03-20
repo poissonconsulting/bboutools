@@ -27,6 +27,8 @@ test_that("bb_predict_growth estimate works", {
 })
 
 test_that("bb_predict_growth multiple years each and one year common", {
+  skip_on_covr()
+  
   survival <- bboudata::bbousurv_a
   survival <- survival[survival$Year %in% 2002:2003, ]
 
@@ -44,6 +46,8 @@ test_that("bb_predict_growth multiple years each and one year common", {
 })
 
 test_that("bb_predict_growth 1 year each and no years common", {
+  skip_on_covr()
+  
   survival <- bboudata::bbousurv_a
   survival <- survival[survival$Year %in% c(2002, 2004), ]
 
