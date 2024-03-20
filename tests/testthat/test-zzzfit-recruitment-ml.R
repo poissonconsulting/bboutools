@@ -1,5 +1,7 @@
 test_that("recruitment default works", {
   skip_on_ci()
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   fit <- bb_fit_recruitment_ml(
     data = x,
@@ -16,6 +18,8 @@ test_that("recruitment default works", {
 
 test_that("recruitment fixed year works", {
   skip_on_ci()
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   fit <- bb_fit_recruitment_ml(
     data = x,
@@ -33,6 +37,8 @@ test_that("recruitment fixed year works", {
 
 test_that("can change fixed adult_female_proportion", {
   skip_on_ci()
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   fit <- bb_fit_recruitment_ml(
     data = x,
@@ -50,6 +56,8 @@ test_that("can change fixed adult_female_proportion", {
 
 test_that("can change fixed yearling_female_proportion", {
   skip_on_ci()
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   x$Yearlings[5:10] <- 1
   fit <- bb_fit_recruitment_ml(
@@ -69,6 +77,8 @@ test_that("can change fixed yearling_female_proportion", {
 test_that("can estimate adult_female_proportion", {
   # minor number rounding differences in fixed year estimates
   skip_on_ci()
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   fit <- bb_fit_recruitment_ml(
     data = x,
@@ -86,6 +96,8 @@ test_that("can estimate adult_female_proportion", {
 
 test_that("can set inits", {
   skip_on_ci()
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
 
   inits <- list(

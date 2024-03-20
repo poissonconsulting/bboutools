@@ -1,4 +1,6 @@
 test_that("recruitment default works", {
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   set.seed(101)
   fit <- bb_fit_recruitment(
@@ -16,6 +18,8 @@ test_that("recruitment default works", {
 })
 
 test_that("recruitment can set caribou year", {
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   set.seed(101)
   fit <- bb_fit_recruitment(
@@ -33,6 +37,8 @@ test_that("recruitment can set caribou year", {
 })
 
 test_that("recruitment fixed works", {
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   set.seed(101)
   fit <- bb_fit_recruitment(
@@ -51,6 +57,8 @@ test_that("recruitment fixed works", {
 })
 
 test_that("recruitment trend works", {
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   set.seed(101)
   fit <- bb_fit_recruitment(
@@ -70,6 +78,8 @@ test_that("recruitment trend works", {
 })
 
 test_that("can change fixed adult_female_proportion", {
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   set.seed(101)
   fit <- bb_fit_recruitment(
@@ -88,6 +98,8 @@ test_that("can change fixed adult_female_proportion", {
 })
 
 test_that("can estimate adult_female_proportion", {
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   set.seed(101)
   fit <- bb_fit_recruitment(
@@ -106,6 +118,8 @@ test_that("can estimate adult_female_proportion", {
 })
 
 test_that("can change fixed yearling_female_proportion", {
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   x$Yearlings[5:10] <- 1
   set.seed(101)
@@ -125,6 +139,8 @@ test_that("can change fixed yearling_female_proportion", {
 })
 
 test_that("can set priors", {
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   set.seed(101)
 
@@ -162,6 +178,8 @@ test_that("can set priors", {
 })
 
 test_that("fails with wrong prior", {
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   wrong_prior <- list(bInterce = 1)
   expect_chk_error(bb_fit_recruitment(x, nthin = 1L, priors = wrong_prior, quiet = TRUE), "Names in `priors` must match 'adult_female_proportion_alpha', 'adult_female_proportion_beta', 'b0_mu', 'b0_sd', 'bAnnual_sd', 'bYear_mu', 'bYear_sd' or 'sAnnual_rate', not 'bInterce'.")
@@ -173,6 +191,8 @@ test_that("fails with multiple populations", {
 })
 
 test_that("can set niters", {
+  skip_on_covr()
+  
   x <- bboudata::bbourecruit_a
   set.seed(101)
   fit <- bb_fit_recruitment(
