@@ -86,7 +86,7 @@ The annual recruitment in boreal caribou population is typically estimated from 
 
 `bboutools` fits a Poisson annual recruitment model to the counts of calfs, cows, yearlings unknown adults and potentially, bulls.  
 
-It is up to the user to ensure that the data are from surveys that were conducted at the same time of year when calf survival is expected to be similar to adult survival. 
+It is up to the user to ensure that the data are from surveys that were conducted at the same time of year, when calf survival is expected to be similar to adult survival. 
 
 ### Fit a Bayesian model
 
