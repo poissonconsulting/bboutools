@@ -40,6 +40,7 @@ test_that("can exclude year effect", {
   skip_on_covr()
   skip_on_os("windows")
   
+  
   x <- bboudata::bbousurv_a
   fit <- bb_fit_survival_ml(
     data = x,
