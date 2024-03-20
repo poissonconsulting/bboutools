@@ -1,6 +1,4 @@
 test_that("survival default works", {
-  skip_on_covr()
-  
   x <- bboudata::bbousurv_a
   set.seed(101)
   fit <- bb_fit_survival(
@@ -17,8 +15,6 @@ test_that("survival default works", {
 })
 
 test_that("survival year start works", {
-  skip_on_covr()
-  
   x <- bboudata::bbousurv_a
   set.seed(101)
   fit <- bb_fit_survival(
@@ -39,8 +35,6 @@ test_that("survival year start works", {
 })
 
 test_that("survival fixed works", {
-  skip_on_covr()
-  
   x <- bboudata::bbousurv_a
   set.seed(101)
   fit <- bb_fit_survival(
@@ -59,8 +53,6 @@ test_that("survival fixed works", {
 })
 
 test_that("survival year trend + random works", {
-  skip_on_covr()
-  
   x <- bboudata::bbousurv_a
   set.seed(101)
   fit <- bb_fit_survival(
@@ -79,8 +71,6 @@ test_that("survival year trend + random works", {
 })
 
 test_that("survival year trend only", {
-  skip_on_covr()
-  
   x <- bboudata::bbousurv_a
   set.seed(101)
   fit <- bb_fit_survival(
@@ -99,8 +89,6 @@ test_that("survival year trend only", {
 })
 
 test_that("can include_uncertain_morts", {
-  skip_on_covr()
-  
   x <- bboudata::bbousurv_a
   set.seed(101)
   x$MortalitiesUncertain <- pmin(x$StartTotal - x$MortalitiesCertain, rbinom(nrow(x), prob = 0.1, size = 1))
@@ -119,8 +107,6 @@ test_that("can include_uncertain_morts", {
 })
 
 test_that("can set priors", {
-  skip_on_covr()
-  
   x <- bboudata::bbousurv_a
   set.seed(101)
   priors <- c(b0_mu = 10, b0_sd = 0.5)
@@ -159,8 +145,6 @@ test_that("fails with multiple populations", {
 })
 
 test_that("can set niters", {
-  skip_on_covr()
-  
   x <- bboudata::bbousurv_a
   set.seed(101)
   fit <- bb_fit_survival(
@@ -181,8 +165,6 @@ test_that("can set niters", {
 
 
 test_that("works with less than 12 months", {
-  skip_on_covr()
-  
   x <- bboudata::bbousurv_c
   x <- x[!x$Month %in% 12, ]
   set.seed(101)
