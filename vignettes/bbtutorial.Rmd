@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, message=FALSE, warning=FALSE}
 library(bboutools)
+library(bboudata)
 ```
 
 `bboutools` is an R package to estimate Boreal Caribou recruitment, survival and population growth. 
@@ -61,15 +62,17 @@ If you discover a bug in `bboutools` please file an issue with a [reprex](https:
 ## Providing Data
 
 Once the `bboutools` package has been loaded, the next task is to provide some data.
-An easy way to do this is to create a comma separated file (`.csv`) with spreadsheet software. Recruitment and survival data should be formatted as in the following anonymized datasets:
+An easy way to do this is to create a comma separated file (`.csv`) with spreadsheet software. Recruitment and survival data should be formatted as in the following anonymized datasets and can be check to confirm it is in the correct format by using the `bboudata` functions:
 
 ```{r}
 # Recruitment data
+bboudata::bbd_chk_data_recruitment(bboudata::bbourecruit_a)
 bboudata::bbourecruit_a
 ```
 
 ```{r}
 # Survival data
+bboudata::bbd_chk_data_survival(bboudata::bbousurv_a)
 bboudata::bbousurv_a
 ```
 
