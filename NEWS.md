@@ -1,6 +1,9 @@
-# bboutools (development version)
-
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
+
+# bboutools 0.0.0.9006
+
+- Moved internal data checking functions to be exported function in `bboudata`.
+- Updated bbtutorial vignette to mention the new data checking functions.
 
 # bboutools 0.0.0.9005
 
