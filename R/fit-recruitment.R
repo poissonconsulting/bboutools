@@ -31,7 +31,7 @@ bb_fit_recruitment <- function(
     priors = NULL,
     quiet = FALSE) {
   chk_data(data)
-  .chk_data_recruitment(data)
+  bbd_chk_data_recruitment(data)
   chk_null_or(adult_female_proportion, vld = vld_range)
   chk_range(yearling_female_proportion)
   chk_whole_number(min_random_year)
@@ -124,7 +124,7 @@ bb_fit_recruitment_ml <- function(
     inits = NULL,
     quiet = FALSE) {
   chk_data(data)
-  .chk_data_recruitment(data)
+  bbd_chk_data_recruitment(data)
   chk_null_or(adult_female_proportion, vld = vld_range)
   chk_range(yearling_female_proportion)
   chk_whole_number(min_random_year)

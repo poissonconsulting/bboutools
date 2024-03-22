@@ -41,7 +41,7 @@ bb_fit_survival <- function(data,
                             priors = NULL,
                             quiet = FALSE) {
   chk_data(data)
-  .chk_data_survival(data)
+  bbd_chk_data_survival(data)
   chk_whole_number(min_random_year)
   chk_gte(min_random_year)
   chk_flag(year_trend)
@@ -138,7 +138,7 @@ bb_fit_survival_ml <- function(data,
                                inits = NULL,
                                quiet = FALSE) {
   chk_data(data)
-  .chk_data_survival(data)
+  bbd_chk_data_survival(data)
   chk_whole_number(min_random_year)
   chk_gte(min_random_year)
   chk_flag(year_trend)
