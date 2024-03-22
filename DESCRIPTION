@@ -20,6 +20,7 @@ Depends:
     nimble,
     R (>= 4.0)
 Imports: 
+    bboudata,
     chk,
     generics,
     ggplot2,
@@ -36,7 +37,6 @@ Imports:
     tidyr,
     universals
 Suggests: 
-    bboudata,
     coda,
     covr,
     knitr,
