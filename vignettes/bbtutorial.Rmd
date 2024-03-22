@@ -62,7 +62,7 @@ If you discover a bug in `bboutools` please file an issue with a [reprex](https:
 ## Providing Data
 
 Once the `bboutools` package has been loaded, the next task is to provide some data.
-An easy way to do this is to create a comma separated file (`.csv`) with spreadsheet software. Recruitment and survival data should be formatted as in the following anonymized datasets and can be check to confirm it is in the correct format by using the `bboudata` functions:
+An easy way to do this is to create a comma separated file (`.csv`) with spreadsheet software. Recruitment and survival data should be formatted as in the following anonymized datasets and can be checked to confirm it is in the correct format by using the `bboudata` functions:
 
 ```{r}
 # Recruitment data
