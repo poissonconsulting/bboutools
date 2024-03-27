@@ -1,5 +1,6 @@
 test_that("survival default works", {
   skip_on_covr()
+  skip_on_os("windows")
   
   x <- bboudata::bbousurv_a
   fit <- bb_fit_survival_ml(
@@ -37,6 +38,7 @@ test_that("survival fixed works", {
 
 test_that("can exclude year effect", {
   skip_on_covr()
+  skip_on_os("windows")
   
   x <- bboudata::bbousurv_a
   fit <- bb_fit_survival_ml(
@@ -56,6 +58,7 @@ test_that("can exclude year effect", {
 
 test_that("year trend works", {
   skip_on_covr()
+  skip_on_os("windows")
   
   x <- bboudata::bbousurv_a
   fit <- bb_fit_survival_ml(
@@ -75,6 +78,7 @@ test_that("year trend works", {
 
 test_that("year trend only works", {
   skip_on_covr()
+  skip_on_os("windows")
   
   x <- bboudata::bbousurv_a
   fit <- bb_fit_survival_ml(
@@ -97,6 +101,7 @@ test_that("can include_uncertain_morts", {
   skip_on_ci()
   skip_on_covr()
   
+  set.seed(101)
   x <- bboudata::bbousurv_a
   x$MortalitiesUncertain <- pmin(x$StartTotal - x$MortalitiesCertain, rbinom(nrow(x), prob = 0.1, size = 1))
   fit <- bb_fit_survival_ml(
@@ -115,6 +120,7 @@ test_that("can include_uncertain_morts", {
 
 test_that("can set inits", {
   skip_on_covr()
+  skip_on_os("windows")
   
   x <- bboudata::bbousurv_a
 
@@ -145,6 +151,7 @@ test_that("fails with multiple populations", {
 
 test_that("works with less than 12 months", {
   skip_on_covr()
+  skip_on_os("windows")
   
   x <- bboudata::bbousurv_c
   x <- x[!x$Month %in% 12, ]

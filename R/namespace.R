@@ -7,4 +7,5 @@
 #' @importFrom utils modifyList
 #' @importFrom generics augment glance tidy
 #' @importFrom universals estimates nchains npars nterms niters rhat esr converged pars
+#' @importFrom bboudata bbd_chk_data_recruitment bbd_chk_data_survival
 NULL

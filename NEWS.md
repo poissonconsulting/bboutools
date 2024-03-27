@@ -1,6 +1,9 @@
-# bboutools (development version)
-
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
+
+# bboutools 0.0.0.9006
+
+- Moved internal data checking functions to be exported function in `bboudata`.
+- Updated bbtutorial vignette to mention the new data checking functions.
 
 # bboutools 0.0.0.9005
 
@@ -12,6 +15,7 @@
 Added 'Getting Started' vignette. 
 
 Added functions:
+
 - `bb_predict_survival_trend()`
 - `bb_predict_recruitment_trend()`
 - `bb_plot_year_trend_survival()`
@@ -21,6 +25,7 @@ Added functions:
 - `plot()` (plot traceplots for bboufit object)
 
 Added arguments:
+
 - `year_start = 4L` to `bb_fit_survival()` and `bb_fit_recruitment()` to set caribou year start month as integer - (default April)
 - `yearling_female_proportion = 0.5` to `bb_fit_recruitment()` to set yearling sex ratio
 - `year_trend = FALSE` to `bb_fit_survival()` and `bb_fit_recruitment()` to fit model with year trend
