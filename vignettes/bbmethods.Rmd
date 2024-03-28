@@ -28,10 +28,16 @@ Most models can be fit in a Bayesian or frequentist framework.
 
 ## Fixed vs Random Effects
 
-When a categorical variable is treated as a fixed effect each parameter values is estimated in isolation.
-In contrast, when it is treated as a random effect the parameter values are assumed to be drawn from a common underlying distribution which allows the typical values to be estimated and each parameter estimate to be influenced by the other ones.
+When a categorical variable is treated as a fixed effect each parameter value is estimated in isolation.
+In contrast, when it is treated as a random effect the parameter values are assumed to be drawn from a common underlying distribution which allows the typical values to be estimated and each parameter estimate to be influenced by the other ones.  
 
-Fixed and random effects can be used in Bayesian or frequentist models.
+The use of random effects is especially beneficial when some months/years have sparse or missing data. 
+In the case of sparse data or extreme values, estimates will tend to be pulled toward the mean (i.e., 'shrinkage'). 
+For missing data, the estimate will be equal to the mean. 
+Shrinkage may not be desired if extreme values are likely to represent the true value (e.g., numerous wolf attacks in one year). 
+In this case, a fixed effect model would yield better estimates. 
+
+Fixed and random effects can be used in Bayesian or frequentist models. 
 
 ## Maximum Likelihood vs Posterior Probability
 
@@ -126,7 +132,8 @@ The `bb_fit_survival()` and `bb_fit_recruitment()` functions use a Bayesian appr
 
 Objects of class `bboufit` have three elements: 
 
-1. `model` - the compiled Nimble model as created by `nimble::nimbleModel()`.    
+1. `model` - the compiled Nimble model as created by `nimble::nimbleModel()`.  
+1. `model_code` - the model code in text format.  
 1. `samples` - the MCMC samples generated from`nimble::runMCMC()` converted to an object of class `mcmcr`.  
 1. `data` - the survival or recruitment data provided.
 
@@ -143,6 +150,7 @@ The `bb_fit_survival_ml()` and `bb_fit_recruitment_ml()` functions use a Maximum
 Objects of class `bboufit_ml` have four elements: 
 
 1. `model` - the Nimble model as created by `nimble::nimbleModel()`.   
+1. `model_code` - the model code in text format.  
 1. `mle` - the Maximum Likelihood output as created by model$findMLE().
 1. `summary` - the summary of the Maximum Likelihood output as created by `model$summary(mle)`.  
 1. `data` - the survival or recruitment data provided.
