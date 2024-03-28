@@ -1,9 +1,9 @@
 predict_lambda <- function(survival, recruitment){
-  .chk_fit(survival)
+  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival)) 
   chk_s3_class(survival, "bboufit_survival")
-  .chk_fit(recruitment)
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment)) 
   chk_s3_class(recruitment, "bboufit_recruitment")
-  
+
   pred_sur <- predict_survival(survival, year = TRUE, month = FALSE)
   pred_rec <- predict_recruitment(recruitment, year = TRUE)
   

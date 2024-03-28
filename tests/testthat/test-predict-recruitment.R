@@ -52,3 +52,25 @@ test_that("predict sig_fig works", {
   skip_on_os("linux")
   expect_snapshot_data(predict, "predict_recruitment_sig_fig")
 })
+
+test_that("bb_predict_recruitment works on ML", {
+  predict <- bb_predict_recruitment(bboutools:::fit_recruitment_ml)
+  expect_s3_class(predict, "tbl")
+  skip_on_os("linux")
+  expect_snapshot_data(predict, "bb_predict_recruitment_ml")
+})
+
+test_that("bb_predict_recruitment works on ML with trend", {
+  predict <- bb_predict_recruitment(bboutools:::fit_recruitment_ml_trend)
+  expect_s3_class(predict, "tbl")
+  skip_on_os("linux")
+  expect_snapshot_data(predict, "bb_predict_recruitment_ml_trend")
+})
+
+test_that("generic predict recruitment works on ML", {
+  predict <- predict(bboutools:::fit_recruitment_ml)
+  expect_s3_class(predict, "tbl")
+  skip_on_os("linux")
+  expect_snapshot_data(predict, "predict_recruitment_ml")
+})
+

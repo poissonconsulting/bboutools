@@ -185,13 +185,14 @@ bb_fit_survival_ml <- function(data,
 
   attrs <- list(
     nobs = nrow(data$data),
-    converged = !convergence_fail
+    converged = !convergence_fail,
+    year_trend = year_trend
   )
 
   .attrs_bboufit_ml(fit) <- attrs
 
   fit$data <- data$data
   fit$model_code <- model$getCode()
-  class(fit) <- c("bboufit_ml")
+  class(fit) <- c("bboufit_survival", "bboufit_ml")
   fit
 }

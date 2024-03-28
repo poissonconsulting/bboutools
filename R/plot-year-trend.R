@@ -3,21 +3,28 @@ plot_year_trend <- function(x, ...) {
   check_data(x, values = list(
     CaribouYear = 1L,
     estimate = c(0, Inf),
-    lower = c(0, Inf),
-    upper = c(0, Inf)
+    lower = c(0, Inf, NA),
+    upper = c(0, Inf, NA)
   ))
 
-  ggplot(data = x) +
+  gp <- ggplot(data = x) +
     aes(
       x = as.integer(.data$CaribouYear),
       y = .data$estimate
     ) +
     geom_line() +
+    xlab(" Caribou Year")
+  
+  if(any(is.na(x$lower))){
+    return(gp)
+  }
+  
+  gp + 
     geom_ribbon(aes(
       ymin = .data$lower,
       ymax = .data$upper
-    ), alpha = 0.2) +
-    xlab(" Caribou Year")
+    ), alpha = 0.2) 
+    
 }
 
 #' Plot Annual Survival Trend

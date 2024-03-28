@@ -4,6 +4,7 @@
 \alias{bb_plot_year}
 \alias{bb_plot_year.data.frame}
 \alias{bb_plot_year.bboufit}
+\alias{bb_plot_year.bboufit_ml}
 \title{Plot Year}
 \usage{
 bb_plot_year(x, ...)
@@ -11,6 +12,8 @@ bb_plot_year(x, ...)
 \method{bb_plot_year}{data.frame}(x, ...)
 
 \method{bb_plot_year}{bboufit}(x, conf_level = 0.95, estimate = median, ...)
+
+\method{bb_plot_year}{bboufit_ml}(x, conf_level = 0.95, estimate = median, ...)
 }
 \arguments{
 \item{x}{The object.}
@@ -29,5 +32,7 @@ Plots annual estimates with credible limits.
 \item \code{bb_plot_year(data.frame)}: Plot annual estimate for a data frame.
 
 \item \code{bb_plot_year(bboufit)}: Plot annual estimates for a bboufit object.
+
+\item \code{bb_plot_year(bboufit_ml)}: Plot annual estimates for a bboufit_ml object.
 
 }}

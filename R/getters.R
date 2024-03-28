@@ -50,7 +50,7 @@
 
 .attrs_bboufit_ml <- function(fit) {
   attrs <- attributes(fit)
-  attrs[c("nobs", "converged")]
+  attrs[c("nobs", "converged", "year_trend")]
 }
 
 `.attrs_bboufit<-` <- function(fit, value) {
@@ -64,5 +64,6 @@
 `.attrs_bboufit_ml<-` <- function(fit, value) {
   .converged_bboufit(fit) <- value$converged
   .nobs_bboufit(fit) <- value$nobs
+  .year_trend_bboufit(fit) <- value$year_trend
   fit
 }

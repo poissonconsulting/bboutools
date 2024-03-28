@@ -31,3 +31,9 @@ test_that("predict sig_fig works", {
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_popchange_sig_fig")
 })
+
+test_that("bb_predict_population_change works with ML", {
+  predict <- bb_predict_population_change(bboutools:::fit_survival_ml, bboutools:::fit_recruitment_ml)
+  expect_s3_class(predict, "tbl")
+  expect_snapshot_data(predict, "bb_predict_popchange_ml")
+})

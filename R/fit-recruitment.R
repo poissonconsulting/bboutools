@@ -171,13 +171,14 @@ bb_fit_recruitment_ml <- function(
 
   attrs <- list(
     nobs = nrow(data$data),
-    converged = !convergence_fail
+    converged = !convergence_fail,
+    year_trend = year_trend
   )
 
   .attrs_bboufit_ml(fit) <- attrs
 
   fit$data <- data$data
   fit$model_code <- model$getCode()
-  class(fit) <- c("bboufit_ml")
+  class(fit) <- c("bboufit_recruitment", "bboufit_ml")
   fit
 }

@@ -20,7 +20,7 @@ bb_predict_recruitment_trend <- function(recruitment,
                                          conf_level = 0.95,
                                          estimate = median,
                                          sig_fig = 5) {
-  .chk_fit(recruitment)
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment)) 
   chk_s3_class(recruitment, "bboufit_recruitment")
   .chk_year_trend(recruitment)
   chk_range(conf_level)
@@ -54,7 +54,7 @@ bb_predict_survival_trend <- function(survival,
                                       conf_level = 0.95,
                                       estimate = median,
                                       sig_fig = 5) {
-  .chk_fit(survival)
+  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival)) 
   chk_s3_class(survival, "bboufit_survival")
   .chk_year_trend(survival)
   chk_range(conf_level)
