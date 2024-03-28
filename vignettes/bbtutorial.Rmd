@@ -262,11 +262,11 @@ predict_change <- bb_predict_population_change(survival = survival, recruitment 
 bb_plot_year_population_change(predict_change)
 ```
 
-### Maximum Likelihood
+## Maximum Likelihood
 Maximum Likelihood (ML) models can be fit using the `bb_fit_recruitment_ml()` and `bb_fit_survival_ml()` functions. 
 These functions take a few seconds to execute because Nimble must compile the model into C++ code.
 See the [Nimble documentation](https://r-nimble.org/html_manual/cha-AD.html#how-to-use-laplace-approximation) for more information and comparison to TMB.
-Similar to Bayesian model fits, generic functions such as `tidy()`, `glance()` and `augment()` work on ML fit objects (class 'bboufit_ml').
+Similar to Bayesian model fits, generic functions (e.g., `tidy()`, `glance()` and `augment()`) work on ML fit objects (class 'bboufit_ml').
 
 ```{r}
 recruitment_ml <- bb_fit_recruitment_ml(bboudata::bbourecruit_a, year_start = 4, year_trend = TRUE, quiet = TRUE)
@@ -290,8 +290,18 @@ tidy(recruitment_ml, include_random_effects = FALSE)
 tidy(survival_ml, include_random_effects = FALSE)
 ```
 
-There is no functionality in `bboutools` to generate predictions (i.e., derived parameters) from ML models. 
+There is functionality in `bboutools` to generate predictions (i.e., derived parameters) from ML models. 
+However, there is no functionality to get confidence intervals on predictions. 
 This is a more straightforward task with Bayesian models. 
+
+```{r}
+bb_predict_survival(survival_ml)
+```
+
+```{r}
+growth <- bb_predict_growth(survival_ml, recruitment_ml)
+bb_plot_year_growth(growth)
+```
 
 Note that ML models can struggle to converge with a fixed year effect if there are many years in the dataset. 
 Insufficient information to estimate each year independently results in a flat likelihood surface and inability of the model to reliably identify the ML estimates.
