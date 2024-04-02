@@ -91,6 +91,12 @@
     <loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival_trend.html</loc>
   </url>
   <url>
+    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html</loc>
+  </url>
+  <url>
+    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html</loc>
+  </url>
+  <url>
     <loc>https://poissonconsulting.github.io/bboutools/reference/bboutools-package.html</loc>
   </url>
   <url>
@@ -170,6 +176,9 @@
   </url>
   <url>
     <loc>https://poissonconsulting.github.io/bboutools/reference/rhat.bboufit.html</loc>
+  </url>
+  <url>
+    <loc>https://poissonconsulting.github.io/bboutools/reference/samples.html</loc>
   </url>
   <url>
     <loc>https://poissonconsulting.github.io/bboutools/reference/tidy.bboufit.html</loc>

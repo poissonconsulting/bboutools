@@ -110,11 +110,18 @@ irrespective of the sample size.</p>
 <h2 id="fixed-vs-random-effects">Fixed vs Random Effects<a class="anchor" aria-label="anchor" href="#fixed-vs-random-effects"></a>
 </h2>
 <p>When a categorical variable is treated as a fixed effect each
-parameter values is estimated in isolation. In contrast, when it is
+parameter value is estimated in isolation. In contrast, when it is
 treated as a random effect the parameter values are assumed to be drawn
 from a common underlying distribution which allows the typical values to
 be estimated and each parameter estimate to be influenced by the other
 ones.</p>
+<p>The use of random effects is especially beneficial when some
+months/years have sparse or missing data. In the case of sparse data or
+extreme values, estimates will tend to be pulled toward the mean (i.e.,
+‘shrinkage’). For missing data, the estimate will be equal to the mean.
+Shrinkage may not be desired if extreme values are likely to represent
+the true value (e.g., numerous wolf attacks in one year). In this case,
+a fixed effect model would yield better estimates.</p>
 <p>Fixed and random effects can be used in Bayesian or frequentist
 models.</p>
 </div>
@@ -233,6 +240,9 @@ return objects that inherit from class <code>bboufit</code>.</p>
 <code><a href="https://rdrr.io/pkg/nimble/man/nimbleModel.html" class="external-link">nimble::nimbleModel()</a></code>.<br>
 </li>
 <li>
+<code>model_code</code> - the model code in text format.<br>
+</li>
+<li>
 <code>samples</code> - the MCMC samples generated
 from<code><a href="https://rdrr.io/pkg/nimble/man/runMCMC.html" class="external-link">nimble::runMCMC()</a></code> converted to an object of class
 <code>mcmcr</code>.<br>
@@ -262,6 +272,9 @@ approach and return objects that inherit from class
 <li>
 <code>model</code> - the Nimble model as created by
 <code><a href="https://rdrr.io/pkg/nimble/man/nimbleModel.html" class="external-link">nimble::nimbleModel()</a></code>.<br>
+</li>
+<li>
+<code>model_code</code> - the model code in text format.<br>
 </li>
 <li>
 <code>mle</code> - the Maximum Likelihood output as created by
