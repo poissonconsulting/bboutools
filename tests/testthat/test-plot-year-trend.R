@@ -24,6 +24,32 @@ test_that("bb_plot_year_trend_survival.data.frame works", {
   expect_snapshot_plot(plot, "plot_year_trend_survival_df")
 })
 
+test_that("bb_plot_year_trend_recruitment.bboufit_recruitment ML works", {
+  plot <- bb_plot_year_trend_recruitment(bboutools:::fit_recruitment_ml_trend)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_trend_recruitment_ml")
+})
+
+test_that("bb_plot_year_trend_recruitment.data.frame ML works", {
+  prediction <- bb_predict_recruitment_trend(bboutools:::fit_recruitment_ml_trend)
+  plot <- bb_plot_year_trend_recruitment(prediction)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_trend_recruitment_ml_df")
+})
+
+test_that("bb_plot_year_trend_survival.bboufit_survival ML works", {
+  plot <- bb_plot_year_trend_survival(bboutools:::fit_survival_ml_trend)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_trend_survival_ml")
+})
+
+test_that("bb_plot_year_trend_survival.data.frame ML works", {
+  prediction <- bb_predict_survival_trend(bboutools:::fit_survival_ml_trend)
+  plot <- bb_plot_year_trend_survival(prediction)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_trend_survival_ml_df")
+})
+
 test_that("bb_plot_year_trend_recruitment.data.frame no rows", {
   prediction <- tibble::tribble(
     ~CaribouYear, ~estimate, ~lower, ~upper,

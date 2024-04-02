@@ -112,7 +112,7 @@ npars.bboufit <- function(x, ...) {
 #' @return A number of the number of parameters.
 #' @export
 npars.bboufit_ml <- function(x, ...) {
-  length(pars(x))
+  mcmcr::npars(samples(x))
 }
 
 #' @export
@@ -133,7 +133,7 @@ nterms.bboufit <- function(x, ...) {
 #' @return A number of the number of terms.
 #' @export
 nterms.bboufit_ml <- function(x, ...) {
-  length(terms_ml(x))
+  mcmcr::nterms(samples(x))
 }
 
 #' @export
@@ -214,5 +214,5 @@ pars.bboufit <- function(x, ...) {
 #' @return A vector of the parameter names.
 #' @export
 pars.bboufit_ml <- function(x, ...) {
-  sort(unique(pars_ml(x)))
+  mcmcr::pars(samples(x))
 }

@@ -15,8 +15,8 @@ bb_plot_month.data.frame <- function(x, ...) {
   check_data(x, values = list(
     Month = c(1L, 12L),
     estimate = c(0, Inf),
-    lower = c(0, Inf),
-    upper = c(0, Inf)
+    lower = c(0, Inf, NA),
+    upper = c(0, Inf, NA)
   ))
 
   breaks2 <- seq(2, 12, by = 2)
@@ -27,13 +27,18 @@ bb_plot_month.data.frame <- function(x, ...) {
   # this deals with empty data.frame since scale_x_discrete doesn't like it
   gp <- ggplot(data = x) +
     aes(x = .data$Month, y = .data$estimate, ymin = .data$lower, ymax = .data$upper) +
-    geom_pointrange() +
     xlab("Month")
-
+  
+  if(any(is.na(x$lower))){
+    gp <- gp + ggplot2::geom_point()
+  } else {
+    gp <- gp + geom_pointrange()
+  }
+  
   if (length(x$Month)) {
     return(gp + scale_x_discrete(breaks = breaks2, labels = month.abb[breaks2], drop = FALSE))
   }
-
+  
   gp
 }
 

@@ -8,6 +8,16 @@ test_that("bb_predict_survival_trend fails if no year trend fit", {
   expect_chk_error(bb_predict_survival_trend(bboutools:::fit_survival))
 })
 
+test_that("bb_predict_survival_trend works with ML", {
+  predict <- bb_predict_survival_trend(bboutools:::fit_survival_ml_trend)
+  expect_s3_class(predict, "tbl")
+  expect_snapshot_data(predict, "bb_predict_survival_trend_trend_ml")
+})
+
+test_that("bb_predict_survival_trend fails if no year trend fit with ML", {
+  expect_chk_error(bb_predict_survival_trend(bboutools:::fit_survival_ml))
+})
+
 test_that("bb_predict_recruitment_trend works", {
   predict <- bb_predict_recruitment_trend(bboutools:::fit_recruitment_trend)
   expect_s3_class(predict, "tbl")
@@ -16,4 +26,14 @@ test_that("bb_predict_recruitment_trend works", {
 
 test_that("bb_predict_recruitment_trend fails if no year trend fit", {
   expect_chk_error(bb_predict_recruitment_trend(bboutools:::fit_recruitment))
+})
+
+test_that("bb_predict_recruitment_trend works with ML", {
+  predict <- bb_predict_recruitment_trend(bboutools:::fit_recruitment_ml_trend)
+  expect_s3_class(predict, "tbl")
+  expect_snapshot_data(predict, "bb_predict_recruitment_trend_trend_ml")
+})
+
+test_that("bb_predict_recruitment_trend fails if no year trend fit", {
+  expect_chk_error(bb_predict_recruitment_trend(bboutools:::fit_recruitment_ml))
 })

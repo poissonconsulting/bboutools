@@ -10,3 +10,16 @@ test_that("plot_month_survival.data.frame works", {
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "plot_month_survival_predict_survival")
 })
+
+test_that("plot_month_survival.survival ML works", {
+  plot <- bb_plot_month_survival(bboutools:::fit_survival_ml)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_month_survival_survival_ml")
+})
+
+test_that("plot_month_survival.data.frame ML works", {
+  prediction <- predict(bboutools:::fit_survival_ml, month = TRUE, year = FALSE)
+  plot <- bb_plot_month_survival(prediction)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_month_survival_predict_survival_ml")
+})
