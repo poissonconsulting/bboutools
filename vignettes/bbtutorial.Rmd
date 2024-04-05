@@ -132,7 +132,7 @@ Convergence is successful if `ess` > 33% of the number of iterations and `rhat` 
 `rhat` evaluates whether the chains agree on the same values. 
 As the total variance of all the chains shrinks to the average variance within chains, r-hat approaches 1.  
 
-To improve convergence (i.e., by increasing `ess` and/or decreasing `rhat`), the user can increase the thinning rate with the `nthin` argument.
+By default, the `bboutools` Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves). The number of samples saved can be adjusted with the `niters` argument. With `niters` set, the user can simply increment the thinning rate as required to achieve convergence (i.e., by increasing `ess` and/or decreasing `rhat`).
 
 ### Summary
 Various generic functions in `bboutools` can be used to summarize or interrogate the output of model fitting functions.
@@ -225,30 +225,10 @@ bb_plot_month_survival(predict_survival_month)
 
 ## Population Growth
 
-The rate of population growth ($\lambda$) is
+A user can predict population growth (lambda) with `bb_predict_growth()`. 
+The survival and recruitment models fit in the previous steps are used as input. 
+Details on how lambda is calculated can be found in the analytical methods vignette. 
 
-$$\lambda = \frac{N_{t+1}}{N_t}$$
-
-where $N_t$ is the population abundance in year $t$.
-
-Following @hatter_moose_1991, it can be shown that
-
-$$\lambda = \frac{S}{1-R}$$
-
-As ungulate populations are generally polygynous survival and recruitment are estimated with respect to the number of adult (mature) females.
-
-Following @decesare_estimating_2012, before calculating $\lambda$ the annual recruitment is first divided by two to give the expected number of female calves per adult female (under the assumption of a 1:1 sex ratio).
-
-$$R_F = R/2$$
-
-Next the annual recruitment is adjusted to give the proportional change in the population.
-
-$$R_\Delta =  \frac{R_F}{1 + R_F}$$
-
-Finally $\lambda$ is calculated using
-
-$$\lambda = \frac{S}{1-R_\Delta}$$
-A user can predict population growth with `bb_predict_growth()`, feeding in the previously fit survival and recruitment models. 
 ```{r}
 predict_lambda <- bb_predict_growth(survival = survival, recruitment = recruitment)
 bb_plot_year_growth(predict_lambda) +
@@ -315,16 +295,32 @@ The user can replace initial values for parameters using `inits`.
 inits_ml <- bb_fit_recruitment_ml(bboudata::bbourecruit_a, inits = c(b0 = 1, sAnnual = 0.3))
 ```
 
-## Going beyond `bboutools`
-The output of `bb_fit_recruitment()` and `bb_fit_survival()` is a named list with class `bboufit`. It contains the MCMC samples (class `mcmcr`), data, model code, and Nimble model object. 
+## Understanding `bboufit` objects 
 
-```{r}
-names(recruitment)
-```
+The `bb_fit_survival()` and `bb_fit_recruitment()` functions use a Bayesian approach and return objects that inherit from class `bboufit`.
 
-A user can do more than the existing `bboutools` functionality provides by working directly with these objects. 
-Packages such as `mcmcr`, `mcmcderive` and `coda` can be used to work with MCMC samples. 
+Objects of class `bboufit` have three elements: 
 
-The [Nimble](https://r-nimble.org) R package can be used to work directly with the Nimble model object.
+1. `model` - the compiled Nimble model as created by `nimble::nimbleModel()`.  
+1. `model_code` - the model code in text format.  
+1. `samples` - the MCMC samples generated from`nimble::runMCMC()` converted to an object of class `mcmcr`.  
+1. `data` - the survival or recruitment data provided.
+
+These are the raw materials for any further exploration or analysis. 
+For example, view trace and density plots with `plot(fit$samples)`.
+
+See [mcmcr](https://github.com/poissonconsulting/mcmcr) and [mcmcderive](https://github.com/poissonconsulting/mcmcderive) for working with `mcmcr` objects, or convert samples to an object of class `mcmc.list`, e,g, with `coda::as.mcmc.list` for working with the [coda](https://github.com/cran/coda) R package. 
+
+The `bb_fit_survival_ml()` and `bb_fit_recruitment_ml()` functions use a Maximum Likelihood approach and return objects that inherit from class `bboufit_ml`.
+
+Objects of class `bboufit_ml` have four elements: 
+
+1. `model` - the Nimble model as created by `nimble::nimbleModel()`.   
+1. `model_code` - the model code in text format.  
+1. `mle` - the Maximum Likelihood output as created by model$findMLE().
+1. `summary` - the summary of the Maximum Likelihood output as created by `model$summary(mle)`.  
+1. `data` - the survival or recruitment data provided.
+
+See [nimble](https://github.com/nimble-dev/nimble) for how to work with nimble model objects and Maximum Likelihood output. 
 
 ## References

@@ -5,6 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
 ---
 
 ```{r, include = FALSE}
@@ -53,10 +54,11 @@ This approach has the advantage of allowing derived parameters such as the popul
 
 ## bboutools
 
-`bboutools` provides the option to estimate parameter values using a Maximum Likelihood or a fully Bayesian approach. Random effects are used where appropriate by default. The Bayesian approach also uses biologically reasonable informative priors by default. 
+`bboutools` provides the option to estimate parameter values using a Maximum Likelihood or a fully Bayesian approach. Random effects are used where appropriate by default. The Bayesian approach also uses biologically reasonable, weakly informative priors by default. 
 `bboutools` provides relatively simple general models that can be used to compare survival, recruitment and population growth estimates across jurisdictions.
 
-By default, the `bboutools` Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves). The number of samples saved can be adjusted with the `niters` argument. 
+By default, the `bboutools` Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves). 
+The number of samples saved can be adjusted with the `niters` argument. 
 With `niters` set, the user can simply increment the thinning rate as required to achieve convergence.
 This process is automated in the Shiny app. 
 
@@ -126,34 +128,29 @@ for(i in 1:nObs) {
 }
 ```
 
-### `bboufit` Objects
+### Predicted Survival, Recruitment and Population Growth
+As ungulate populations are generally polygynous survival and recruitment are estimated with respect to the number of adult (mature) females.
 
-The `bb_fit_survival()` and `bb_fit_recruitment()` functions use a Bayesian approach and return objects that inherit from class `bboufit`.
+To estimate recruitment following @decesare_estimating_2012, the predicted annual calves per female adult is first divided by two to give the expected number of female calves per adult female (under the assumption of a 1:1 sex ratio).
 
-Objects of class `bboufit` have three elements: 
+$$R_F = R/2$$
 
-1. `model` - the compiled Nimble model as created by `nimble::nimbleModel()`.  
-1. `model_code` - the model code in text format.  
-1. `samples` - the MCMC samples generated from`nimble::runMCMC()` converted to an object of class `mcmcr`.  
-1. `data` - the survival or recruitment data provided.
+Next the annual recruitment is adjusted to give the proportional change in the population.
 
-These are the raw materials for any further exploration or analysis. 
-For example, view trace and density plots with `plot(fit$samples)`.
+$$R_\Delta =  \frac{R_F}{1 + R_F}$$
+The rate of population growth ($\lambda$) is
 
-See [mcmcr](https://github.com/poissonconsulting/mcmcr) and [mcmcderive](https://github.com/poissonconsulting/mcmcderive) for working with `mcmcr` objects, or convert samples to an object of class `mcmc.list`, e,g, with `coda::as.mcmc.list` for working with the [coda](https://github.com/cran/coda) R package. 
+$$\lambda = \frac{N_{t+1}}{N_t}$$
 
+where $N_t$ is the population abundance in year $t$.
 
-### `bboufit_ml` Objects
+Following @hatter_moose_1991, it can be shown that
 
-The `bb_fit_survival_ml()` and `bb_fit_recruitment_ml()` functions use a Maximum Likelihood approach and return objects that inherit from class `bboufit_ml`.
+$$\lambda = \frac{S}{1-R}$$
+where $S$ is the annual survival. 
 
-Objects of class `bboufit_ml` have four elements: 
+$\lambda$ is calculated from $R_\Delta$ and $S$ as
 
-1. `model` - the Nimble model as created by `nimble::nimbleModel()`.   
-1. `model_code` - the model code in text format.  
-1. `mle` - the Maximum Likelihood output as created by model$findMLE().
-1. `summary` - the summary of the Maximum Likelihood output as created by `model$summary(mle)`.  
-1. `data` - the survival or recruitment data provided.
+$$\lambda = \frac{S}{1-R_\Delta}$$
 
-See [nimble](https://github.com/nimble-dev/nimble) for how to work with nimble model objects and Maximum Likelihood output. 
-
+## References
