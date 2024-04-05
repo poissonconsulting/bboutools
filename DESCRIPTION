@@ -6,7 +6,8 @@ Authors@R: c(
     comment = c(ORCID = "0000-0002-3658-4517")),
     person("Joe", "Thorley", , "joe@poissonconsulting.ca", role = "aut",
            comment = c(ORCID = "0000-0002-7683-4592")),
-    person("John", "Boulanger", role = "aut"),
+    person("John", "Boulanger", role = "aut",
+           comment = c(ORCID = "0000-0001-8222-1445")),
     person("Ayla", "Pearson", , "ayla@poissonconsulting.ca", role = "aut"),
     person(given = "Environment and Climate Change Canada",
              role = "cph")
