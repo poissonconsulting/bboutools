@@ -1,10 +1,10 @@
 priors_survival <- function(){
   c(
-    b0_mu = 4,
-    b0_sd = 2,
+    b0_mu = 3,
+    b0_sd = 10,
     bYear_mu = 0,
-    bYear_sd = 1,
-    bAnnual_sd = 1,
+    bYear_sd = 5,
+    bAnnual_sd = 10,
     sAnnual_rate = 1,
     sMonth_rate = 1
   )
