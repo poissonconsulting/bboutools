@@ -87,6 +87,14 @@ test_that("bb_predict_survival works on ML", {
   expect_snapshot_data(predict, "bb_predict_survival_ml")
 })
 
+test_that("bb_predict_survival works on ML with fixed", {
+  predict <- bb_predict_survival(bboutools:::fit_survival_ml_fixed)
+  expect_true(all(!is.na(predict$estimate)))
+  expect_s3_class(predict, "tbl")
+  skip_on_os("linux")
+  expect_snapshot_data(predict, "bb_predict_survival_ml_fixed")
+})
+
 test_that("bb_predict_survival works on ML with trend", {
   predict <- bb_predict_survival(bboutools:::fit_survival_ml_trend)
   expect_s3_class(predict, "tbl")
