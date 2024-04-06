@@ -13,7 +13,7 @@ priors_survival <- function(){
 priors_recruitment <- function(){
   c(
     b0_mu = -1.5,
-    b0_sd = 0.5,
+    b0_sd = 1,
     bYear_mu = 0,
     bYear_sd = 2,
     bAnnual_sd = 1,
