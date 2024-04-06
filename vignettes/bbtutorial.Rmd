@@ -152,17 +152,17 @@ Keep in mind that any reference to 'Year' or 'Annual' in these summary outputs r
 
 ### Priors
 In general, weakly informative priors are used by default [@gelman_prior_2017; @mcelreath_statistical_2016]. 
-The default prior distribution parameter values can be accessed from `bb_priors_recruitment()` and `bb_priors_survival()`. See documentation (i.e., `?bb_priors_recruitment`) for more information on the prior distributions.
+The default prior distribution parameter values can be accessed from `bb_priors_recruitment()` and `bb_priors_survival()`. See the priors vignette for more information.
 
 ```{r}
 bb_priors_recruitment()
 ```
-The default prior distribution for adult_female_proportion is `Beta(65, 35)` and the default prior distribution for the intercept (`b0`) is `Normal(-1.4, 0.5)`, which is on the log-odds scale. 
+For example, the default prior distribution for adult_female_proportion is `Beta(65, 35)` and the default prior distribution for the intercept (`b0`) is `Normal(-1.5, 1)`, which is on the log scale. 
 The user can change the priors by providing a named vector to the `priors` argument in the model fitting functions. The names must match one of the names in `bb_priors_recruitment()`.  
 
-For example, uninformative priors for `adult_female_proportion` (e.g., `Beta(1, 1)`) and `b0` (e.g., `Normal(0, 2)`) can be supplied as follows. 
+For example, less informative priors for `adult_female_proportion` (e.g., `Beta(1, 1)`) and `b0` (e.g., `Normal(0, 5)`) can be supplied as follows. 
 ```{r, eval=FALSE}
-recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a, priors = c(adult_female_proportion_alpha = 1, adult_female_proportion_beta = 1, b0_mu = 0, b0_sd = 2))
+recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a, priors = c(adult_female_proportion_alpha = 1, adult_female_proportion_beta = 1, b0_mu = 0, b0_sd = 5))
 ```
 
 If the user is interested in fitting models without priors, see `bb_fit_recruitment_ml()`/`bb_fit_survival_ml()`, which use a Maximum Likelihood approach (see more details below). 
