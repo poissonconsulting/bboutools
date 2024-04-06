@@ -3,7 +3,7 @@ priors_survival <- function(){
     b0_mu = 3,
     b0_sd = 10,
     bYear_mu = 0,
-    bYear_sd = 5,
+    bYear_sd = 2,
     bAnnual_sd = 10,
     sAnnual_rate = 1,
     sMonth_rate = 1
@@ -15,7 +15,7 @@ priors_recruitment <- function(){
     b0_mu = -1.4,
     b0_sd = 0.5,
     bYear_mu = 0,
-    bYear_sd = 1,
+    bYear_sd = 2,
     bAnnual_sd = 1,
     sAnnual_rate = 1,
     adult_female_proportion_alpha = 65,
