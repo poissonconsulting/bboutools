@@ -119,10 +119,9 @@ gp <-
 gp
 ```
 
-In general, Maximum Likelihood and Bayesian models of the same type (i.e., fixed or random) have similar estimates. 
-This is because the priors in the Bayesian models are not informative. 
+In this example, Maximum Likelihood and Bayesian models of the same type (i.e., fixed or random) have similar estimates because the Bayesian model priors are not informative. 
 Estimates from random effect models tend to be pulled toward the mean. 
-Estimates from fixed effect models more closely match the observed data. 
+Estimates from the fixed effect models more closely match the observed data, including extreme values. 
 Note, there is no functionality in `bboutools` to get confidence intervals on predictions (i.e., derived parameters) for Maximum Likelihood models. 
 This is a more straightforward task with Bayesian models. 
 
