@@ -1,5 +1,6 @@
 term,estimate,lower,upper
 b0,-2.07,-2.73,-1.42
+bAnnual[1],0,0,0
 bAnnual[2],0.591,-0.135,1.32
 bAnnual[3],0.822,0.0719,1.57
 bAnnual[4],1.03,0.301,1.75

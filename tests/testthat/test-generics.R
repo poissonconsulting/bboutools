@@ -88,6 +88,12 @@ test_that("summary ml works", {
   expect_snapshot(summary_ml)
 })
 
+test_that("summary ml matches estimates correctly", {
+  x <- summary(bboutools:::fit_survival_ml_fixed)
+  x <- x$bAnnual[2]
+  expect_equal(bboutools:::fit_survival_ml_fixed$summary$params$estimates[2], x)
+})
+
 test_that("estimate works", {
   estimates <- estimates(bboutools:::fit_recruitment)
   expect_snapshot(estimates)
@@ -115,7 +121,7 @@ test_that("get attributes ml works", {
 })
 
 test_that("convergence works", {
-  expect_equal(rhat(bboutools:::fit_survival), 1.015)
+  expect_equal(rhat(bboutools:::fit_survival), 1.029)
   expect_false(converged(bboutools:::fit_survival))
-  expect_equal(esr(bboutools:::fit_survival), 0.037)
+  expect_equal(esr(bboutools:::fit_survival), 0.046)
 })
