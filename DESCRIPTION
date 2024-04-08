@@ -23,6 +23,7 @@ Depends:
 Imports: 
     bboudata,
     chk,
+    dplyr,
     generics,
     ggplot2,
     glue,
@@ -40,7 +41,6 @@ Imports:
 Suggests: 
     coda,
     covr,
-    dplyr,
     knitr,
     readr,
     rmarkdown,
