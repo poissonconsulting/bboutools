@@ -17,18 +17,18 @@ estimates_ml <- function(x) {
 }
 
 summary_ml <- function(x) {
-  y <- data.frame(
+  y <- tibble(
     term = terms_ml(x),
     parameter = pars_ml(x),
     estimate = estimates_ml(x)
-  )
-  if(!("bAnnual[1]" %in% y$term)){
-    y <- rbind(y, data.frame(term = "bAnnual[1]", 
+  ) 
+  if(!("bAnnual[1]" %in% y$term) & any(grepl("bAnnual", y$term))){
+    y <- bind_rows(y, tibble(term = term::as_term("bAnnual[1]") , 
                         parameter = "bAnnual", 
                         estimate = 0)) 
-    y <- y[order(y$term),]
+      
   }
-  y
+  arrange(y, .data$term)
 }
 
 .ess <- function(x) {
