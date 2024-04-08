@@ -45,6 +45,7 @@ Predicts population growth (lambda) from survival and recruitment fit objects.
 }}
 \seealso{
 Other analysis: 
+\code{\link{bb_predict_calf_cow_ratio}()},
 \code{\link{bb_predict_population_change}()},
 \code{\link{bb_predict_recruitment}()},
 \code{\link{bb_predict_recruitment_trend}()},

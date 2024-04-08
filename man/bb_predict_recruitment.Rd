@@ -27,11 +27,12 @@ bb_predict_recruitment(
 A tibble of the predicted estimates.
 }
 \description{
-Predict recruitment by year.
+Predict DeCesare adjusted recruitment by year, assuming a 50\% sex ratio.
 If year is FALSE, predictions are made for a 'typical' year.
 }
 \seealso{
 Other analysis: 
+\code{\link{bb_predict_calf_cow_ratio}()},
 \code{\link{bb_predict_growth}()},
 \code{\link{bb_predict_population_change}()},
 \code{\link{bb_predict_recruitment_trend}()},
