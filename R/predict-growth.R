@@ -5,7 +5,7 @@ predict_lambda <- function(survival, recruitment){
   chk_s3_class(recruitment, "bboufit_recruitment")
 
   pred_sur <- predict_survival(survival, year = TRUE, month = FALSE)
-  pred_rec <- predict_recruitment(recruitment, year = TRUE)
+  pred_rec <- predict_calf_cow(recruitment, year = TRUE)
   
   data_sur <- pred_sur$data
   data_rec <- pred_rec$data

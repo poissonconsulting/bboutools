@@ -21,7 +21,7 @@ predict_survival <- function(fit, year, month) {
   x
 }
 
-predict_recruitment <- function(fit, year) {
+predict_calf_cow <- function(fit, year) {
   samples <- samples(fit)
   data <- augment(fit)
   new <- new_data_ym(data, year = year, month = FALSE)
@@ -96,11 +96,43 @@ predict.bboufit_survival <- function(object,
   bb_predict_survival(object, year, month, conf_level, estimate, sig_fig)
 }
 
-#' Predict Recruitment
+#' Predict Calf-Cow Ratio
 #'
-#' Predict recruitment by year.
+#' Predict calves per adult female by year.
 #' If year is FALSE, predictions are made for a 'typical' year.
 #'
+#' @inheritParams params
+#' @return A tibble of the predicted estimates.
+#' @export
+#' @family analysis
+bb_predict_calf_cow_ratio <- function(recruitment,
+                                   year = TRUE,
+                                   conf_level = 0.95,
+                                   estimate = median,
+                                   sig_fig = 3) {
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment)) 
+  chk_s3_class(recruitment, "bboufit_recruitment")
+  chk_flag(year)
+  chk_range(conf_level)
+  chk_function(estimate)
+  chk_whole_number(sig_fig)
+  
+  predicted <- predict_calf_cow(fit = recruitment, year = year)
+  coef <- predict_coef(
+    samples = predicted$samples,
+    new_data = predicted$data,
+    conf_level = conf_level,
+    estimate = estimate,
+    sig_fig = sig_fig
+  )
+  coef
+}
+
+#' Predict Recruitment
+#'
+#' Predict DeCesare adjusted recruitment by year, assuming a 50% sex ratio. 
+#' If year is FALSE, predictions are made for a 'typical' year.
+#' 
 #' @inheritParams params
 #' @return A tibble of the predicted estimates.
 #' @export
@@ -117,9 +149,14 @@ bb_predict_recruitment <- function(recruitment,
   chk_function(estimate)
   chk_whole_number(sig_fig)
 
-  predicted <- predict_recruitment(fit = recruitment, year = year)
+  predicted <- predict_calf_cow(fit = recruitment, year = year)
+  rec <- predicted$samples
+  class(rec) <- "mcmcarray"
+  rec <- rec / 2
+  rec <- rec / (1 + rec)
+  
   coef <- predict_coef(
-    samples = predicted$samples,
+    samples = rec,
     new_data = predicted$data,
     conf_level = conf_level,
     estimate = estimate,
