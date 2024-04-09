@@ -1,8 +1,12 @@
-model_data_survival <- function(data, include_uncertain_morts, year_start, quiet) {
+model_data_survival <- function(data, 
+                                include_uncertain_morts,
+                                year_start, 
+                                quiet) {
   data <- data_clean_survival(data, quiet = quiet)
   data <- data_prep_survival(data,
     include_uncertain_morts = include_uncertain_morts,
-    year_start = year_start
+    year_start = year_start,
+    smart_intercept = smart_intercept
   )
   datal <- data_list_survival(data)
   list(datal = datal, data = data)

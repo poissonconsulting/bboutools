@@ -150,12 +150,19 @@ bb_fit_survival_ml <- function(data,
   chk_null_or(inits, vld = vld_named)
   chk_flag(quiet)
 
-  data <-
-    model_data_survival(data,
-      include_uncertain_morts = include_uncertain_morts,
-      year_start = year_start, quiet = quiet
-    )
-  year_random <- data$datal$nAnnual >= min_random_year
+  # special treatment of intercept for ML fixed
+  data <- data_clean_survival(data, quiet = quiet)
+  data <- data_prep_survival(data,
+                             include_uncertain_morts = include_uncertain_morts,
+                             year_start = year_start
+  )
+  year_random <- length(unique(data$Year)) >= min_random_year
+  if(!year_random)
+    data <- data_adjust_intercept(data)
+  
+  datal <- data_list_survival(data)
+  data <- list(datal = datal, data = data)
+  
   if (!year_random && year_trend && !exclude_year) {
     if(!quiet) message_trend_fixed()
   }
