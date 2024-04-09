@@ -1,7 +1,14 @@
 #' Plot Year Recruitment
 #'
 #' Plot annual recruitment estimates with credible limits.
+#' Recruitment is adjusted following DeCesare et al. (2012) methods. 
+#' 
 #' @inheritParams params
+#' @references
+#'   DeCesare, Nicholas J., Mark Hebblewhite, Mark Bradley, Kirby G. Smith,
+#'   David Hervieux, and Lalenia Neufeld. 2012 “Estimating Ungulate Recruitment
+#'   and Growth Rates Using Age Ratios.” The Journal of Wildlife Management
+#'   76 (1): 144–53 https://doi.org/10.1002/jwmg.244.
 #' @export
 bb_plot_year_recruitment <- function(x, ...) {
   UseMethod("bb_plot_year_recruitment")
@@ -14,7 +21,7 @@ bb_plot_year_recruitment.data.frame <- function(x, ...) {
   chk_unused(...)
 
   bb_plot_year(x) +
-    scale_y_continuous("Recruitment (calves/adult female)") +
+    scale_y_continuous("Recruitment") +
     expand_limits(y = 0)
 }
 

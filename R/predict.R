@@ -131,12 +131,18 @@ bb_predict_calf_cow_ratio <- function(recruitment,
 
 #' Predict Recruitment
 #'
-#' Predict DeCesare adjusted recruitment by year, assuming a 50% sex ratio. 
+#' Predict adjusted recruitment by year using DeCesare et al. (2012) methods. 
 #' If year is FALSE, predictions are made for a 'typical' year.
+#' See [bb_predict_calf_cow_ratio()] for unadjusted recruitment. 
 #' 
 #' @inheritParams params
 #' @return A tibble of the predicted estimates.
 #' @export
+#' @references
+#'   DeCesare, Nicholas J., Mark Hebblewhite, Mark Bradley, Kirby G. Smith,
+#'   David Hervieux, and Lalenia Neufeld. 2012 “Estimating Ungulate Recruitment
+#'   and Growth Rates Using Age Ratios.” The Journal of Wildlife Management
+#'   76 (1): 144–53 https://doi.org/10.1002/jwmg.244.
 #' @family analysis
 bb_predict_recruitment <- function(recruitment,
                                    year = TRUE,
