@@ -29,7 +29,7 @@ predict_lambda <- function(survival, recruitment){
   class(sur) <- "mcmcarray"
   class(rec) <- "mcmcarray"
   
-  rec <- rec / 2
+  rec <- rec * sex_ratio
   rec <- rec / (1 + rec)
   lambda <- sur / (1 - rec)
   list(lambda = lambda, data = data)
@@ -47,10 +47,13 @@ predict_lambda <- function(survival, recruitment){
 #' @family analysis
 bb_predict_growth <- function(survival,
                               recruitment,
+                              sex_ratio = 0.5,
                               conf_level = 0.95,
                               estimate = median,
                               sig_fig = 3) {
   
+  chk_number(sex_ratio)
+  chk_range(sex_ratio)
   chk_range(conf_level, c(0, 1))
   chk_is(estimate, "function")
   chk_whole_number(sig_fig)

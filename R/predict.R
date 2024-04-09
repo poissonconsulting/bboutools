@@ -146,12 +146,15 @@ bb_predict_calf_cow_ratio <- function(recruitment,
 #' @family analysis
 bb_predict_recruitment <- function(recruitment,
                                    year = TRUE,
+                                   sex_ratio = 0.5,
                                    conf_level = 0.95,
                                    estimate = median,
                                    sig_fig = 3) {
   chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment)) 
   chk_s3_class(recruitment, "bboufit_recruitment")
   chk_flag(year)
+  chk_number(sex_ratio)
+  chk_rang(sex_ratio)
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
@@ -159,7 +162,7 @@ bb_predict_recruitment <- function(recruitment,
   predicted <- predict_calf_cow(fit = recruitment, year = year)
   rec <- predicted$samples
   class(rec) <- "mcmcarray"
-  rec <- rec / 2
+  rec <- rec * sex_ratio
   rec <- rec / (1 + rec)
   
   coef <- predict_coef(

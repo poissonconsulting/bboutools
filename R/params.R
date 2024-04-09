@@ -16,6 +16,7 @@
 #' @param adult_female_proportion A number between 0 and 1 of the expected proportion of adults that are female.
 #' If NULL, the proportion is estimated from the data (i.e., `Cows ~ Binomial(adult_female_proportion, Cows + Bulls)`) and a prior of dbeta(65, 35) is used. 
 #' This prior can be changed via the `priors` argument.
+#' @param sex_ratio A number between 0 and 1 of the proportion of females at birth.
 #' @param year A flag indicating whether to predict by year.
 #' @param month A flag indicating whether to predict by month.
 #' @param nthin A whole number of the thinning rate.
