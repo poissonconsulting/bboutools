@@ -56,6 +56,7 @@ predict_coef <- function(samples, new_data, conf_level = 0.95,
   new_data$Month <- factor_to_integer(new_data$Month)
   coef <- cbind(new_data, coef)[cols]
   coef <- signif_cols(coef, sig_fig = sig_fig)
+  coef <- arrange(coef, .data$CaribouYear)
 
   tibble::as_tibble(coef)
 }
