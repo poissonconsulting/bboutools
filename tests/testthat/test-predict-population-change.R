@@ -4,6 +4,11 @@ test_that("bb_predict_population_change works", {
   expect_snapshot_data(predict, "bb_predict_popchange")
 })
 
+test_that("bb_predict_population_change works with sex ratio", {
+  predict <- bb_predict_population_change(bboutools:::fit_survival, bboutools:::fit_recruitment, sex_ratio = 0.7)
+  expect_s3_class(predict, "tbl")
+  expect_snapshot_data(predict, "bb_predict_popchange_sex_ratio")
+})
 test_that("bb_predict_population_change works with trend", {
   predict <- bb_predict_population_change(bboutools:::fit_survival_trend, bboutools:::fit_recruitment_trend)
   expect_s3_class(predict, "tbl")
