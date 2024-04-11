@@ -5,8 +5,7 @@ model_data_survival <- function(data,
   data <- data_clean_survival(data, quiet = quiet)
   data <- data_prep_survival(data,
     include_uncertain_morts = include_uncertain_morts,
-    year_start = year_start,
-    smart_intercept = smart_intercept
+    year_start = year_start
   )
   datal <- data_list_survival(data)
   list(datal = datal, data = data)
