@@ -73,11 +73,16 @@ stats::predict
 #' @seealso [`bb_predict_recruitment()`]
 predict.bboufit_recruitment <- function(object,
                                         year = TRUE,
+                                        sex_ratio = 0.5,
                                         conf_level = 0.95,
                                         estimate = median,
                                         sig_fig = 3, ...) {
   chk_unused(...)
-  bb_predict_recruitment(object, year, conf_level, estimate, sig_fig)
+  bb_predict_recruitment(object, year = year, 
+                         sex_ratio = sex_ratio, 
+                         conf_level = conf_level, 
+                         estimate = estimate, 
+                         sig_fig = sig_fig)
 }
 
 #' Predict Survival
@@ -154,7 +159,7 @@ bb_predict_recruitment <- function(recruitment,
   chk_s3_class(recruitment, "bboufit_recruitment")
   chk_flag(year)
   chk_number(sex_ratio)
-  chk_rang(sex_ratio)
+  chk_range(sex_ratio)
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
