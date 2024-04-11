@@ -1,4 +1,4 @@
-predict_lambda <- function(survival, recruitment){
+predict_lambda <- function(survival, recruitment, sex_ratio){
   chkor_vld(.vld_fit(survival), .vld_fit_ml(survival)) 
   chk_s3_class(survival, "bboufit_survival")
   chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment)) 
@@ -58,7 +58,9 @@ bb_predict_growth <- function(survival,
   chk_is(estimate, "function")
   chk_whole_number(sig_fig)
   
-  lambda <- predict_lambda(survival, recruitment)
+  lambda <- predict_lambda(survival, 
+                           recruitment = recruitment, 
+                           sex_ratio = sex_ratio)
   data <- lambda$data
   # no years in common
   if(!nrow(data))
@@ -86,15 +88,20 @@ bb_predict_growth <- function(survival,
 #' @family analysis
 bb_predict_population_change <- function(survival,
                                          recruitment,
+                                         sex_ratio = 0.5,
                                          conf_level = 0.95,
                                          estimate = median,
                                          sig_fig = 3) {
   
+  chk_number(sex_ratio)
+  chk_range(sex_ratio)
   chk_range(conf_level, c(0, 1))
   chk_is(estimate, "function")
   chk_whole_number(sig_fig)
   
-  lambda <- predict_lambda(survival, recruitment)
+  lambda <- predict_lambda(survival,
+                           recruitment = recruitment, 
+                           sex_ratio = sex_ratio)
   data <- lambda$data
   # no years in common
   if(!nrow(data))
