@@ -40,8 +40,6 @@ predict_lambda <- function(survival, recruitment, sex_ratio){
 #' Predicts population growth (lambda) from survival and recruitment fit objects.
 #'
 #' @inheritParams params
-#' @param survival An object of class 'bboufit_survival' (output of [`bb_fit_survival()`]).
-#' @param recruitment An object of class 'bboufit_recruitment' (output of [`bb_fit_recruitment()`]).
 #' @return A tibble of the lambda estimates with upper and lower credible intervals.
 #' @export
 #' @family analysis
@@ -81,8 +79,6 @@ bb_predict_growth <- function(survival,
 #' Population change is the cumulative product of population growth rate (i.e., output of [`bb_predict_growth()`])
 #'
 #' @inheritParams params
-#' @param survival An object of class 'bboufit_survival' (output of [`bb_fit_survival()`]).
-#' @param recruitment An object of class 'bboufit_recruitment' (output of [`bb_fit_recruitment()`]).
 #' @return A tibble of the population change estimates with upper and lower credible intervals.
 #' @export
 #' @family analysis
