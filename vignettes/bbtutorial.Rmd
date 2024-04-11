@@ -157,7 +157,7 @@ The default prior distribution parameter values can be accessed from `bb_priors_
 ```{r}
 bb_priors_recruitment()
 ```
-For example, the default prior distribution for adult_female_proportion is `Beta(65, 35)` and the default prior distribution for the intercept (`b0`) is `Normal(-1.5, 1)`, which is on the log scale. 
+The default prior distribution for adult_female_proportion is `Beta(65, 35)` and the default prior distribution for the intercept (`b0`) is `Normal(-1.5, 1)`, which is on the log scale. 
 The user can change the priors by providing a named vector to the `priors` argument in the model fitting functions. The names must match one of the names in `bb_priors_recruitment()`.  
 
 For example, less informative priors for `adult_female_proportion` (e.g., `Beta(1, 1)`) and `b0` (e.g., `Normal(0, 5)`) can be supplied as follows. 
@@ -188,7 +188,11 @@ tidy(survival, include_random_effects = FALSE)
 ```
 
 ## Predictions
-A user can generate and plot predictions of recruitment, survival and population growth. 
+A user can generate and plot predictions of recruitment, survival and population growth.
+
+Recruitment is the adjusted recruitment using  methods from [@decesare_estimating_2012]. See the 'analytical methods' vignette for details. 
+
+Predictions of calf-cow ratio can also be made using `bb_predict_calf_cow_ratio()`. 
 
 #### Recruitment by year
 ```{r}
