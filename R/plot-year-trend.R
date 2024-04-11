@@ -71,7 +71,7 @@ bb_plot_year_trend_recruitment.data.frame <- function(x, ...) {
   chk_unused(...)
 
   plot_year_trend(x) +
-    scale_y_continuous("Recruitment (calves/adult female)") +
+    scale_y_continuous("Recruitment") +
     expand_limits(y = 0)
 }
 
