@@ -28,6 +28,7 @@ Imports:
     ggplot2,
     glue,
     lifecycle,
+    magrittr,
     mcmcderive,
     mcmcr,
     newdata,

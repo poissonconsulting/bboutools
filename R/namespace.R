@@ -1,4 +1,4 @@
-#' @import chk glue nimble
+#' @import chk glue nimble magrittr
 #' @importFrom scales percent
 #' @importFrom rescale rescale
 #' @importFrom dplyr arrange tibble bind_rows left_join
