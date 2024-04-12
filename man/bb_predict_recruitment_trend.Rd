@@ -6,6 +6,7 @@
 \usage{
 bb_predict_recruitment_trend(
   recruitment,
+  sex_ratio = 0.5,
   conf_level = 0.95,
   estimate = median,
   sig_fig = 5
@@ -13,6 +14,8 @@ bb_predict_recruitment_trend(
 }
 \arguments{
 \item{recruitment}{An object of class 'bboufit_recruitment' (output of \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}})}
+
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.}
 
 \item{conf_level}{A number between 0 and 1 of the confidence level.}
 
