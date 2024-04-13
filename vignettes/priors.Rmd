@@ -55,7 +55,7 @@ where $bAnnual$ can be a fixed or random effect of categorical year on the inter
 
 The model has the following default priors in `bboutools`
 
-- Intercept (log scale)
+- Intercept (log-odds scale)
 $$b0 \sim Normal(-1, sd = 5)$$
 
 - Categorical year fixed effect
