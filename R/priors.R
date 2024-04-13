@@ -12,11 +12,11 @@ priors_survival <- function(){
 
 priors_recruitment <- function(){
   c(
-    b0_mu = -1.5,
-    b0_sd = 1,
+    b0_mu = -1,
+    b0_sd = 5,
     bYear_mu = 0,
     bYear_sd = 2,
-    bAnnual_sd = 1,
+    bAnnual_sd = 5,
     sAnnual_rate = 1,
     adult_female_proportion_alpha = 65,
     adult_female_proportion_beta = 35
