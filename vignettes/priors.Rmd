@@ -50,16 +50,16 @@ $$bYear \sim Normal(0, sd = 2)$$
 ### Recruitment
 
 Given the full model, the expected recruitment (calves per adult female) for the $i^{th}$ year is
-$$log(Recruitment[i]) = b0 + bAnnual[i] + bYear \cdot Year[i]$$
+$$logit(Recruitment[i]) = b0 + bAnnual[i] + bYear \cdot Year[i]$$
 where $bAnnual$ can be a fixed or random effect of categorical year on the intercept on the log scale and $Year$ is the scaled continuous year. 
 
 The model has the following default priors in `bboutools`
 
 - Intercept (log scale)
-$$b0 \sim Normal(-1.5, sd = 1)$$
+$$b0 \sim Normal(-1, sd = 5)$$
 
 - Categorical year fixed effect
-$$bAnnual[i] \sim Normal(0, sd = 1)$$
+$$bAnnual[i] \sim Normal(0, sd = 5)$$
 
 - Categorical year random effect
 $$sAnnual \sim Exponential(1)\\
