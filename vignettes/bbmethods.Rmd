@@ -158,7 +158,7 @@ for(i in 1:nObs) {
 
 ### Recruitment Model
 
-The recruitment model with annual random effect and year trend is specified below in a simplified form of the BUGS language for readability.
+The recruitment model with annual random effect and year trend is specified below in a simplified form of the BUGS language for readability. Group-level observations are aggregated by caribou year prior to model fitting. 
 
 ```
 b0 ~ Normal(-1, 5)
@@ -166,16 +166,16 @@ bYear ~ Normal(0, 1)
 
 adult_female_proportion ~ Beta(65, 35)
 
-sAnnual ~  exponential(1)
+sAnnual ~  Exponential(1)
 for(i in 1:nAnnual)  bAnnual[i] ~ Normal(0, sAnnual)
 
-for(i in 1:nObs) {
+for(i in 1:nAnnual) {
   FemaleYearlings[i] ~ Binomial(0.5, Yearlings[i])
   Cows[i] ~ Binomial(adult_female_proportion, CowsBulls[i])
   OtherAdultsFemales[i] ~ Binomial(adult_female_proportion, UnknownAdults[i])
   log(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
   AdultsFemales[i] <- max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
-  Calves[i] ~ Poisson(eRecruitment[i] * AdultsFemales[i])
+  Calves[i] ~ Binomial(eRecruitment[i], AdultsFemales[i])
 }
 ```
 
@@ -188,16 +188,16 @@ bYear ~ Normal(0, 1)
 
 adult_female_proportion ~ Beta(65, 35)
 
-sAnnual ~  exponential(1)
+sAnnual ~  Exponential(1)
 for(i in 1:nAnnual)  bAnnual[i] ~ Normal(0, sAnnual)
 
-for(i in 1:nObs) {
+for(i in 1:nAnnual) {
   Cows[i] ~ Binomial(adult_female_proportion, CowsBulls[i])
-  FemaleYearlings[i] <- 0.5 * Yearlings[i]
-  OtherAdultsFemales[i] <- adult_female_proportion * UnknownAdults[i]
-  log(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
+  FemaleYearlings[i] <- round(0.5 * Yearlings[i])
+  OtherAdultsFemales[i] <- round(adult_female_proportion * UnknownAdults[i])
+  logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
   AdultsFemales[i] <- max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
-  Calves[i] ~ Poisson(eRecruitment[i] * AdultsFemales[i])
+  Calves[i] ~ Binomial(eRecruitment[i], AdultsFemales[i])
 }
 ```
 
