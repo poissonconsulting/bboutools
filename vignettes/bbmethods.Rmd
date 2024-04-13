@@ -141,10 +141,10 @@ The survival model with annual random effect and trend is specified below in a s
 The same model code is used for both the Bayesian and frequentist methods.
 
 ```
-b0 ~ Normal(4, 2)
-bYear ~ Normal(0, 1)
+b0 ~ Normal(3, 10)
+bYear ~ Normal(0, 2)
 
-sMonth ~  Normal(0, 2) T(0,)
+sMonth ~  Exponential(1)
 for(i in 1:nMonth)  bMonth[i] ~ Normal(0, sMonth)
 
 sAnnual ~ Exponential(1)
@@ -161,7 +161,7 @@ for(i in 1:nObs) {
 The recruitment model with annual random effect and year trend is specified below in a simplified form of the BUGS language for readability.
 
 ```
-b0 ~ Normal(-1.4, 0.5)
+b0 ~ Normal(-1, 5)
 bYear ~ Normal(0, 1)
 
 adult_female_proportion ~ Beta(65, 35)
