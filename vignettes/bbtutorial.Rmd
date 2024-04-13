@@ -87,7 +87,7 @@ data <- read_csv(file = "path/to/file.csv")
 
 The annual recruitment in boreal caribou population is typically estimated from annual calf:cow ratios.
 
-`bboutools` fits a Poisson annual recruitment model to the counts of calfs, cows, yearlings unknown adults and potentially, bulls.  
+`bboutools` fits a Binomial recruitment model to the annual counts of calves, cows, yearlings, unknown adults and potentially, bulls.  
 
 It is up to the user to ensure that the data are from surveys that were conducted at the same time of year, when calf survival is expected to be similar to adult survival. 
 
@@ -97,6 +97,7 @@ The function `bb_fit_recruitment()` fits a Bayesian recruitment model.
 
 The start month of the biological year (i.e., 'caribou year') can be set with the `year_start` argument.
 By default, the start month is April. 
+Data are aggregated by biological year (not calendar year) prior to model fitting. 
  
 The adult female proportion can either be fixed or estimated from counts of cows and bulls (i.e., `Cows ~ Binomial(adult_female_proportion, Cows + Bulls)`). 
 
