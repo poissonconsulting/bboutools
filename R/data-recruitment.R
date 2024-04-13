@@ -15,12 +15,12 @@ data_prep_recruitment <- function(data, year_start) {
   data <- 
     data %>%
     dplyr::group_by(Year) %>%
-    dplyr::summarize(Cows = sum(Cows),
-              CowsBulls = sum(CowsBulls),
-              UnknownAdults = sum(UnknownAdults),
-              Yearlings = sum(Yearlings),
-              Calves = sum(Calves),
-              PopulationName = dplyr::first(PopulationName)) %>%
+    dplyr::summarize(Cows = sum(.data$Cows),
+              CowsBulls = sum(.data$CowsBulls),
+              UnknownAdults = sum(.data$UnknownAdults),
+              Yearlings = sum(.data$Yearlings),
+              Calves = sum(.data$Calves),
+              PopulationName = dplyr::first(.data$PopulationName)) %>%
     dplyr::ungroup()
   data$Annual <- factor(data$Year)
   
