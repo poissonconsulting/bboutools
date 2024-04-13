@@ -69,16 +69,16 @@ model_recruitment <-
       if (year_trend) {
         if (year_random) {
           for (i in 1:nObs) {
-            log(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
+            logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
           }
         } else {
           for (i in 1:nObs) {
-            log(eRecruitment[i]) <- b0 + bYear * Year[i]
+            logit(eRecruitment[i]) <- b0 + bYear * Year[i]
           }
         }
       } else {
         for (i in 1:nObs) {
-          log(eRecruitment[i]) <- b0 + bAnnual[Annual[i]]
+          logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]]
         }
       }
 
@@ -95,9 +95,9 @@ model_recruitment <-
         }
       } else {
         for (i in 1:nObs) {
-          FemaleYearlings[i] <- yearling_female_proportion * Yearlings[i]
+          FemaleYearlings[i] <- round(yearling_female_proportion * Yearlings[i])
           OtherAdultsFemales[i] <-
-            adult_female_proportion * UnknownAdults[i]
+            round(adult_female_proportion * UnknownAdults[i])
         }
       }
 
@@ -107,7 +107,7 @@ model_recruitment <-
           # in original model because max cannot be used with ML
           ((FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]) < 1) +
           FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]
-        Calves[i] ~ dpois(eRecruitment[i] * AdultsFemales[i])
+        Calves[i] ~ dbin(eRecruitment[i], AdultsFemales[i])
       }
     })
 
