@@ -14,7 +14,7 @@
 #' @param include_uncertain_morts A flag indicating whether to include uncertain mortalities in total mortalities.
 #' @param yearling_female_proportion A number between 0 and 1 of the expected proportion of yearlings that are female.
 #' @param adult_female_proportion A number between 0 and 1 of the expected proportion of adults that are female.
-#' If NULL, the proportion is estimated from the data (i.e., `Cows ~ Binomial(adult_female_proportion, Cows + Bulls)`) and a prior of dbeta(65, 35) is used. 
+#' If NULL, the proportion is estimated from the data (i.e., `Cows ~ Binomial(adult_female_proportion, Cows + Bulls)`) and a prior of dbeta(65, 35) is used.
 #' This prior can be changed via the `priors` argument.
 #' @param sex_ratio A number between 0 and 1 of the proportion of females at birth.
 #' @param year A flag indicating whether to predict by year.
@@ -35,7 +35,7 @@
 #' @param original_scale A flag indicating whether to return the estimates in the original scale.
 #' @param exclude_year A flag indicating whether to exclude the year effect.
 #' @param year_random A flag indicating whether to include year random effect. If FALSE, year is fitted as a fixed effect.
-#' @param year_start A whole number between 1 and 12 indicating the start of the caribou year. By default, April is set as the start of the biological year. 
+#' @param year_start A whole number between 1 and 12 indicating the start of the caribou year. By default, April is set as the start of the biological year.
 #' @param params A named list of the parameter names and values to simulate.
 #'
 #' @keywords internal

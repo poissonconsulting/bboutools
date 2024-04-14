@@ -14,17 +14,16 @@ plot_year_trend <- function(x, ...) {
     ) +
     geom_line() +
     xlab(" Caribou Year")
-  
-  if(any(is.na(x$lower))){
+
+  if (any(is.na(x$lower))) {
     return(gp)
   }
-  
-  gp + 
+
+  gp +
     geom_ribbon(aes(
       ymin = .data$lower,
       ymax = .data$upper
-    ), alpha = 0.2) 
-    
+    ), alpha = 0.2)
 }
 
 #' Plot Annual Survival Trend

@@ -71,15 +71,19 @@ library(ggplot2)
 set.seed(1)
 surv <- bboudata::bbousurv_a
 data <- bboutools:::model_data_survival(surv, year_start = 4L, include_uncertain_morts = FALSE, quiet = FALSE)$data
-obs <- 
+obs <-
   data %>%
   group_by(Year, Month) %>%
-  summarise(survival = 1 - (MortalitiesCertain)/StartTotal,
-            weight = StartTotal^(1/2)) %>%
+  summarise(
+    survival = 1 - (MortalitiesCertain) / StartTotal,
+    weight = StartTotal^(1 / 2)
+  ) %>%
   ungroup() %>%
   group_by(Year) %>%
-  summarise(mean_survival = weighted.mean(survival, weight)^12,
-            mean_weight = mean(weight))
+  summarise(
+    mean_survival = weighted.mean(survival, weight)^12,
+    mean_weight = mean(weight)
+  )
 
 fit <- bb_fit_survival_ml(surv, quiet = TRUE)
 fit2 <- bb_fit_survival_ml(surv, min_random_year = Inf, quiet = TRUE)
@@ -91,26 +95,38 @@ pred2 <- bb_predict_survival(fit2)
 pred3 <- bb_predict_survival(fit3)
 pred4 <- bb_predict_survival(fit4)
 
-df <- dplyr::bind_rows(list("ML Random" = pred, 
-                            "ML Fixed" = pred2,
-                            "Bayes Fixed" = pred3,
-                            "Bayes Random" = pred4), .id = "model") %>%
-  mutate(method = if_else(grepl("ML", model), "Frequentist", "Bayesian"),
-         year = if_else(grepl("Fixed", model), "Fixed", "Random"))
+df <- dplyr::bind_rows(list(
+  "ML Random" = pred,
+  "ML Fixed" = pred2,
+  "Bayes Fixed" = pred3,
+  "Bayes Random" = pred4
+), .id = "model") %>%
+  mutate(
+    method = if_else(grepl("ML", model), "Frequentist", "Bayesian"),
+    year = if_else(grepl("Fixed", model), "Fixed", "Random")
+  )
 
-gp <- 
+gp <-
   ggplot(data = df) +
-  geom_pointrange(aes(x = CaribouYear, 
-                      y = estimate, 
-                      ymin = lower, 
-                      ymax = upper, 
-                      color = model,
-                      shape = year), 
-                  position = position_dodge(width = 0.7)) +
-  geom_point(data = obs, aes(x = Year,
-                             y = mean_survival,
-                             alpha = mean_weight), 
-             color = "black") +
+  geom_pointrange(
+    aes(
+      x = CaribouYear,
+      y = estimate,
+      ymin = lower,
+      ymax = upper,
+      color = model,
+      shape = year
+    ),
+    position = position_dodge(width = 0.7)
+  ) +
+  geom_point(
+    data = obs, aes(
+      x = Year,
+      y = mean_survival,
+      alpha = mean_weight
+    ),
+    color = "black"
+  ) +
   scale_alpha_continuous(expression(sqrt(n)), range = c(0.3, 1)) +
   scale_y_continuous("Annual Survival", labels = scales::percent) +
   scale_color_discrete("") +

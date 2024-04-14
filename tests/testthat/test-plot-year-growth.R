@@ -25,4 +25,3 @@ test_that("bb_plot_year_population_change ML works", {
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "plot_year_population_change_ml")
 })
-

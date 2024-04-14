@@ -17,7 +17,7 @@ test_that("bb_predict_population_change works with trend", {
 
 test_that("bb_predict_population_change conf_level works", {
   predict <- bb_predict_population_change(bboutools:::fit_survival, bboutools:::fit_recruitment,
-                               conf_level = 0.5
+    conf_level = 0.5
   )
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_popchange_conf_level")
@@ -25,7 +25,7 @@ test_that("bb_predict_population_change conf_level works", {
 
 test_that("bb_predict_population_change estimate works", {
   predict <- bb_predict_population_change(bboutools:::fit_survival, bboutools:::fit_recruitment,
-                               estimate = max
+    estimate = max
   )
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_pophange_estimates")

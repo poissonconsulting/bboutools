@@ -1,4 +1,4 @@
-priors_survival <- function(){
+priors_survival <- function() {
   c(
     b0_mu = 3,
     b0_sd = 10,
@@ -10,7 +10,7 @@ priors_survival <- function(){
   )
 }
 
-priors_recruitment <- function(){
+priors_recruitment <- function() {
   c(
     b0_mu = -1,
     b0_sd = 5,
@@ -24,30 +24,30 @@ priors_recruitment <- function(){
 }
 
 #' Survival model default priors
-#' 
-#' Prior distribution parameters and default values for survival model parameters. 
-#' 
+#'
+#' Prior distribution parameters and default values for survival model parameters.
+#'
 #' Intercept
-#' 
+#'
 #' `b0 ~ Normal(mu = b0_mu, sd = b0_sd)`
-#' 
+#'
 #' Year Trend
-#' 
+#'
 #' `bYear ~ Normal(mu = bYear_mu, sd = bYear_sd)`
-#' 
+#'
 #' Year fixed effect
-#' 
+#'
 #' `bAnnual ~ Normal(mu = 0, sd = bAnnual_sd)`
-#' 
+#'
 #' Standard deviation of annual random effect
-#' 
+#'
 #' `sAnnual ~ Exponential(rate = sAnnual_rate)`
-#' 
+#'
 #' Standard deviation of month random effect
-#' 
+#'
 #' `sMonth ~ Exponential(rate = sMonth_rate)`
-#' 
-#' @return A named vector. 
+#'
+#' @return A named vector.
 #' @export
 #'
 #' @examples bb_priors_survival()
@@ -56,30 +56,30 @@ bb_priors_survival <- function() {
 }
 
 #' Recruitment model default priors
-#' 
-#' Prior distribution parameters and default values for recruitment model parameters. 
-#' 
+#'
+#' Prior distribution parameters and default values for recruitment model parameters.
+#'
 #' Intercept
-#' 
+#'
 #' `b0 ~ Normal(mu = b0_mu, sd = b0_sd)`
-#' 
+#'
 #' Year Trend
-#' 
+#'
 #' `bYear ~ Normal(mu = bYear_mu, sd = bYear_sd)`
-#' 
+#'
 #' Year fixed effect
-#' 
+#'
 #' `bAnnual ~ Normal(mu = 0, sd = bAnnual_sd)`
-#' 
+#'
 #' Standard deviation of annual random effect
-#' 
+#'
 #' `sAnnual ~ Exponential(rate = sAnnual_rate)`
-#' 
+#'
 #' Adult female proportion
-#' 
+#'
 #' `adult_female_proportion ~ Beta(alpha = adult_female_proportion_alpha, beta = adult_female_proportion_beta)`
-#' 
-#' @return A named vector. 
+#'
+#' @return A named vector.
 #' @export
 #'
 #' @examples bb_priors_survival()

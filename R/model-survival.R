@@ -1,6 +1,6 @@
-model_data_survival <- function(data, 
+model_data_survival <- function(data,
                                 include_uncertain_morts,
-                                year_start, 
+                                year_start,
                                 quiet) {
   data <- data_clean_survival(data, quiet = quiet)
   data <- data_prep_survival(data,
@@ -14,7 +14,7 @@ model_data_survival <- function(data,
 #' Build Nimble survival model.
 #'
 #' This is for use by developers.
-#' 
+#'
 #' @inheritParams params
 #' @param build_derivs A flag indicating whether to build derivatives Laplace approximation.
 #' @export
@@ -97,16 +97,16 @@ model_survival <- function(data,
   enable_derivs <- nimbleOptions("enableDerivs")
   nimbleOptions(verbose = FALSE)
   nimbleOptions(enableDerivs = TRUE)
-  
+
   model <- nimbleModel(code,
     constants = constants,
     buildDerivs = build_derivs,
     name = "bboumodel_survival"
   )
-  
+
   # reset to user
   nimbleOptions(verbose = verbose)
   nimbleOptions(enableDerivs = enable_derivs)
-  
+
   model
 }

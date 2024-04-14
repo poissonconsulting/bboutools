@@ -28,17 +28,17 @@ bb_plot_month.data.frame <- function(x, ...) {
   gp <- ggplot(data = x) +
     aes(x = .data$Month, y = .data$estimate, ymin = .data$lower, ymax = .data$upper) +
     xlab("Month")
-  
-  if(any(is.na(x$lower))){
+
+  if (any(is.na(x$lower))) {
     gp <- gp + ggplot2::geom_point()
   } else {
     gp <- gp + geom_pointrange()
   }
-  
+
   if (length(x$Month)) {
     return(gp + scale_x_discrete(breaks = breaks2, labels = month.abb[breaks2], drop = FALSE))
   }
-  
+
   gp
 }
 

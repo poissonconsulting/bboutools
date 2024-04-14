@@ -1,8 +1,8 @@
 #' Plot Year Recruitment
 #'
 #' Plot annual recruitment estimates with credible limits.
-#' Recruitment is adjusted following DeCesare et al. (2012) methods. 
-#' 
+#' Recruitment is adjusted following DeCesare et al. (2012) methods.
+#'
 #' @inheritParams params
 #' @references
 #'   DeCesare, Nicholas J., Mark Hebblewhite, Mark Bradley, Kirby G. Smith,

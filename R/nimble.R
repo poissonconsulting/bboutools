@@ -32,7 +32,7 @@ run_nimble_ml <- function(model, inits, prior_inits, quiet) {
   cmodel <- compileNimble(model, resetFunctions = TRUE)
   params <- setupMargNodes(model)$paramNodes
   chk_subset(names(inits), params, x_name = "Names in `inits`")
-  
+
   # need to deal with special case when estimating adult_female_proportion
   # nimble does not guess default param nodes correctly
   cows <- map_lgl(params, function(x) grepl("Cows", x))

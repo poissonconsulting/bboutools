@@ -12,18 +12,20 @@ data_clean_recruitment <- function(data, quiet = FALSE) {
 data_prep_recruitment <- function(data, year_start) {
   data$CowsBulls <- data$Cows + data$Bulls
   data$Year <- caribou_year(data$Year, data$Month, year_start = year_start)
-  data <- 
+  data <-
     data %>%
     dplyr::group_by(Year) %>%
-    dplyr::summarize(Cows = sum(.data$Cows),
-              CowsBulls = sum(.data$CowsBulls),
-              UnknownAdults = sum(.data$UnknownAdults),
-              Yearlings = sum(.data$Yearlings),
-              Calves = sum(.data$Calves),
-              PopulationName = dplyr::first(.data$PopulationName)) %>%
+    dplyr::summarize(
+      Cows = sum(.data$Cows),
+      CowsBulls = sum(.data$CowsBulls),
+      UnknownAdults = sum(.data$UnknownAdults),
+      Yearlings = sum(.data$Yearlings),
+      Calves = sum(.data$Calves),
+      PopulationName = dplyr::first(.data$PopulationName)
+    ) %>%
     dplyr::ungroup()
   data$Annual <- factor(data$Year)
-  
+
   data
 }
 

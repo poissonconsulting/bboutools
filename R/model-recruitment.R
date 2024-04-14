@@ -8,7 +8,7 @@ model_data_recruitment <- function(data, year_start = year_start, quiet) {
 #' Build Nimble recruitment model.
 #'
 #' This is for use by developers.
-#' 
+#'
 #' @inheritParams params
 #' @param demographic_stochasticity A flag indicating whether to include demographic_stochasticity in the recruitment model.
 #' @export
@@ -122,10 +122,10 @@ model_recruitment <-
       buildDerivs = TRUE,
       name = "bboumodel_recruitment"
     )
-    
+
     # reset to user
     nimbleOptions(verbose = verbose)
     nimbleOptions(enableDerivs = enable_derivs)
-    
+
     model
   }

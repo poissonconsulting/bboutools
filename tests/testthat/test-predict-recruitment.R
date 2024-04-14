@@ -81,4 +81,3 @@ test_that("generic predict recruitment works on ML", {
   skip_on_os("linux")
   expect_snapshot_data(predict, "predict_recruitment_ml")
 })
-

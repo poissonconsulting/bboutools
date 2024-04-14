@@ -27,12 +27,11 @@ bb_plot_year.data.frame <- function(x, ...) {
       ymax = .data$upper
     ) +
     xlab("Caribou Year")
-  
-  if(any(is.na(x$lower))){
+
+  if (any(is.na(x$lower))) {
     return(gp + ggplot2::geom_point())
   }
   gp + geom_pointrange()
-    
 }
 
 #' @describeIn bb_plot_year Plot annual estimates for a bboufit object.

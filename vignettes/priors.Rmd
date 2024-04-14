@@ -11,7 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  warning = FALSE, 
+  warning = FALSE,
   message = FALSE
 )
 ```
@@ -91,8 +91,10 @@ data <- bboudata::bbousurv_c
 # force model to fit fixed year effect, use default priors
 fit <- bb_fit_survival(data, min_random_year = Inf, quiet = TRUE)
 # tighten prior on bAnnual by changing SD from default 10 to 1
-fit_prior <- bb_fit_survival(data, min_random_year = Inf, quiet = TRUE,
-                             priors = c("bAnnual_sd" = 1))
+fit_prior <- bb_fit_survival(data,
+  min_random_year = Inf, quiet = TRUE,
+  priors = c("bAnnual_sd" = 1)
+)
 # fit maximum likelihood model for comparison
 fit_ml <- bb_fit_survival_ml(data, min_random_year = Inf, quiet = TRUE)
 
@@ -100,9 +102,11 @@ pred <- bb_predict_survival(fit)
 pred_prior <- bb_predict_survival(fit_prior)
 pred_ml <- bb_predict_survival(fit_ml)
 
-df <- bind_rows(list("Bayesian Vague (Default)" = pred,
-                     "Bayesian Informative" = pred_prior,
-                     "Maximum Likelihood" = pred_ml), .id = "model")
+df <- bind_rows(list(
+  "Bayesian Vague (Default)" = pred,
+  "Bayesian Informative" = pred_prior,
+  "Maximum Likelihood" = pred_ml
+), .id = "model")
 ggplot(data = df) +
   geom_pointrange(aes(x = factor(CaribouYear), y = estimate, ymin = lower, ymax = upper, color = model), position = position_dodge(width = 0.5)) +
   theme(legend.position = "bottom") +
@@ -121,12 +125,20 @@ We compare estimates from very informative, informative (default) and vague prio
 set.seed(1)
 data <- bboudata::bbourecruit_c
 fit <- bb_fit_recruitment(data, adult_female_proportion = NULL, quiet = TRUE)
-fit_inf <- bb_fit_recruitment(data, adult_female_proportion = NULL, quiet = TRUE,
-                          priors = c("adult_female_proportion_alpha" = 650,
-                                           "adult_female_proportion_beta" = 350))
-fit_vague <- bb_fit_recruitment(data, adult_female_proportion = NULL, quiet = TRUE,
-                                priors = c("adult_female_proportion_alpha" = 1,
-                                           "adult_female_proportion_beta" = 1))
+fit_inf <- bb_fit_recruitment(data,
+  adult_female_proportion = NULL, quiet = TRUE,
+  priors = c(
+    "adult_female_proportion_alpha" = 650,
+    "adult_female_proportion_beta" = 350
+  )
+)
+fit_vague <- bb_fit_recruitment(data,
+  adult_female_proportion = NULL, quiet = TRUE,
+  priors = c(
+    "adult_female_proportion_alpha" = 1,
+    "adult_female_proportion_beta" = 1
+  )
+)
 fit_ml <- bb_fit_recruitment_ml(data, adult_female_proportion = NULL, quiet = TRUE)
 
 est <-
@@ -145,12 +157,16 @@ est_ml <-
   coef(fit_ml) %>%
   filter(term == "adult_female_proportion")
 
-df <- bind_rows(list("Bayesian Default" = est,
-                     "Bayesian Informative" = est_inf,
-                     "Bayesian Vague" = est_vague,
-                     "Maximum Likelihood" = est_ml), .id = "model") %>%
-  mutate(model = factor(model, levels = c("Bayesian Vague", "Bayesian Default",
-                                          "Bayesian Informative", "Maximum Likelihood")))
+df <- bind_rows(list(
+  "Bayesian Default" = est,
+  "Bayesian Informative" = est_inf,
+  "Bayesian Vague" = est_vague,
+  "Maximum Likelihood" = est_ml
+), .id = "model") %>%
+  mutate(model = factor(model, levels = c(
+    "Bayesian Vague", "Bayesian Default",
+    "Bayesian Informative", "Maximum Likelihood"
+  )))
 df$prior <- c("Beta(65,35)", "Beta(650,350)", "Beta(1,1)", "ML")
 ggplot(data = df) +
   geom_pointrange(aes(x = prior, y = estimate, ymin = lower, ymax = upper, color = model), position = position_dodge(width = 2)) +

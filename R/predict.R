@@ -78,11 +78,13 @@ predict.bboufit_recruitment <- function(object,
                                         estimate = median,
                                         sig_fig = 3, ...) {
   chk_unused(...)
-  bb_predict_recruitment(object, year = year, 
-                         sex_ratio = sex_ratio, 
-                         conf_level = conf_level, 
-                         estimate = estimate, 
-                         sig_fig = sig_fig)
+  bb_predict_recruitment(object,
+    year = year,
+    sex_ratio = sex_ratio,
+    conf_level = conf_level,
+    estimate = estimate,
+    sig_fig = sig_fig
+  )
 }
 
 #' Predict Survival
@@ -112,17 +114,17 @@ predict.bboufit_survival <- function(object,
 #' @export
 #' @family analysis
 bb_predict_calf_cow_ratio <- function(recruitment,
-                                   year = TRUE,
-                                   conf_level = 0.95,
-                                   estimate = median,
-                                   sig_fig = 3) {
-  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment)) 
+                                      year = TRUE,
+                                      conf_level = 0.95,
+                                      estimate = median,
+                                      sig_fig = 3) {
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
   chk_s3_class(recruitment, "bboufit_recruitment")
   chk_flag(year)
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
-  
+
   predicted <- predict_calf_cow(fit = recruitment, year = year)
   coef <- predict_coef(
     samples = predicted$samples,
@@ -136,10 +138,10 @@ bb_predict_calf_cow_ratio <- function(recruitment,
 
 #' Predict Recruitment
 #'
-#' Predict adjusted recruitment by year using DeCesare et al. (2012) methods. 
+#' Predict adjusted recruitment by year using DeCesare et al. (2012) methods.
 #' If year is FALSE, predictions are made for a 'typical' year.
-#' See [bb_predict_calf_cow_ratio()] for unadjusted recruitment. 
-#' 
+#' See [bb_predict_calf_cow_ratio()] for unadjusted recruitment.
+#'
 #' @inheritParams params
 #' @return A tibble of the predicted estimates.
 #' @export
@@ -155,7 +157,7 @@ bb_predict_recruitment <- function(recruitment,
                                    conf_level = 0.95,
                                    estimate = median,
                                    sig_fig = 3) {
-  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment)) 
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
   chk_s3_class(recruitment, "bboufit_recruitment")
   chk_flag(year)
   chk_number(sex_ratio)
@@ -169,7 +171,7 @@ bb_predict_recruitment <- function(recruitment,
   class(rec) <- "mcmcarray"
   rec <- rec * sex_ratio
   rec <- rec / (1 + rec)
-  
+
   coef <- predict_coef(
     samples = rec,
     new_data = predicted$data,
@@ -195,7 +197,7 @@ bb_predict_survival <- function(survival,
                                 conf_level = 0.95,
                                 estimate = median,
                                 sig_fig = 3) {
-  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival)) 
+  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival))
   chk_s3_class(survival, "bboufit_survival")
   chk_flag(year)
   chk_flag(month)

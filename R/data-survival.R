@@ -13,15 +13,15 @@ data_prep_survival <- function(data, include_uncertain_morts,
   }
   data$Year <- caribou_year(data$Year, data$Month, year_start = year_start)
   data$Annual <- factor(data$Year)
- 
+
   # leaves month but sets factor levels to be caribou month for model
   nmonth <- length(unique(data$Month))
   data$Month <- factor(data$Month, levels = month_levels(year_start, n = nmonth))
- 
+
   data
 }
 
-data_adjust_intercept <- function(data){
+data_adjust_intercept <- function(data) {
   year_b0 <- year_intercept(data)
   levels <- unique(data$Year)
   levels <- levels[levels != year_b0]

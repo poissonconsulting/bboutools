@@ -56,24 +56,26 @@ month_levels <- function(first, n) {
   levels
 }
 
-year_intercept <- function(x){
-  y <- 
+year_intercept <- function(x) {
+  y <-
     x %>%
     dplyr::group_by(Year) %>%
-    dplyr::summarize(mean_start = mean(.data$StartTotal),
-              any_morts = sum(.data$Mortalities) >= 1) %>%
+    dplyr::summarize(
+      mean_start = mean(.data$StartTotal),
+      any_morts = sum(.data$Mortalities) >= 1
+    ) %>%
     dplyr::ungroup() %>%
     dplyr::filter(.data$any_morts)
-  
-  if(nrow(y) == 0){
+
+  if (nrow(y) == 0) {
     message("Warning: All years have 0 mortalities. Estimation of Confidence Intervals may not be reliable.")
     return(min(x$Year))
   }
-    
-  y <- 
+
+  y <-
     y %>%
     arrange(.data$mean_start) %>%
-    dplyr::slice(dplyr::n()) 
+    dplyr::slice(dplyr::n())
 
   y$Year
 }

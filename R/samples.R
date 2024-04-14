@@ -14,7 +14,7 @@ samples.bboufit <- function(x) {
   x$samples
 }
 
-#' @describeIn samples Create MCMC samples (1 iteration, 1 chain) from bboufit_ml object. 
+#' @describeIn samples Create MCMC samples (1 iteration, 1 chain) from bboufit_ml object.
 #'
 #' @export
 samples.bboufit_ml <- function(x) {

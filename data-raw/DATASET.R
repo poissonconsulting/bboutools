@@ -77,7 +77,7 @@ fit_survival_ml_trend$model <- NULL
 
 usethis::use_data(fit_recruitment, fit_recruitment_trend,
   fit_survival, fit_survival_trend,
-  fit_survival_ml, fit_survival_ml_fixed, 
+  fit_survival_ml, fit_survival_ml_fixed,
   fit_recruitment_ml, fit_recruitment_ml_fixed,
   fit_survival_ml_trend, fit_recruitment_ml_trend,
   internal = TRUE, overwrite = TRUE
