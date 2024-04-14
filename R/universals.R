@@ -22,7 +22,7 @@ summary_ml <- function(x) {
     parameter = pars_ml(x),
     estimate = estimates_ml(x)
   )
-  if (!("bAnnual[1]" %in% y$term) & any(grepl("bAnnual", y$term))) {
+  if (!("bAnnual[1]" %in% y$term) && any(grepl("bAnnual", y$term))) {
     y <- bind_rows(y, tibble(
       term = term::as_term("bAnnual[1]"),
       parameter = "bAnnual",

@@ -142,7 +142,6 @@ bb_fit_recruitment_ml <- function(
     if (!quiet) message_trend_fixed()
   }
 
-  priors <- priors_recruitment()
   model <- model_recruitment(
     data = data$datal,
     year_random = year_random,
