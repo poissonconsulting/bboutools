@@ -4,6 +4,12 @@ test_that("bb_predict_growth works", {
   expect_snapshot_data(predict, "bb_predict_growth")
 })
 
+test_that("bb_predict_growth works with sex ratio", {
+  predict <- bb_predict_growth(bboutools:::fit_survival, bboutools:::fit_recruitment, sex_ratio = 0.7)
+  expect_s3_class(predict, "tbl")
+  expect_snapshot_data(predict, "bb_predict_growth_sex_ratio")
+})
+
 test_that("bb_predict_growth works with trend", {
   predict <- bb_predict_growth(bboutools:::fit_survival_trend, bboutools:::fit_recruitment_trend)
   expect_s3_class(predict, "tbl")
@@ -28,7 +34,7 @@ test_that("bb_predict_growth estimate works", {
 
 test_that("bb_predict_growth multiple years each and one year common", {
   skip_on_covr()
-  
+
   survival <- bboudata::bbousurv_a
   survival <- survival[survival$Year %in% 2002:2003, ]
 
@@ -47,7 +53,7 @@ test_that("bb_predict_growth multiple years each and one year common", {
 
 test_that("bb_predict_growth 1 year each and no years common", {
   skip_on_covr()
-  
+
   survival <- bboudata::bbousurv_a
   survival <- survival[survival$Year %in% c(2002, 2004), ]
 
@@ -75,4 +81,3 @@ test_that("bb_predict_growth works with ML", {
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_growth_ml")
 })
-

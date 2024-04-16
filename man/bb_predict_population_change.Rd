@@ -7,6 +7,7 @@
 bb_predict_population_change(
   survival,
   recruitment,
+  sex_ratio = 0.5,
   conf_level = 0.95,
   estimate = median,
   sig_fig = 3
@@ -15,7 +16,9 @@ bb_predict_population_change(
 \arguments{
 \item{survival}{An object of class 'bboufit_survival' (output of \code{\link[=bb_fit_survival]{bb_fit_survival()}}).}
 
-\item{recruitment}{An object of class 'bboufit_recruitment' (output of \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}}).}
+\item{recruitment}{An object of class 'bboufit_recruitment' (output of \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}})}
+
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.}
 
 \item{conf_level}{A number between 0 and 1 of the confidence level.}
 
@@ -32,6 +35,7 @@ Population change is the cumulative product of population growth rate (i.e., out
 }
 \seealso{
 Other analysis: 
+\code{\link{bb_predict_calf_cow_ratio}()},
 \code{\link{bb_predict_growth}()},
 \code{\link{bb_predict_recruitment}()},
 \code{\link{bb_predict_recruitment_trend}()},

@@ -23,4 +23,3 @@ test_that("plot_year_recruitment.data.frame ML works", {
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "dataframe_ml")
 })
-

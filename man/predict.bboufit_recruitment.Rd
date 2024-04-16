@@ -7,6 +7,7 @@
 \method{predict}{bboufit_recruitment}(
   object,
   year = TRUE,
+  sex_ratio = 0.5,
   conf_level = 0.95,
   estimate = median,
   sig_fig = 3,
@@ -17,6 +18,8 @@
 \item{object}{The object.}
 
 \item{year}{A flag indicating whether to predict by year.}
+
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.}
 
 \item{conf_level}{A number between 0 and 1 of the confidence level.}
 

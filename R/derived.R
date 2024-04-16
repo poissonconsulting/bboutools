@@ -34,12 +34,12 @@ derived_expr_recruitment <- function(fit, year) {
     lik <- extract_lik(fit)
   }
   paste0("for(i in 1:length(Annual)) {
-  log(prediction[i]) <- ", lik, "\n}")
+  logit(prediction[i]) <- ", lik, "\n}")
 }
 
 derived_expr_recruitment_trend <- function() {
   "for(i in 1:length(Annual)) {
-  log(prediction[i]) <- b0 + bYear * Year[i]\n}"
+  logit(prediction[i]) <- b0 + bYear * Year[i]\n}"
 }
 
 derived_expr_survival_trend <- function() {

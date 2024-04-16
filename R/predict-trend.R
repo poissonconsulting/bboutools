@@ -17,12 +17,15 @@ predict_trend <- function(fit, derived_expr) {
 #' @export
 #' @family analysis
 bb_predict_recruitment_trend <- function(recruitment,
+                                         sex_ratio = 0.5,
                                          conf_level = 0.95,
                                          estimate = median,
                                          sig_fig = 5) {
-  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment)) 
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
   chk_s3_class(recruitment, "bboufit_recruitment")
   .chk_year_trend(recruitment)
+  chk_number(sex_ratio)
+  chk_range(sex_ratio)
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
@@ -31,8 +34,14 @@ bb_predict_recruitment_trend <- function(recruitment,
     fit = recruitment,
     derived_expr = derived_expr_recruitment_trend()
   )
+
+  rec <- predicted$samples
+  class(rec) <- "mcmcarray"
+  rec <- rec * sex_ratio
+  rec <- rec / (1 + rec)
+
   coef <- predict_coef(
-    samples = predicted$samples,
+    samples = rec,
     new_data = predicted$data,
     conf_level = conf_level,
     estimate = estimate,
@@ -54,7 +63,7 @@ bb_predict_survival_trend <- function(survival,
                                       conf_level = 0.95,
                                       estimate = median,
                                       sig_fig = 5) {
-  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival)) 
+  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival))
   chk_s3_class(survival, "bboufit_survival")
   .chk_year_trend(survival)
   chk_range(conf_level)

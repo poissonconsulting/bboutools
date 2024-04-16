@@ -19,7 +19,7 @@ bb_plot_year_growth <- function(x) {
 #' @export
 bb_plot_year_population_change <- function(x) {
   chk_data(x)
-  
+
   plot_year_trend(x) +
     scale_y_continuous("Population Change", labels = percent) +
     expand_limits(y = c(0, NA))

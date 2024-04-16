@@ -7,6 +7,7 @@
 bb_predict_recruitment(
   recruitment,
   year = TRUE,
+  sex_ratio = 0.5,
   conf_level = 0.95,
   estimate = median,
   sig_fig = 3
@@ -16,6 +17,8 @@ bb_predict_recruitment(
 \item{recruitment}{An object of class 'bboufit_recruitment' (output of \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}})}
 
 \item{year}{A flag indicating whether to predict by year.}
+
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.}
 
 \item{conf_level}{A number between 0 and 1 of the confidence level.}
 
@@ -27,11 +30,19 @@ bb_predict_recruitment(
 A tibble of the predicted estimates.
 }
 \description{
-Predict recruitment by year.
+Predict adjusted recruitment by year using DeCesare et al. (2012) methods.
 If year is FALSE, predictions are made for a 'typical' year.
+See \code{\link[=bb_predict_calf_cow_ratio]{bb_predict_calf_cow_ratio()}} for unadjusted recruitment.
+}
+\references{
+DeCesare, Nicholas J., Mark Hebblewhite, Mark Bradley, Kirby G. Smith,
+David Hervieux, and Lalenia Neufeld. 2012 “Estimating Ungulate Recruitment
+and Growth Rates Using Age Ratios.” The Journal of Wildlife Management
+76 (1): 144–53 https://doi.org/10.1002/jwmg.244.
 }
 \seealso{
 Other analysis: 
+\code{\link{bb_predict_calf_cow_ratio}()},
 \code{\link{bb_predict_growth}()},
 \code{\link{bb_predict_population_change}()},
 \code{\link{bb_predict_recruitment_trend}()},

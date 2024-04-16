@@ -11,4 +11,3 @@ test_that("sample works for bboutfit_ml", {
   expect_equal(nchains(x), 1)
   expect_equal(niters(x), 1)
 })
-

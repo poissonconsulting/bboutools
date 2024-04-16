@@ -5,12 +5,15 @@ vignette: >
   %\VignetteIndexEntry{Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE
 )
 ```
 
@@ -51,12 +54,100 @@ The Bayesian approach multiplies the likelihood by the probability of the parame
 Bayesian methods repeatedly sample from the posterior probability distributions using MCMC (Monte Carlo Markov Chain) methods.
 This approach has the advantage of allowing derived parameters such as the population growth rate to be accurately estimated from the primary survival and recruitment parameters.
 
+To demonstrate, we use an anonymized data set to compare annual survival estimates from a:  
+
+- Bayesian model with fixed year effect.  
+- Bayesian model with random year effect.    
+- Maximum Likelihood model with fixed year effect.    
+- Maximum Likelihood model with random year effect.   
+
+Observed data (black points) are shown as the mean monthly survival by year, weighted by the square root of the number of collars. Transparency of the black points shows the mean $\sqrt(n)$. 
+
+```{r, fig.height=5, fig.width=8, echo=FALSE}
+library(bboutools)
+library(dplyr)
+library(ggplot2)
+
+set.seed(1)
+surv <- bboudata::bbousurv_a
+data <- bboutools:::model_data_survival(surv, year_start = 4L, include_uncertain_morts = FALSE, quiet = FALSE)$data
+obs <-
+  data %>%
+  group_by(Year, Month) %>%
+  summarise(
+    survival = 1 - (MortalitiesCertain) / StartTotal,
+    weight = StartTotal^(1 / 2)
+  ) %>%
+  ungroup() %>%
+  group_by(Year) %>%
+  summarise(
+    mean_survival = weighted.mean(survival, weight)^12,
+    mean_weight = mean(weight)
+  )
+
+fit <- bb_fit_survival_ml(surv, quiet = TRUE)
+fit2 <- bb_fit_survival_ml(surv, min_random_year = Inf, quiet = TRUE)
+fit3 <- bb_fit_survival(surv, min_random_year = Inf, nthin = 50, quiet = TRUE)
+fit4 <- bb_fit_survival(surv, nthin = 20, quiet = TRUE)
+
+pred <- bb_predict_survival(fit)
+pred2 <- bb_predict_survival(fit2)
+pred3 <- bb_predict_survival(fit3)
+pred4 <- bb_predict_survival(fit4)
+
+df <- dplyr::bind_rows(list(
+  "ML Random" = pred,
+  "ML Fixed" = pred2,
+  "Bayes Fixed" = pred3,
+  "Bayes Random" = pred4
+), .id = "model") %>%
+  mutate(
+    method = if_else(grepl("ML", model), "Frequentist", "Bayesian"),
+    year = if_else(grepl("Fixed", model), "Fixed", "Random")
+  )
+
+gp <-
+  ggplot(data = df) +
+  geom_pointrange(
+    aes(
+      x = CaribouYear,
+      y = estimate,
+      ymin = lower,
+      ymax = upper,
+      color = model,
+      shape = year
+    ),
+    position = position_dodge(width = 0.7)
+  ) +
+  geom_point(
+    data = obs, aes(
+      x = Year,
+      y = mean_survival,
+      alpha = mean_weight
+    ),
+    color = "black"
+  ) +
+  scale_alpha_continuous(expression(sqrt(n)), range = c(0.3, 1)) +
+  scale_y_continuous("Annual Survival", labels = scales::percent) +
+  scale_color_discrete("") +
+  scale_shape_discrete("") +
+  xlab("Caribou Year")
+gp
+```
+
+In this example, Maximum Likelihood and Bayesian models of the same type (i.e., fixed or random) have similar estimates because the Bayesian model priors are not informative. 
+Estimates from random effect models tend to be pulled toward the mean. 
+Estimates from the fixed effect models more closely match the observed data, including extreme values. 
+Note, there is no functionality in `bboutools` to get confidence intervals on predictions (i.e., derived parameters) for Maximum Likelihood models. 
+This is a more straightforward task with Bayesian models. 
+
 ## bboutools
 
-`bboutools` provides the option to estimate parameter values using a Maximum Likelihood or a fully Bayesian approach. Random effects are used where appropriate by default. The Bayesian approach also uses biologically reasonable informative priors by default. 
+`bboutools` provides the option to estimate parameter values using a Maximum Likelihood or a fully Bayesian approach. Random effects are used where appropriate by default. The Bayesian approach also uses biologically reasonable, weakly informative priors by default. 
 `bboutools` provides relatively simple general models that can be used to compare survival, recruitment and population growth estimates across jurisdictions.
 
-By default, the `bboutools` Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves). The number of samples saved can be adjusted with the `niters` argument. 
+By default, the `bboutools` Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves). 
+The number of samples saved can be adjusted with the `niters` argument. 
 With `niters` set, the user can simply increment the thinning rate as required to achieve convergence.
 This process is automated in the Shiny app. 
 
@@ -66,10 +157,10 @@ The survival model with annual random effect and trend is specified below in a s
 The same model code is used for both the Bayesian and frequentist methods.
 
 ```
-b0 ~ Normal(4, 2)
-bYear ~ Normal(0, 1)
+b0 ~ Normal(3, 10)
+bYear ~ Normal(0, 2)
 
-sMonth ~  Normal(0, 2) T(0,)
+sMonth ~  Exponential(1)
 for(i in 1:nMonth)  bMonth[i] ~ Normal(0, sMonth)
 
 sAnnual ~ Exponential(1)
@@ -83,24 +174,24 @@ for(i in 1:nObs) {
 
 ### Recruitment Model
 
-The recruitment model with annual random effect and year trend is specified below in a simplified form of the BUGS language for readability.
+The recruitment model with annual random effect and year trend is specified below in a simplified form of the BUGS language for readability. Group-level observations are aggregated by caribou year prior to model fitting. 
 
 ```
-b0 ~ Normal(-1.4, 0.5)
+b0 ~ Normal(-1, 5)
 bYear ~ Normal(0, 1)
 
 adult_female_proportion ~ Beta(65, 35)
 
-sAnnual ~  exponential(1)
+sAnnual ~  Exponential(1)
 for(i in 1:nAnnual)  bAnnual[i] ~ Normal(0, sAnnual)
 
-for(i in 1:nObs) {
+for(i in 1:nAnnual) {
   FemaleYearlings[i] ~ Binomial(0.5, Yearlings[i])
   Cows[i] ~ Binomial(adult_female_proportion, CowsBulls[i])
   OtherAdultsFemales[i] ~ Binomial(adult_female_proportion, UnknownAdults[i])
   log(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
   AdultsFemales[i] <- max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
-  Calves[i] ~ Poisson(eRecruitment[i] * AdultsFemales[i])
+  Calves[i] ~ Binomial(eRecruitment[i], AdultsFemales[i])
 }
 ```
 
@@ -113,47 +204,42 @@ bYear ~ Normal(0, 1)
 
 adult_female_proportion ~ Beta(65, 35)
 
-sAnnual ~  exponential(1)
+sAnnual ~  Exponential(1)
 for(i in 1:nAnnual)  bAnnual[i] ~ Normal(0, sAnnual)
 
-for(i in 1:nObs) {
+for(i in 1:nAnnual) {
   Cows[i] ~ Binomial(adult_female_proportion, CowsBulls[i])
-  FemaleYearlings[i] <- 0.5 * Yearlings[i]
-  OtherAdultsFemales[i] <- adult_female_proportion * UnknownAdults[i]
-  log(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
+  FemaleYearlings[i] <- round(0.5 * Yearlings[i])
+  OtherAdultsFemales[i] <- round(adult_female_proportion * UnknownAdults[i])
+  logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
   AdultsFemales[i] <- max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
-  Calves[i] ~ Poisson(eRecruitment[i] * AdultsFemales[i])
+  Calves[i] ~ Binomial(eRecruitment[i], AdultsFemales[i])
 }
 ```
 
-### `bboufit` Objects
+### Predicted Survival, Recruitment and Population Growth
+As ungulate populations are generally polygynous survival and recruitment are estimated with respect to the number of adult (mature) females.
 
-The `bb_fit_survival()` and `bb_fit_recruitment()` functions use a Bayesian approach and return objects that inherit from class `bboufit`.
+To estimate recruitment following @decesare_estimating_2012, the predicted annual calves per female adult is first divided by two to give the expected number of female calves per adult female (under the assumption of a 1:1 sex ratio).
 
-Objects of class `bboufit` have three elements: 
+$$R_F = R/2$$
 
-1. `model` - the compiled Nimble model as created by `nimble::nimbleModel()`.  
-1. `model_code` - the model code in text format.  
-1. `samples` - the MCMC samples generated from`nimble::runMCMC()` converted to an object of class `mcmcr`.  
-1. `data` - the survival or recruitment data provided.
+Next the annual recruitment is adjusted to give the proportional change in the population.
 
-These are the raw materials for any further exploration or analysis. 
-For example, view trace and density plots with `plot(fit$samples)`.
+$$R_\Delta =  \frac{R_F}{1 + R_F}$$
+The rate of population growth ($\lambda$) is
 
-See [mcmcr](https://github.com/poissonconsulting/mcmcr) and [mcmcderive](https://github.com/poissonconsulting/mcmcderive) for working with `mcmcr` objects, or convert samples to an object of class `mcmc.list`, e,g, with `coda::as.mcmc.list` for working with the [coda](https://github.com/cran/coda) R package. 
+$$\lambda = \frac{N_{t+1}}{N_t}$$
 
+where $N_t$ is the population abundance in year $t$.
 
-### `bboufit_ml` Objects
+Following @hatter_moose_1991, it can be shown that
 
-The `bb_fit_survival_ml()` and `bb_fit_recruitment_ml()` functions use a Maximum Likelihood approach and return objects that inherit from class `bboufit_ml`.
+$$\lambda = \frac{S}{1-R}$$
+where $S$ is the annual survival. 
 
-Objects of class `bboufit_ml` have four elements: 
+$\lambda$ is calculated from $R_\Delta$ and $S$ as
 
-1. `model` - the Nimble model as created by `nimble::nimbleModel()`.   
-1. `model_code` - the model code in text format.  
-1. `mle` - the Maximum Likelihood output as created by model$findMLE().
-1. `summary` - the summary of the Maximum Likelihood output as created by `model$summary(mle)`.  
-1. `data` - the survival or recruitment data provided.
+$$\lambda = \frac{S}{1-R_\Delta}$$
 
-See [nimble](https://github.com/nimble-dev/nimble) for how to work with nimble model objects and Maximum Likelihood output. 
-
+## References

@@ -13,10 +13,15 @@ ci_upper <- function(x, se, conf_level) {
 }
 
 .stderr <- function(x) {
-  c(
+  se <- c(
     x$summary$params$stdErrors,
     x$summary$randomEffects$stdErrors
   )
+  names(se) <- terms_ml(x)
+  se <- tibble::as_tibble(se, rownames = "term")
+  se$se <- se$value
+  se$value <- NULL
+  se
 }
 
 transform_cols <- function(x, terms, transform = exp, cols = c("estimate", "lower", "upper")) {
@@ -98,9 +103,12 @@ tidy.bboufit_ml <-
     coef <- summary_ml(x)
     coef$parameter <- NULL
     se <- .stderr(x)
+    coef <- left_join(coef, se, "term")
+    coef$se[is.na(coef$se)] <- 0
 
-    coef$lower <- ci_lower(coef$estimate, se, conf_level)
-    coef$upper <- ci_upper(coef$estimate, se, conf_level)
+    coef$lower <- ci_lower(coef$estimate, coef$se, conf_level)
+    coef$upper <- ci_upper(coef$estimate, coef$se, conf_level)
+    coef$se <- NULL
     terms <- coef$term
     terms_exp <- terms[terms %in% c("sAnnual", "sMonth")]
     terms_ilogit <- terms[terms %in% c("adult_female_proportion")]

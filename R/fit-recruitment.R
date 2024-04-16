@@ -1,14 +1,14 @@
 #' Fit Recruitment Model
 #'
 #' Fit heirarchical Bayesian recruitment model using Nimble.
-#' 
+#'
 #' If the number of years is > `min_random_year`, a fixed-effects model is fit.
 #' Otherwise, a mixed-effects model is fit with random intercept for each year.
-#' If `year_trend` is TRUE and the number of years is > `min_random_year`, the model 
-#' will be fit with year as a continuous effect (i.e. trend) and no fixed effect of year. 
-#' If `year_trend` is TRUE and the number of years is <= `min_random_year`, the model 
-#' will be fit with year as a continuous effect and a random intercept for each year. 
-#' 
+#' If `year_trend` is TRUE and the number of years is > `min_random_year`, the model
+#' will be fit with year as a continuous effect (i.e. trend) and no fixed effect of year.
+#' If `year_trend` is TRUE and the number of years is <= `min_random_year`, the model
+#' will be fit with year as a continuous effect and a random intercept for each year.
+#'
 #' The start month of the Caribou year can be adjusted with `year_start`.
 #'
 #' @inheritParams params
@@ -94,18 +94,18 @@ bb_fit_recruitment <- function(
 #' Fit Recruitment Model with Maximum Likelihood
 #'
 #' Fit recruitment model with Maximum Likelihood using Nimble Laplace Approximation.
-#' 
+#'
 #' If the number of years is > `min_random_year`, a fixed-effects model is fit.
 #' Otherwise, a mixed-effects model is fit with random intercept for each year.
-#' If `year_trend` is TRUE and the number of years is > `min_random_year`, the model 
-#' will be fit with year as a continuous effect (i.e. trend) and no fixed effect of year. 
-#' If `year_trend` is TRUE and the number of years is <= `min_random_year`, the model 
+#' If `year_trend` is TRUE and the number of years is > `min_random_year`, the model
+#' will be fit with year as a continuous effect (i.e. trend) and no fixed effect of year.
+#' If `year_trend` is TRUE and the number of years is <= `min_random_year`, the model
 #' will be fit with year as a continuous effect and a random intercept for each year.
 #'
 #' Year effect can be excluded with `exclude_year`. This can be useful if the ML model is failing to converge.
-#' 
+#'
 #' The start month of the Caribou year can be adjusted with `year_start`.
-#' 
+#'
 #' @inheritParams params
 #' @return A list of the Nimble model object and Maximum Likelihood output with estimates and standard errors on the transformed scale.
 #' @export
@@ -139,10 +139,9 @@ bb_fit_recruitment_ml <- function(
   data <- model_data_recruitment(data, year_start = year_start, quiet = quiet)
   year_random <- data$datal$nAnnual >= min_random_year
   if (!year_random && year_trend) {
-    if(!quiet) message_trend_fixed()
+    if (!quiet) message_trend_fixed()
   }
 
-  priors <- priors_recruitment()
   model <- model_recruitment(
     data = data$datal,
     year_random = year_random,
@@ -164,7 +163,7 @@ bb_fit_recruitment_ml <- function(
 
   convergence_fail <- ml_converge_fail(fit) || ml_se_fail(fit)
   if (convergence_fail) {
-    if(!quiet) message_convergence_fail()
+    if (!quiet) message_convergence_fail()
   }
 
   fit <- fit$result
