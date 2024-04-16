@@ -25,7 +25,7 @@ Year trend cannot be fit if there is also a fixed year effect (as opposed to ran
 
 \item{include_uncertain_morts}{A flag indicating whether to include uncertain mortalities in total mortalities.}
 
-\item{year_start}{A whole number between 1 and 12 indicating the start of the caribou year. By default, April is set as the start of the biological year.}
+\item{year_start}{A whole number between 1 and 12 indicating the start of the caribou (i.e., biological) year. By default, April is set as the start of the caribou year.}
 
 \item{exclude_year}{A flag indicating whether to exclude the year effect.}
 
