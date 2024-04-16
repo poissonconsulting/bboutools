@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth • bboutools</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -54,6 +54,9 @@
     </li>
     <li>
       <a href="../articles/bbtutorial.html">Getting Started with bboutools</a>
+    </li>
+    <li>
+      <a href="../articles/priors.html">Prior Selection and Influence</a>
     </li>
   </ul>
 </li>
@@ -145,6 +148,30 @@ distributions using MCMC (Monte Carlo Markov Chain) methods. This
 approach has the advantage of allowing derived parameters such as the
 population growth rate to be accurately estimated from the primary
 survival and recruitment parameters.</p>
+<p>To demonstrate, we use an anonymized data set to compare annual
+survival estimates from a:</p>
+<ul>
+<li>Bayesian model with fixed year effect.<br>
+</li>
+<li>Bayesian model with random year effect.<br>
+</li>
+<li>Maximum Likelihood model with fixed year effect.<br>
+</li>
+<li>Maximum Likelihood model with random year effect.</li>
+</ul>
+<p>Observed data (black points) are shown as the mean monthly survival
+by year, weighted by the square root of the number of collars.
+Transparency of the black points shows the mean <span class="math inline">\(\sqrt(n)\)</span>.</p>
+<p><img src="bbmethods_files/figure-html/unnamed-chunk-2-1.png" width="768"></p>
+<p>In this example, Maximum Likelihood and Bayesian models of the same
+type (i.e., fixed or random) have similar estimates because the Bayesian
+model priors are not informative. Estimates from random effect models
+tend to be pulled toward the mean. Estimates from the fixed effect
+models more closely match the observed data, including extreme values.
+Note, there is no functionality in <code>bboutools</code> to get
+confidence intervals on predictions (i.e., derived parameters) for
+Maximum Likelihood models. This is a more straightforward task with
+Bayesian models.</p>
 </div>
 <div class="section level2">
 <h2 id="bboutools">bboutools<a class="anchor" aria-label="anchor" href="#bboutools"></a>
@@ -152,7 +179,7 @@ survival and recruitment parameters.</p>
 <p><code>bboutools</code> provides the option to estimate parameter
 values using a Maximum Likelihood or a fully Bayesian approach. Random
 effects are used where appropriate by default. The Bayesian approach
-also uses biologically reasonable informative priors by default.
+also uses biologically reasonable, weakly informative priors by default.
 <code>bboutools</code> provides relatively simple general models that
 can be used to compare survival, recruitment and population growth
 estimates across jurisdictions.</p>
@@ -169,41 +196,42 @@ This process is automated in the Shiny app.</p>
 below in a simplified form of the BUGS language for readability. The
 same model code is used for both the Bayesian and frequentist
 methods.</p>
-<pre><code>b0 ~ Normal(4, 2)
-bYear ~ Normal(0, 1)
-
-sMonth ~  Normal(0, 2) T(0,)
-for(i in 1:nMonth)  bMonth[i] ~ Normal(0, sMonth)
-
-sAnnual ~ Exponential(1)
-for(i in 1:nAnnual)  bAnnual[i] ~ Normal(0, sAnnual)
-
-for(i in 1:nObs) {
-  logit(eSurvival[i]) = b0 + bMonth[Month[i]] + bAnnual[Annual[i]] + bYear * Year[i]
-  Mortalities[i] ~ Binomial(1 - eSurvival[i], StartTotal[i])
-}</code></pre>
+<pre><code><span><span class="va">b0</span> <span class="op">~</span> <span class="fu">Normal</span><span class="op">(</span><span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">bYear</span> <span class="op">~</span> <span class="fu">Normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sMonth</span> <span class="op">~</span>  <span class="fu">Exponential</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nMonth</span><span class="op">)</span>  <span class="va">bMonth</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Normal</span><span class="op">(</span><span class="fl">0</span>, <span class="va">sMonth</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sAnnual</span> <span class="op">~</span> <span class="fu">Exponential</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nAnnual</span><span class="op">)</span>  <span class="va">bAnnual</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Normal</span><span class="op">(</span><span class="fl">0</span>, <span class="va">sAnnual</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nObs</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/nimble/man/nimble-math.html" class="external-link">logit</a></span><span class="op">(</span><span class="va">eSurvival</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">=</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">bMonth</span><span class="op">[</span><span class="va">Month</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">bAnnual</span><span class="op">[</span><span class="va">Annual</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">bYear</span> <span class="op">*</span> <span class="va">Year</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
+<span>  <span class="va">Mortalities</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Binomial</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">eSurvival</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">StartTotal</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="recruitment-model">Recruitment Model<a class="anchor" aria-label="anchor" href="#recruitment-model"></a>
 </h3>
 <p>The recruitment model with annual random effect and year trend is
 specified below in a simplified form of the BUGS language for
-readability.</p>
-<pre><code><span><span class="va">b0</span> <span class="op">~</span> <span class="fu">Normal</span><span class="op">(</span><span class="op">-</span><span class="fl">1.4</span>, <span class="fl">0.5</span><span class="op">)</span></span>
+readability. Group-level observations are aggregated by caribou year
+prior to model fitting.</p>
+<pre><code><span><span class="va">b0</span> <span class="op">~</span> <span class="fu">Normal</span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">bYear</span> <span class="op">~</span> <span class="fu">Normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">adult_female_proportion</span> <span class="op">~</span> <span class="fu">Beta</span><span class="op">(</span><span class="fl">65</span>, <span class="fl">35</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sAnnual</span> <span class="op">~</span>  <span class="fu">exponential</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">sAnnual</span> <span class="op">~</span>  <span class="fu">Exponential</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nAnnual</span><span class="op">)</span>  <span class="va">bAnnual</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Normal</span><span class="op">(</span><span class="fl">0</span>, <span class="va">sAnnual</span><span class="op">)</span></span>
 <span></span>
-<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nObs</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nAnnual</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">FemaleYearlings</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Binomial</span><span class="op">(</span><span class="fl">0.5</span>, <span class="va">Yearlings</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">Cows</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Binomial</span><span class="op">(</span><span class="va">adult_female_proportion</span>, <span class="va">CowsBulls</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">OtherAdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Binomial</span><span class="op">(</span><span class="va">adult_female_proportion</span>, <span class="va">UnknownAdults</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">eRecruitment</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">bAnnual</span><span class="op">[</span><span class="va">Annual</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">bYear</span> <span class="op">*</span> <span class="va">Year</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
 <span>  <span class="va">AdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">FemaleYearlings</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">+</span> <span class="va">Cows</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">+</span> <span class="va">OtherAdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="va">Calves</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Poisson</span><span class="op">(</span><span class="va">eRecruitment</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">*</span> <span class="va">AdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">Calves</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Binomial</span><span class="op">(</span><span class="va">eRecruitment</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">AdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 <p>In the frequentist approach, demographic stochasticity is removed
 from the model because it is not possible to estimate discrete latent
@@ -214,80 +242,61 @@ specified below.</p>
 <span></span>
 <span><span class="va">adult_female_proportion</span> <span class="op">~</span> <span class="fu">Beta</span><span class="op">(</span><span class="fl">65</span>, <span class="fl">35</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sAnnual</span> <span class="op">~</span>  <span class="fu">exponential</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">sAnnual</span> <span class="op">~</span>  <span class="fu">Exponential</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nAnnual</span><span class="op">)</span>  <span class="va">bAnnual</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Normal</span><span class="op">(</span><span class="fl">0</span>, <span class="va">sAnnual</span><span class="op">)</span></span>
 <span></span>
-<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nObs</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nAnnual</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">Cows</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Binomial</span><span class="op">(</span><span class="va">adult_female_proportion</span>, <span class="va">CowsBulls</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="va">FemaleYearlings</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">Yearlings</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
-<span>  <span class="va">OtherAdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">adult_female_proportion</span> <span class="op">*</span> <span class="va">UnknownAdults</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">eRecruitment</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">bAnnual</span><span class="op">[</span><span class="va">Annual</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">bYear</span> <span class="op">*</span> <span class="va">Year</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
+<span>  <span class="va">FemaleYearlings</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">0.5</span> <span class="op">*</span> <span class="va">Yearlings</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">OtherAdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">adult_female_proportion</span> <span class="op">*</span> <span class="va">UnknownAdults</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/nimble/man/nimble-math.html" class="external-link">logit</a></span><span class="op">(</span><span class="va">eRecruitment</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">bAnnual</span><span class="op">[</span><span class="va">Annual</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">bYear</span> <span class="op">*</span> <span class="va">Year</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
 <span>  <span class="va">AdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">FemaleYearlings</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">+</span> <span class="va">Cows</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">+</span> <span class="va">OtherAdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="va">Calves</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Poisson</span><span class="op">(</span><span class="va">eRecruitment</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">*</span> <span class="va">AdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">Calves</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">Binomial</span><span class="op">(</span><span class="va">eRecruitment</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">AdultsFemales</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="bboufit-objects">
-<code>bboufit</code> Objects<a class="anchor" aria-label="anchor" href="#bboufit-objects"></a>
+<h3 id="predicted-survival-recruitment-and-population-growth">Predicted Survival, Recruitment and Population Growth<a class="anchor" aria-label="anchor" href="#predicted-survival-recruitment-and-population-growth"></a>
 </h3>
-<p>The <code><a href="../reference/bb_fit_survival.html">bb_fit_survival()</a></code> and
-<code><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment()</a></code> functions use a Bayesian approach and
-return objects that inherit from class <code>bboufit</code>.</p>
-<p>Objects of class <code>bboufit</code> have three elements:</p>
-<ol style="list-style-type: decimal">
-<li>
-<code>model</code> - the compiled Nimble model as created by
-<code><a href="https://rdrr.io/pkg/nimble/man/nimbleModel.html" class="external-link">nimble::nimbleModel()</a></code>.<br>
-</li>
-<li>
-<code>model_code</code> - the model code in text format.<br>
-</li>
-<li>
-<code>samples</code> - the MCMC samples generated
-from<code><a href="https://rdrr.io/pkg/nimble/man/runMCMC.html" class="external-link">nimble::runMCMC()</a></code> converted to an object of class
-<code>mcmcr</code>.<br>
-</li>
-<li>
-<code>data</code> - the survival or recruitment data provided.</li>
-</ol>
-<p>These are the raw materials for any further exploration or analysis.
-For example, view trace and density plots with
-<code>plot(fit$samples)</code>.</p>
-<p>See <a href="https://github.com/poissonconsulting/mcmcr" class="external-link">mcmcr</a>
-and <a href="https://github.com/poissonconsulting/mcmcderive" class="external-link">mcmcderive</a>
-for working with <code>mcmcr</code> objects, or convert samples to an
-object of class <code>mcmc.list</code>, e,g, with
-<code><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">coda::as.mcmc.list</a></code> for working with the <a href="https://github.com/cran/coda" class="external-link">coda</a> R package.</p>
+<p>As ungulate populations are generally polygynous survival and
+recruitment are estimated with respect to the number of adult (mature)
+females.</p>
+<p>To estimate recruitment following <span class="citation">DeCesare et
+al. (2012)</span>, the predicted annual calves per female adult is first
+divided by two to give the expected number of female calves per adult
+female (under the assumption of a 1:1 sex ratio).</p>
+<p><span class="math display">\[R_F = R/2\]</span></p>
+<p>Next the annual recruitment is adjusted to give the proportional
+change in the population.</p>
+<p><span class="math display">\[R_\Delta =  \frac{R_F}{1 + R_F}\]</span>
+The rate of population growth (<span class="math inline">\(\lambda\)</span>) is</p>
+<p><span class="math display">\[\lambda =
+\frac{N_{t+1}}{N_t}\]</span></p>
+<p>where <span class="math inline">\(N_t\)</span> is the population
+abundance in year <span class="math inline">\(t\)</span>.</p>
+<p>Following <span class="citation">Hatter and Bergerud (1991)</span>,
+it can be shown that</p>
+<p><span class="math display">\[\lambda = \frac{S}{1-R}\]</span> where
+<span class="math inline">\(S\)</span> is the annual survival.</p>
+<p><span class="math inline">\(\lambda\)</span> is calculated from <span class="math inline">\(R_\Delta\)</span> and <span class="math inline">\(S\)</span> as</p>
+<p><span class="math display">\[\lambda =
+\frac{S}{1-R_\Delta}\]</span></p>
 </div>
-<div class="section level3">
-<h3 id="bboufit_ml-objects">
-<code>bboufit_ml</code> Objects<a class="anchor" aria-label="anchor" href="#bboufit_ml-objects"></a>
-</h3>
-<p>The <code><a href="../reference/bb_fit_survival_ml.html">bb_fit_survival_ml()</a></code> and
-<code><a href="../reference/bb_fit_recruitment_ml.html">bb_fit_recruitment_ml()</a></code> functions use a Maximum Likelihood
-approach and return objects that inherit from class
-<code>bboufit_ml</code>.</p>
-<p>Objects of class <code>bboufit_ml</code> have four elements:</p>
-<ol style="list-style-type: decimal">
-<li>
-<code>model</code> - the Nimble model as created by
-<code><a href="https://rdrr.io/pkg/nimble/man/nimbleModel.html" class="external-link">nimble::nimbleModel()</a></code>.<br>
-</li>
-<li>
-<code>model_code</code> - the model code in text format.<br>
-</li>
-<li>
-<code>mle</code> - the Maximum Likelihood output as created by
-model$findMLE().</li>
-<li>
-<code>summary</code> - the summary of the Maximum Likelihood output
-as created by <code>model$summary(mle)</code>.<br>
-</li>
-<li>
-<code>data</code> - the survival or recruitment data provided.</li>
-</ol>
-<p>See <a href="https://github.com/nimble-dev/nimble" class="external-link">nimble</a> for how
-to work with nimble model objects and Maximum Likelihood output.</p>
+</div>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-decesare_estimating_2012" class="csl-entry">
+DeCesare, Nicholas J., Mark Hebblewhite, Mark Bradley, Kirby G. Smith,
+David Hervieux, and Lalenia Neufeld. 2012. <span>“Estimating Ungulate
+Recruitment and Growth Rates Using Age Ratios.”</span> <em>The Journal
+of Wildlife Management</em> 76 (1): 144–53. <a href="https://doi.org/10.1002/jwmg.244" class="external-link">https://doi.org/10.1002/jwmg.244</a>.
+</div>
+<div id="ref-hatter_moose_1991" class="csl-entry">
+Hatter, Ian, and Wendy Bergerud. 1991. <span>“Moose
+<span>Recuriment</span> <span>Adult</span> <span>Mortality</span> and
+<span>Rate</span> of <span>Change</span>”</span> 27: 65–73.
+</div>
 </div>
 </div>
   </div>
@@ -309,7 +318,7 @@ to work with nimble model objects and Maximum Likelihood output.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
       </footer>

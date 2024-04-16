@@ -19,6 +19,9 @@
     <loc>https://poissonconsulting.github.io/bboutools/articles/index.html</loc>
   </url>
   <url>
+    <loc>https://poissonconsulting.github.io/bboutools/articles/priors.html</loc>
+  </url>
+  <url>
     <loc>https://poissonconsulting.github.io/bboutools/authors.html</loc>
   </url>
   <url>
@@ -71,6 +74,9 @@
   </url>
   <url>
     <loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_trend_survival.html</loc>
+  </url>
+  <url>
+    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_calf_cow_ratio.html</loc>
   </url>
   <url>
     <loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_growth.html</loc>
