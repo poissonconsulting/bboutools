@@ -100,6 +100,7 @@ model_survival <- function(data,
 
   model <- nimbleModel(code,
     constants = constants,
+    # priors too vague - causes warning of logprob = -Inf unless inits constrained
     inits = list(b0 = rnorm(1, 3, 2)),
     buildDerivs = build_derivs,
     name = "bboumodel_survival"
