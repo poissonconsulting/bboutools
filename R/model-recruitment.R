@@ -119,6 +119,8 @@ model_recruitment <-
 
     model <- nimbleModel(code,
       constants = constants,
+      # priors too vague - causes warning of logprob = -Inf unless inits constrained
+      inits = list(b0 = rnorm(1, -1, 2)),
       buildDerivs = TRUE,
       name = "bboumodel_recruitment"
     )
