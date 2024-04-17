@@ -254,7 +254,7 @@ function.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 8</span></span></span>
 <span><span class="co">#&gt;       n     K nchains niters nthin   ess  rhat converged</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    27     4       3   <span style="text-decoration: underline;">1</span>000    10  <span style="text-decoration: underline;">1</span>092  1.00 TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    27     4       3   <span style="text-decoration: underline;">1</span>000    10   801  1.00 FALSE</span></span></code></pre></div>
 <p>Model convergence provides an indication of whether the parameter
 estimates are reliable.</p>
 <p>Convergence is successful if <code>ess</code> &gt; 33% of the number
@@ -301,8 +301,8 @@ coefficient output.</p>
 <span><span class="co">#&gt;   term    estimate  lower   upper</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;term&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> b0       -<span style="color: #BB0000;">1.46</span>   -<span style="color: #BB0000;">1.63</span>  -<span style="color: #BB0000;">1.3</span>   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> bYear    -<span style="color: #BB0000;">0.095</span><span style="color: #BB0000; text-decoration: underline;">4</span> -<span style="color: #BB0000;">0.254</span>  0.065<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sAnnual   0.325   0.182  0.501</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> bYear    -<span style="color: #BB0000;">0.094</span><span style="color: #BB0000; text-decoration: underline;">8</span> -<span style="color: #BB0000;">0.252</span>  0.076<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sAnnual   0.327   0.181  0.512</span></span></code></pre></div>
 <p>Keep in mind that any reference to ‘Year’ or ‘Annual’ in these
 summary outputs represent the caribou year, which can be set by the user
 within the fitting functions.</p>
@@ -369,9 +369,9 @@ otherwise, only certain mortalities are used to fit the model.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
 <span><span class="co">#&gt;   term    estimate  lower upper</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;term&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> b0         4.46  4.18   4.8  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sAnnual    0.312 0.042<span style="text-decoration: underline;">7</span> 0.674</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sMonth     0.244 0.032  0.609</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> b0         4.46  4.19   4.8  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sAnnual    0.339 0.056<span style="text-decoration: underline;">3</span> 0.683</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sMonth     0.255 0.052  0.635</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="predictions">Predictions<a class="anchor" aria-label="anchor" href="#predictions"></a>
@@ -397,9 +397,9 @@ methods’ vignette for details.</p>
 <code class="sourceCode R"><span><span class="va">predict_recruitment_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_predict_recruitment.html">bb_predict_recruitment</a></span><span class="op">(</span><span class="va">recruitment</span>, year <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">predict_recruitment_1</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
-<span><span class="co">#&gt;   PopulationName CaribouYear Month estimate  lower upper</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> A                       <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>    0.086 0.075<span style="text-decoration: underline;">9</span> 0.097</span></span></code></pre></div>
+<span><span class="co">#&gt;   PopulationName CaribouYear Month estimate  lower  upper</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> A                       <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>   0.086<span style="text-decoration: underline;">4</span> 0.075<span style="text-decoration: underline;">6</span> 0.096<span style="text-decoration: underline;">7</span></span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="recruitment-trend">Recruitment trend<a class="anchor" aria-label="anchor" href="#recruitment-trend"></a>
