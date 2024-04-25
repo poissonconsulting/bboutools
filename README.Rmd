@@ -116,6 +116,16 @@ The ['Getting Started'](https://poissonconsulting.github.io/bboutools/articles/b
 
 There is also a [user-friendly graphical interface](https://poissonconsulting.shinyapps.io/bboushiny/), called [`bboushiny`](https://github.com/poissonconsulting/bboushiny), for non-R users.
 
+## bbou Suite
+
+`bboutools` is part of the bbou suite of tools. 
+Other packages in this suite include:
+
+- [bboudata](https://github.com/poissonconsulting/bboudata)
+- [bbouretro](https://github.com/poissonconsulting/bbouretro)
+- [bboushiny](https://github.com/poissonconsulting/bboushiny)
+- [bbousims](https://github.com/poissonconsulting/bbousims)
+
 ## Contribution
 
 Please report any [issues](https://github.com/poissonconsulting/bboutools/issues).
