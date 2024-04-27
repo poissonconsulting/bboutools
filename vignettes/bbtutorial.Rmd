@@ -231,7 +231,8 @@ bb_plot_month_survival(predict_survival_month)
 ## Population Growth
 
 A user can predict population growth (lambda) with `bb_predict_growth()`. 
-The survival and recruitment models fit in the previous steps are used as input. 
+The survival and recruitment models fit in the previous steps are used as input.
+It is important to ensure that survival and recruitment outputs share the same biological year (i.e., 'caribou year'), which is set with the `year_start` argument in `bb_fir_survival()` and `bb_fit_recruitment()`.
 Details on how lambda is calculated can be found in the analytical methods vignette. 
 
 ```{r}
