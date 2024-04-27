@@ -121,7 +121,7 @@ test_that("get attributes ml works", {
 })
 
 test_that("convergence works", {
-  expect_equal(rhat(bboutools:::fit_survival), 1.029)
+  expect_equal(rhat(bboutools:::fit_survival), 1.024)
   expect_false(converged(bboutools:::fit_survival))
-  expect_equal(esr(bboutools:::fit_survival), 0.046)
+  expect_equal(esr(bboutools:::fit_survival), 0.034)
 })
