@@ -70,7 +70,7 @@ library(ggplot2)
 
 set.seed(1)
 surv <- bboudata::bbousurv_a
-data <- bboutools:::model_data_survival(surv, year_start = 4L, include_uncertain_morts = FALSE, quiet = FALSE)$data
+data <- bboutools:::model_data_survival(surv, year_start = 4L, include_uncertain_morts = TRUE, quiet = FALSE)$data
 obs <-
   data %>%
   group_by(Year, Month) %>%
