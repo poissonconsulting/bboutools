@@ -1,10 +1,5 @@
 ---
 title: "Prior Selection and Influence"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{priors}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -85,19 +80,28 @@ library(dplyr)
 library(ggplot2)
 ```
 
-```{r fig.width=6,fig.height=4}
+```{r}
 set.seed(1)
 data <- bboudata::bbousurv_c
+
 # force model to fit fixed year effect, use default priors
-fit <- bb_fit_survival(data, min_random_year = Inf, quiet = TRUE)
+fit <- bb_fit_survival(data, 
+  min_random_year = Inf, 
+  quiet = TRUE)
+
 # tighten prior on bAnnual by changing SD from default 10 to 1
 fit_prior <- bb_fit_survival(data,
   min_random_year = Inf, quiet = TRUE,
   priors = c("bAnnual_sd" = 1)
 )
-# fit maximum likelihood model for comparison
-fit_ml <- bb_fit_survival_ml(data, min_random_year = Inf, quiet = TRUE)
 
+# fit maximum likelihood model for comparison
+fit_ml <- bb_fit_survival_ml(data, 
+  min_random_year = Inf, 
+  quiet = TRUE)
+```
+
+```{r, echo=FALSE,fig.width=6,fig.height=4}
 pred <- bb_predict_survival(fit)
 pred_prior <- bb_predict_survival(fit_prior)
 pred_ml <- bb_predict_survival(fit_ml)
@@ -121,26 +125,38 @@ If this behaviour is desirable (i.e., to place less trust in extreme estimates),
 As another example, the user might strongly believe (i.e., based on literature or biological understanding) that the true adult female proportion is 65%.
 We compare estimates from very informative, informative (default) and vague priors on $adult\_female\_proportion$, along with the maximum likelihood estimates.
 
-```{r fig.width=6,fig.height=4}
+```{r}
 set.seed(1)
 data <- bboudata::bbourecruit_c
-fit <- bb_fit_recruitment(data, adult_female_proportion = NULL, quiet = TRUE)
+fit <- bb_fit_recruitment(data, 
+  adult_female_proportion = NULL, 
+  quiet = TRUE)
+
 fit_inf <- bb_fit_recruitment(data,
-  adult_female_proportion = NULL, quiet = TRUE,
+  adult_female_proportion = NULL, 
+  quiet = TRUE,
   priors = c(
     "adult_female_proportion_alpha" = 650,
     "adult_female_proportion_beta" = 350
   )
 )
+
 fit_vague <- bb_fit_recruitment(data,
-  adult_female_proportion = NULL, quiet = TRUE,
+  adult_female_proportion = NULL, 
+  quiet = TRUE,
   priors = c(
     "adult_female_proportion_alpha" = 1,
     "adult_female_proportion_beta" = 1
   )
 )
-fit_ml <- bb_fit_recruitment_ml(data, adult_female_proportion = NULL, quiet = TRUE)
 
+fit_ml <- bb_fit_recruitment_ml(data, 
+  adult_female_proportion = NULL,
+  quiet = TRUE)
+
+```
+
+```{r, echo=FALSE,fig.width=6,fig.height=4}
 est <-
   coef(fit) %>%
   filter(term == "adult_female_proportion")
@@ -174,6 +190,7 @@ ggplot(data = df) +
   scale_color_discrete("") +
   xlab("")
 ```
+
 
 As with the above example, the adult female proportion estimate for a Bayesian model with vague priors closely matches the Maximum Likelihood estimate, whereas the Bayesian model with informative prior pulls the estimate toward the prior belief.  
 
