@@ -39,13 +39,25 @@ bb_predict_lambda(
 A tibble of the lambda estimates with upper and lower credible intervals.
 }
 \description{
-Predicts population growth (lambda) from survival and recruitment fit objects.
+Predicts population growth (lambda) from survival and recruitment fit objects using the Hatter-Bergerud equation
+(Hatter and Bergerud, 1991).
 }
 \section{Functions}{
 \itemize{
 \item \code{bb_predict_lambda()}: Deprecated for \code{bb_predict_growth()} \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 }}
+\examples{
+if (interactive()) {
+  survival <- bb_fit_survival(bboudata::bbousurv_a)
+  recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a)
+  growth <- bb_predict_growth(survival, recruitment)
+}
+}
+\references{
+Hatter, Ian, and Wendy Bergerud. 1991. “Moose Recruitment, Adult
+Mortality and Rate of Change” 27: 65–73.
+}
 \seealso{
 Other analysis: 
 \code{\link{bb_predict_calf_cow_ratio}()},

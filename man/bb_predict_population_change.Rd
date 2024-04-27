@@ -33,6 +33,13 @@ A tibble of the population change estimates with upper and lower credible interv
 Predicts population change (\%) from survival and recruitment fit objects.
 Population change is the cumulative product of population growth rate (i.e., output of \code{\link[=bb_predict_growth]{bb_predict_growth()}})
 }
+\examples{
+if (interactive()) {
+  survival <- bb_fit_survival(bboudata::bbousurv_a)
+  recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a)
+  change <- bb_predict_population_change(survival, recruitment)
+}
+}
 \seealso{
 Other analysis: 
 \code{\link{bb_predict_calf_cow_ratio}()},
