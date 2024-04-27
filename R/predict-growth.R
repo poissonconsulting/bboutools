@@ -37,12 +37,21 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
 
 #' Predict Population Growth Lambda
 #'
-#' Predicts population growth (lambda) from survival and recruitment fit objects.
+#' Predicts population growth (lambda) from survival and recruitment fit objects using the Hatter-Bergerud equation
+#' (Hatter and Bergerud, 1991).
 #'
 #' @inheritParams params
 #' @return A tibble of the lambda estimates with upper and lower credible intervals.
 #' @export
+#' @references Hatter, Ian, and Wendy Bergerud. 1991. “Moose Recruitment, Adult
+#'   Mortality and Rate of Change” 27: 65–73.
 #' @family analysis
+#' @examples
+#' if (interactive()) {
+#'   survival <- bb_fit_survival(bboudata::bbousurv_a)
+#'   recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a)
+#'   growth <- bb_predict_growth(survival, recruitment)
+#' }
 bb_predict_growth <- function(survival,
                               recruitment,
                               sex_ratio = 0.5,
@@ -83,6 +92,12 @@ bb_predict_growth <- function(survival,
 #' @return A tibble of the population change estimates with upper and lower credible intervals.
 #' @export
 #' @family analysis
+#' @examples
+#' if (interactive()) {
+#'   survival <- bb_fit_survival(bboudata::bbousurv_a)
+#'   recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a)
+#'   change <- bb_predict_population_change(survival, recruitment)
+#' }
 bb_predict_population_change <- function(survival,
                                          recruitment,
                                          sex_ratio = 0.5,

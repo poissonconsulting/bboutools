@@ -89,7 +89,7 @@ The annual recruitment in boreal caribou population is typically estimated from 
 
 `bboutools` fits a Binomial recruitment model to the annual counts of calves, cows, yearlings, unknown adults and potentially, bulls.  
 
-It is up to the user to ensure that the data are from surveys that were conducted at the same time of year, when calf survival is expected to be similar to adult survival. 
+It is up to the user to ensure that the data are from surveys that were conducted at the same time of year, when calf survival is expected to be similar to adult survival.
 
 ### Fit a Bayesian model
 
@@ -116,8 +116,12 @@ A continuous fixed effect of year can be fit with `year_trend = TRUE`.
 
 The user can set `quiet = FALSE` argument to see messages and sampling progress. 
 
-```{r}
+```{r,eval=FALSE}
 recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a, year_start = 4, year_trend = TRUE, quiet = TRUE)
+```
+
+```{r,echo=FALSE}
+recruitment <- bboutools:::fit_recruitment_trend
 ```
 
 ### Convergence
@@ -180,8 +184,12 @@ Otherwise, the `year_start`, `year_trend`, and `min_random_year` arguments have 
 
 If `include_uncertain_mortalities = TRUE`, the total mortalities is the sum of the certain mortalities and uncertain mortalities ('MortalitiesCertain' and 'MortalitiesUncertain' columns); otherwise, only certain mortalities are used to fit the model. 
 
-```{r}
+```{r,eval=FALSE}
 survival <- bb_fit_survival(bboudata::bbousurv_a, year_start = 4, quiet = TRUE)
+```
+
+```{r,echo=FALSE}
+survival <- bboutools:::fit_survival
 ```
 
 ```{r}
@@ -231,11 +239,13 @@ bb_plot_month_survival(predict_survival_month)
 ## Population Growth
 
 A user can predict population growth (lambda) with `bb_predict_growth()`. 
-The survival and recruitment models fit in the previous steps are used as input. 
+The survival and recruitment models fit in the previous steps are used as input.
+It is important to ensure that survival and recruitment outputs share the same biological year (i.e., 'caribou year'), which is set with the `year_start` argument in `bb_fir_survival()` and `bb_fit_recruitment()`.
 Details on how lambda is calculated can be found in the analytical methods vignette. 
 
 ```{r}
 predict_lambda <- bb_predict_growth(survival = survival, recruitment = recruitment)
+
 bb_plot_year_growth(predict_lambda) +
   ggplot2::scale_y_continuous(labels = scales::percent)
 ```
@@ -253,16 +263,24 @@ These functions take a few seconds to execute because Nimble must compile the mo
 See the [Nimble documentation](https://r-nimble.org/html_manual/cha-AD.html#how-to-use-laplace-approximation) for more information and comparison to TMB.
 Similar to Bayesian model fits, generic functions (e.g., `tidy()`, `glance()` and `augment()`) work on ML fit objects (class 'bboufit_ml').
 
-```{r}
+```{r,eval=FALSE}
 recruitment_ml <- bb_fit_recruitment_ml(bboudata::bbourecruit_a, year_start = 4, year_trend = TRUE, quiet = TRUE)
+```
+
+```{r,echo=FALSE}
+recruitment_ml <- bboutools:::fit_recruitment_ml_trend
 ```
 
 ```{r}
 glance(recruitment_ml)
 ```
 
-```{r}
+```{r,eval=FALSE}
 survival_ml <- bb_fit_survival_ml(bboudata::bbousurv_a, year_start = 4, quiet = TRUE)
+```
+
+```{r,echo=FALSE}
+survival_ml <- bboutools:::fit_survival_ml
 ```
 
 The ML estimates are comparable to estimates derived from the equivalent Bayesian models above. In general, ML models can be interpreted as Bayesian models with uninformative (e.g., uniform) priors [@mcelreath_statistical_2016].
@@ -288,15 +306,14 @@ growth <- bb_predict_growth(survival_ml, recruitment_ml)
 bb_plot_year_growth(growth)
 ```
 
-Note that ML models can struggle to converge with a fixed year effect if there are many years in the dataset. 
-Insufficient information to estimate each year independently results in a flat likelihood surface and inability of the model to reliably identify the ML estimates.
-This can be resolved by estimating year as a random effect, continuous effect (`year_trend`) or excluding year altogether (i.e., with `exclude_year = TRUE`).
+Note that ML models can struggle to converge when there are sparse data, especially with a fixed year effect. 
+If these issues arise, the user can try estimating year as a random effect, continuous effect (`year_trend`), excluding year altogether (i.e., with `exclude_year = TRUE`), or fitting a Bayesian model. 
 
 Another possible source of convergence issues is initial values. 
-By default, `bboutools` sets initial values based on default priors used for parameters in the Bayesian models. 
+By default, `bboutools` sets initial values based on the default priors used for parameters in the Bayesian models. 
 The user can replace initial values for parameters using `inits`.
 
-```{r}
+```{r,eval=FALSE}
 inits_ml <- bb_fit_recruitment_ml(bboudata::bbourecruit_a, inits = c(b0 = 1, sAnnual = 0.3))
 ```
 
@@ -304,7 +321,7 @@ inits_ml <- bb_fit_recruitment_ml(bboudata::bbourecruit_a, inits = c(b0 = 1, sAn
 
 The `bb_fit_survival()` and `bb_fit_recruitment()` functions use a Bayesian approach and return objects that inherit from class `bboufit`.
 
-Objects of class `bboufit` have three elements: 
+Objects of class `bboufit` have four elements: 
 
 1. `model` - the compiled Nimble model as created by `nimble::nimbleModel()`.  
 1. `model_code` - the model code in text format.  
@@ -318,7 +335,7 @@ See [mcmcr](https://github.com/poissonconsulting/mcmcr) and [mcmcderive](https:/
 
 The `bb_fit_survival_ml()` and `bb_fit_recruitment_ml()` functions use a Maximum Likelihood approach and return objects that inherit from class `bboufit_ml`.
 
-Objects of class `bboufit_ml` have four elements: 
+Objects of class `bboufit_ml` have five elements: 
 
 1. `model` - the Nimble model as created by `nimble::nimbleModel()`.   
 1. `model_code` - the model code in text format.  

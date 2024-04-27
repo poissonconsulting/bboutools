@@ -34,7 +34,7 @@ ml_se_fail <- function(x) {
 bb_fit_survival <- function(data,
                             min_random_year = 5,
                             year_trend = FALSE,
-                            include_uncertain_morts = FALSE,
+                            include_uncertain_morts = TRUE,
                             year_start = 4L,
                             nthin = 10,
                             niters = 1000,

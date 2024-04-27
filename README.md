@@ -62,7 +62,7 @@ glance(surv_fit)
 #> # A tibble: 1 × 8
 #>       n     K nchains niters nthin   ess  rhat converged
 #>   <int> <int>   <int>  <int> <dbl> <int> <dbl> <lgl>    
-#> 1   363     5       3   1000    10   120  1.03 FALSE
+#> 1   363     5       3   1000    10   111  1.03 FALSE
 ```
 
 Predictions can then be generated using `bb_predict_survival()`.
@@ -73,16 +73,16 @@ surv_pred
 #> # A tibble: 32 × 6
 #>    PopulationName CaribouYear Month estimate lower upper
 #>    <chr>                <int> <int>    <dbl> <dbl> <dbl>
-#>  1 A                     1985    NA    0.871 0.756 0.945
-#>  2 A                     1986    NA    0.88  0.788 0.954
-#>  3 A                     1987    NA    0.838 0.647 0.907
-#>  4 A                     1988    NA    0.886 0.808 0.956
-#>  5 A                     1989    NA    0.873 0.788 0.94 
-#>  6 A                     1990    NA    0.871 0.786 0.934
-#>  7 A                     1991    NA    0.877 0.803 0.935
-#>  8 A                     1992    NA    0.888 0.821 0.953
-#>  9 A                     1993    NA    0.869 0.794 0.924
-#> 10 A                     1994    NA    0.848 0.75  0.904
+#>  1 A                     1985    NA    0.872 0.762 0.947
+#>  2 A                     1986    NA    0.881 0.791 0.952
+#>  3 A                     1987    NA    0.841 0.645 0.908
+#>  4 A                     1988    NA    0.887 0.813 0.96 
+#>  5 A                     1989    NA    0.874 0.785 0.943
+#>  6 A                     1990    NA    0.872 0.785 0.936
+#>  7 A                     1991    NA    0.877 0.801 0.936
+#>  8 A                     1992    NA    0.889 0.822 0.956
+#>  9 A                     1993    NA    0.87  0.793 0.927
+#> 10 A                     1994    NA    0.849 0.756 0.909
 #> # ℹ 22 more rows
 ```
 
@@ -166,6 +166,16 @@ There is also a [user-friendly graphical
 interface](https://poissonconsulting.shinyapps.io/bboushiny/), called
 [`bboushiny`](https://github.com/poissonconsulting/bboushiny), for non-R
 users.
+
+## bbou Suite
+
+`bboutools` is part of the bbou suite of tools. Other packages in this
+suite include:
+
+- [bboudata](https://github.com/poissonconsulting/bboudata)
+- [bbouretro](https://github.com/poissonconsulting/bbouretro)
+- [bboushiny](https://github.com/poissonconsulting/bboushiny)
+- [bbousims](https://github.com/poissonconsulting/bbousims)
 
 ## Contribution
 

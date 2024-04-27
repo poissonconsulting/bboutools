@@ -1,10 +1,5 @@
 ---
 title: "Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 bibliography: bibliography.bib
 ---
 
@@ -70,7 +65,7 @@ library(ggplot2)
 
 set.seed(1)
 surv <- bboudata::bbousurv_a
-data <- bboutools:::model_data_survival(surv, year_start = 4L, include_uncertain_morts = FALSE, quiet = FALSE)$data
+data <- bboutools:::model_data_survival(surv, year_start = 4L, include_uncertain_morts = TRUE, quiet = FALSE)$data
 obs <-
   data %>%
   group_by(Year, Month) %>%
@@ -85,10 +80,10 @@ obs <-
     mean_weight = mean(weight)
   )
 
-fit <- bb_fit_survival_ml(surv, quiet = TRUE)
-fit2 <- bb_fit_survival_ml(surv, min_random_year = Inf, quiet = TRUE)
-fit3 <- bb_fit_survival(surv, min_random_year = Inf, nthin = 50, quiet = TRUE)
-fit4 <- bb_fit_survival(surv, nthin = 20, quiet = TRUE)
+fit <- bboutools:::fit_survival_ml
+fit2 <- bboutools:::fit_survival_ml_fixed
+fit3 <- bboutools:::fit_survival_fixed
+fit4 <- bboutools:::fit_survival
 
 pred <- bb_predict_survival(fit)
 pred2 <- bb_predict_survival(fit2)

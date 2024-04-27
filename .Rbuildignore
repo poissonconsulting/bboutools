@@ -16,3 +16,4 @@
 ^annual_survival\.csv$
 ^data_survival\.csv$
 ^data_recruitment\.csv$
+^vignettes/articles$
