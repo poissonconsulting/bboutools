@@ -46,11 +46,11 @@ fit_recruitment <- bb_fit_recruitment(
   quiet = TRUE
 )
 
-# trend only
+# trend with random (for get started vignette)
 set.seed(101)
 fit_recruitment_trend <- bb_fit_recruitment(
   data = x, nthin = 10,
-  quiet = TRUE, min_random_year = Inf, year_trend = TRUE
+  quiet = TRUE, year_trend = TRUE
 )
 
 fit_recruitment_ml <- bb_fit_recruitment_ml(
@@ -62,7 +62,6 @@ fit_recruitment_ml_fixed <- bb_fit_recruitment_ml(
   data = x,
   quiet = TRUE, min_random_year = Inf
 )
-
 
 fit_recruitment_ml_trend <- bb_fit_recruitment_ml(
   data = x,
