@@ -40,6 +40,9 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
+  <a href="../articles/bboutools.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -50,10 +53,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/bbmethods.html">Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth</a>
-    </li>
-    <li>
-      <a href="../articles/bbtutorial.html">Getting Started with bboutools</a>
+      <a href="../articles/methods.html">Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth</a>
     </li>
     <li>
       <a href="../articles/priors.html">Prior Selection and Influence</a>
@@ -87,7 +87,7 @@
       <h1 data-toc-skip>Prior Selection and Influence</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/poissonconsulting/bboutools/blob/HEAD/vignettes/priors.Rmd" class="external-link"><code>vignettes/priors.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/poissonconsulting/bboutools/blob/HEAD/vignettes/articles/priors.Rmd" class="external-link"><code>vignettes/articles/priors.Rmd</code></a></small>
       <div class="hidden name"><code>priors.Rmd</code></div>
 
     </div>
@@ -174,32 +174,23 @@ likelihood model is also fit for comparison.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/bboudata/man/bbousurv_c.html" class="external-link">bbousurv_c</a></span></span>
+<span></span>
 <span><span class="co"># force model to fit fixed year effect, use default priors</span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">data</span>, min_random_year <span class="op">=</span> <span class="cn">Inf</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">data</span>, </span>
+<span>  min_random_year <span class="op">=</span> <span class="cn">Inf</span>, </span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># tighten prior on bAnnual by changing SD from default 10 to 1</span></span>
 <span><span class="va">fit_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">data</span>,</span>
 <span>  min_random_year <span class="op">=</span> <span class="cn">Inf</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  priors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bAnnual_sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># fit maximum likelihood model for comparison</span></span>
-<span><span class="va">fit_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival_ml.html">bb_fit_survival_ml</a></span><span class="op">(</span><span class="va">data</span>, min_random_year <span class="op">=</span> <span class="cn">Inf</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_predict_survival.html">bb_predict_survival</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="va">pred_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_predict_survival.html">bb_predict_survival</a></span><span class="op">(</span><span class="va">fit_prior</span><span class="op">)</span></span>
-<span><span class="va">pred_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_predict_survival.html">bb_predict_survival</a></span><span class="op">(</span><span class="va">fit_ml</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"Bayesian Vague (Default)"</span> <span class="op">=</span> <span class="va">pred</span>,</span>
-<span>  <span class="st">"Bayesian Informative"</span> <span class="op">=</span> <span class="va">pred_prior</span>,</span>
-<span>  <span class="st">"Maximum Likelihood"</span> <span class="op">=</span> <span class="va">pred_ml</span></span>
-<span><span class="op">)</span>, .id <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_pointrange</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">CaribouYear</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">estimate</span>, ymin <span class="op">=</span> <span class="va">lower</span>, ymax <span class="op">=</span> <span class="va">upper</span>, color <span class="op">=</span> <span class="va">model</span><span class="op">)</span>, position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html" class="external-link">position_dodge</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span><span class="st">"Annual Survival"</span>, labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Caribou Year"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span></code></pre></div>
-<p><img src="priors_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
+<span><span class="va">fit_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival_ml.html">bb_fit_survival_ml</a></span><span class="op">(</span><span class="va">data</span>, </span>
+<span>  min_random_year <span class="op">=</span> <span class="cn">Inf</span>, </span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="priors_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
 <p>The Bayesian model with vague priors (default) has annual survival
 estimates that closely match the Maximum Likelihood estimates, whereas
 the the Bayesian model with a tighter prior on the year fixed effect
@@ -214,56 +205,32 @@ maximum likelihood estimates.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/bboudata/man/bbourecruit_c.html" class="external-link">bbourecruit_c</a></span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">data</span>, adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">data</span>, </span>
+<span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">fit_inf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">data</span>,</span>
-<span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  priors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"adult_female_proportion_alpha"</span> <span class="op">=</span> <span class="fl">650</span>,</span>
 <span>    <span class="st">"adult_female_proportion_beta"</span> <span class="op">=</span> <span class="fl">350</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">fit_vague</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">data</span>,</span>
-<span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  priors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"adult_female_proportion_alpha"</span> <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    <span class="st">"adult_female_proportion_beta"</span> <span class="op">=</span> <span class="fl">1</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">fit_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment_ml.html">bb_fit_recruitment_ml</a></span><span class="op">(</span><span class="va">data</span>, adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">est</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">==</span> <span class="st">"adult_female_proportion"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">est_inf</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit_inf</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">==</span> <span class="st">"adult_female_proportion"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">est_vague</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit_vague</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">==</span> <span class="st">"adult_female_proportion"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">est_ml</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit_ml</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">==</span> <span class="st">"adult_female_proportion"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"Bayesian Default"</span> <span class="op">=</span> <span class="va">est</span>,</span>
-<span>  <span class="st">"Bayesian Informative"</span> <span class="op">=</span> <span class="va">est_inf</span>,</span>
-<span>  <span class="st">"Bayesian Vague"</span> <span class="op">=</span> <span class="va">est_vague</span>,</span>
-<span>  <span class="st">"Maximum Likelihood"</span> <span class="op">=</span> <span class="va">est_ml</span></span>
-<span><span class="op">)</span>, .id <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">model</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Bayesian Vague"</span>, <span class="st">"Bayesian Default"</span>,</span>
-<span>    <span class="st">"Bayesian Informative"</span>, <span class="st">"Maximum Likelihood"</span></span>
-<span>  <span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">df</span><span class="op">$</span><span class="va">prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Beta(65,35)"</span>, <span class="st">"Beta(650,350)"</span>, <span class="st">"Beta(1,1)"</span>, <span class="st">"ML"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_pointrange</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">prior</span>, y <span class="op">=</span> <span class="va">estimate</span>, ymin <span class="op">=</span> <span class="va">lower</span>, ymax <span class="op">=</span> <span class="va">upper</span>, color <span class="op">=</span> <span class="va">model</span><span class="op">)</span>, position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html" class="external-link">position_dodge</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span><span class="st">"Adult Female Proportion"</span>, labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.65</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span></code></pre></div>
-<p><img src="priors_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
+<span><span class="va">fit_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment_ml.html">bb_fit_recruitment_ml</a></span><span class="op">(</span><span class="va">data</span>, </span>
+<span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="priors_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>As with the above example, the adult female proportion estimate for a
 Bayesian model with vague priors closely matches the Maximum Likelihood
 estimate, whereas the Bayesian model with informative prior pulls the
@@ -289,7 +256,7 @@ details.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
