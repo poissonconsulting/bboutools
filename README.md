@@ -155,12 +155,16 @@ bb_plot_year_population_change(change)
 
 ## Information
 
-Additional information is available from the [`bboutools`
-website](https://poissonconsulting.github.io/bboutools/). The [‘Getting
-Started’](https://poissonconsulting.github.io/bboutools/articles/bbtutorial.html)
-and the [‘Analytic
-Methods’](https://poissonconsulting.github.io/bboutools/articles/bbmethods.html)
-vignettes may be particularly useful.
+Additional information is available from the [bboutools
+website](https://poissonconsulting.github.io/bboutools/), which includes
+the following articles:  
+- [Get
+Started](https://poissonconsulting.github.io/bboutools/articles/bboutools.html).  
+- [Analytic Methods for Estimation of Boreal Caribou Survival,
+Recruitment and Population
+Growth](https://poissonconsulting.github.io/bboutools/articles/bbmethods.html).  
+- [Prior Selection and
+Influence](https://poissonconsulting.github.io/bboutools/articles/priors.html).
 
 There is also a [user-friendly graphical
 interface](https://poissonconsulting.shinyapps.io/bboushiny/), called
