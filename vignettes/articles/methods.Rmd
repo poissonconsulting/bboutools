@@ -33,7 +33,7 @@ The use of random effects is especially beneficial when some months/years have s
 In the case of sparse data or extreme values, estimates will tend to be pulled toward the mean (i.e., 'shrinkage'). 
 For missing data, the estimate will be equal to the mean. 
 Shrinkage may not be desired if extreme values are likely to represent the true value (e.g., numerous wolf attacks in one year). 
-In this case, a fixed effect model would yield better estimates. 
+In this case, a fixed effect model would yield more reliable estimates. 
 
 Fixed and random effects can be used in Bayesian or frequentist models. 
 
@@ -41,7 +41,6 @@ Fixed and random effects can be used in Bayesian or frequentist models.
 
 The frequentist approach simply identifies the parameter values that maximize the likelihood, i.e., have the greatest probability of having produced the data if they were true.
 It does this by searching parameter space for the combination of parameter values with the Maximum Likelihood.
-Parameter estimates for random effects can be estimated using the Laplace approximation (i.e., with software packages [TMB](https://arxiv.org/pdf/1509.00660.pdf) or [Nimble](https://r-nimble.org/html_manual/cha-AD.html#how-to-use-laplace-approximation)). 
 The CIs are calculated using the standard errors, assuming that the likelihood is normally distributed.
 This approach has the advantage of being fast.
 
