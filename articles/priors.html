@@ -94,22 +94,21 @@
 
     
     
-<p>A prior distribution represents our prior understanding or belief in
-the value of an unknown parameter. The influence of a prior on the
-posterior distribution will decrease as the number of observations
-increases. In general, <code>bboutools</code> uses biologically
-reasonable, weakly informative priors by default <span class="citation">[@gelman_prior_2017;
+<p>A prior distribution represents the existing uncertainty in the value
+of an unknown parameter. The influence of a prior on the posterior
+distribution will decrease as the number of observations increases.
+<code>bboutools</code> uses weakly informative priors by default <span class="citation">[@gelman_prior_2017;
 @mcelreath_statistical_2016]</span>.</p>
 <p>If the user is interested in fitting models without priors, see
-<code><a href="../reference/bb_fit_recruitment_ml.html">bb_fit_recruitment_ml()</a></code>/<code><a href="../reference/bb_fit_survival_ml.html">bb_fit_survival_ml()</a></code>,
-which have identical models but use a frequentist approach (Maximum
-Likelihood) to parameter estimation. Models fit with Maximum Likelihood
-are equivalent to Bayesian models with completely uninformative priors
-<span class="citation">[@mcelreath_statistical_2016]</span>.</p>
+<code><a href="../reference/bb_fit_recruitment_ml.html">bb_fit_recruitment_ml()</a></code> and
+<code><a href="../reference/bb_fit_survival_ml.html">bb_fit_survival_ml()</a></code>, which have identical models but use a
+frequentist approach (Maximum Likelihood) to parameter estimation.
+Models fit with Maximum Likelihood are equivalent to Bayesian models
+with completely uninformative priors <span class="citation">[@mcelreath_statistical_2016]</span>.</p>
 <div class="section level3">
 <h3 id="survival">Survival<a class="anchor" aria-label="anchor" href="#survival"></a>
 </h3>
-<p>Given the full model, the expected survival probability for the <span class="math inline">\(i^{th}\)</span> year and <span class="math inline">\(j^{th}\)</span> month is <span class="math display">\[logit(Survival[i,j]) = b0 + bAnnual[i] +
+<p>Given the full model, the expected survival probability for the <span class="math inline">\(i^{th}\)</span> year and <span class="math inline">\(j^{th}\)</span> month is <span class="math display">\[\text{logit}(Survival[i,j]) = b0 + bAnnual[i] +
 bMonth[j] + bYear \cdot Year[i]\]</span> Where <span class="math inline">\(bAnnual\)</span> can be a fixed or random effect
 of categorical year on the intercept on the log-odds scale and <span class="math inline">\(Year\)</span> is the scaled continuous year.</p>
 <p>This model has the following default priors in
@@ -168,12 +167,12 @@ tighten the standard deviation for the fixed effect of categorical year
 on the intercept of monthly survival probability. The equivalent maximum
 likelihood model is also fit for comparison.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://poissonconsulting.github.io/bboutools/">bboutools</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/poissonconsulting/bboutools" class="external-link">bboutools</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/bboudata/man/bbousurv_c.html" class="external-link">bbousurv_c</a></span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_c.html" class="external-link">bbousurv_c</a></span></span>
 <span></span>
 <span><span class="co"># force model to fit fixed year effect, use default priors</span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">data</span>, </span>
@@ -204,7 +203,7 @@ informative (default) and vague priors on <span class="math inline">\(adult\_fem
 maximum likelihood estimates.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/bboudata/man/bbourecruit_c.html" class="external-link">bbourecruit_c</a></span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_c.html" class="external-link">bbourecruit_c</a></span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">data</span>, </span>
 <span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>, </span>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -233,8 +232,8 @@ maximum likelihood estimates.</p>
 <p><img src="priors_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>As with the above example, the adult female proportion estimate for a
 Bayesian model with vague priors closely matches the Maximum Likelihood
-estimate, whereas the Bayesian model with informative prior pulls the
-estimate toward the prior belief.</p>
+estimate, whereas the Bayesian model with informative prior gives less
+weight to the data.</p>
 <p>The <span class="math inline">\(adult\_female\_proportion\)</span>
 can also simply be fixed. See <code><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment()</a></code> for
 details.</p>

@@ -124,7 +124,7 @@ extreme values, estimates will tend to be pulled toward the mean (i.e.,
 ‘shrinkage’). For missing data, the estimate will be equal to the mean.
 Shrinkage may not be desired if extreme values are likely to represent
 the true value (e.g., numerous wolf attacks in one year). In this case,
-a fixed effect model would yield better estimates.</p>
+a fixed effect model would yield more reliable estimates.</p>
 <p>Fixed and random effects can be used in Bayesian or frequentist
 models.</p>
 </div>
@@ -135,19 +135,17 @@ models.</p>
 maximize the likelihood, i.e., have the greatest probability of having
 produced the data if they were true. It does this by searching parameter
 space for the combination of parameter values with the Maximum
-Likelihood. Parameter estimates for random effects can be estimated
-using the Laplace approximation (i.e., with software packages <a href="https://arxiv.org/pdf/1509.00660.pdf" class="external-link">TMB</a> or <a href="https://r-nimble.org/html_manual/cha-AD.html#how-to-use-laplace-approximation" class="external-link">Nimble</a>).
-The CIs are calculated using the standard errors, assuming that the
-likelihood is normally distributed. This approach has the advantage of
-being fast.</p>
-<p>The Bayesian approach multiplies the likelihood by the probability of
-the parameter values being true based on prior knowledge to get the
-posterior probability of the parameter values being true based on the
-data. Bayesian methods repeatedly sample from the posterior probability
+Likelihood. The CIs are calculated using the standard errors, assuming
+that the likelihood is normally distributed. This approach has the
+advantage of being fast.</p>
+<p>The Bayesian approach multiplies the likelihood by the prior
+probability of the parameter values being true to get the posterior
+probability of the parameter values being true based on the data.
+Bayesian methods repeatedly sample from the posterior probability
 distributions using MCMC (Monte Carlo Markov Chain) methods. This
 approach has the advantage of allowing derived parameters such as the
-population growth rate to be accurately estimated from the primary
-survival and recruitment parameters.</p>
+population growth rate to be easily estimated with full uncertainty from
+the primary survival and recruitment parameters.</p>
 <p>To demonstrate, we use an anonymized data set to compare annual
 survival estimates from a:</p>
 <ul>
