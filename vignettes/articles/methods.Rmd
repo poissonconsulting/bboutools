@@ -33,7 +33,7 @@ The use of random effects is especially beneficial when some months/years have s
 In the case of sparse data or extreme values, estimates will tend to be pulled toward the mean (i.e., 'shrinkage'). 
 For missing data, the estimate will be equal to the mean. 
 Shrinkage may not be desired if extreme values are likely to represent the true value (e.g., numerous wolf attacks in one year). 
-In this case, a fixed effect model would yield better estimates. 
+In this case, a fixed effect model would yield more reliable estimates. 
 
 Fixed and random effects can be used in Bayesian or frequentist models. 
 
@@ -41,13 +41,12 @@ Fixed and random effects can be used in Bayesian or frequentist models.
 
 The frequentist approach simply identifies the parameter values that maximize the likelihood, i.e., have the greatest probability of having produced the data if they were true.
 It does this by searching parameter space for the combination of parameter values with the Maximum Likelihood.
-Parameter estimates for random effects can be estimated using the Laplace approximation (i.e., with software packages [TMB](https://arxiv.org/pdf/1509.00660.pdf) or [Nimble](https://r-nimble.org/html_manual/cha-AD.html#how-to-use-laplace-approximation)). 
 The CIs are calculated using the standard errors, assuming that the likelihood is normally distributed.
 This approach has the advantage of being fast.
 
-The Bayesian approach multiplies the likelihood by the probability of the parameter values being true based on prior knowledge to get the posterior probability of the parameter values being true based on the data.
+The Bayesian approach multiplies the likelihood by the prior probability of the parameter values being true to get the posterior probability of the parameter values being true based on the data.
 Bayesian methods repeatedly sample from the posterior probability distributions using MCMC (Monte Carlo Markov Chain) methods.
-This approach has the advantage of allowing derived parameters such as the population growth rate to be accurately estimated from the primary survival and recruitment parameters.
+This approach has the advantage of allowing derived parameters such as the population growth rate to be easily estimated with full uncertainty from the primary survival and recruitment parameters.
 
 To demonstrate, we use an anonymized data set to compare annual survival estimates from a:  
 
@@ -138,7 +137,9 @@ This is a more straightforward task with Bayesian models.
 
 ## bboutools
 
-`bboutools` provides the option to estimate parameter values using a Maximum Likelihood or a fully Bayesian approach. Random effects are used where appropriate by default. The Bayesian approach also uses biologically reasonable, weakly informative priors by default. 
+`bboutools` provides the option to estimate parameter values using a Maximum Likelihood or a fully Bayesian approach. 
+Random effects are used where appropriate by default. 
+The Bayesian approach also uses biologically reasonable, weakly informative priors by default. 
 `bboutools` provides relatively simple general models that can be used to compare survival, recruitment and population growth estimates across jurisdictions.
 
 By default, the `bboutools` Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves). 
@@ -213,6 +214,7 @@ for(i in 1:nAnnual) {
 ```
 
 ### Predicted Survival, Recruitment and Population Growth
+
 As ungulate populations are generally polygynous survival and recruitment are estimated with respect to the number of adult (mature) females.
 
 To estimate recruitment following @decesare_estimating_2012, the predicted annual calves per female adult is first divided by two to give the expected number of female calves per adult female (under the assumption of a 1:1 sex ratio).

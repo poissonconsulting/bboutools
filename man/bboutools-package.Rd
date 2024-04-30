@@ -6,11 +6,12 @@
 \alias{bboutools-package}
 \title{bboutools: Boreal Caribou Survival, Recruitment and Population Growth}
 \description{
-Estimates annual survival, recruitment and population growth for boreal caribou populations using hierarchical Bayesian models.
+Estimates annual survival, recruitment and population growth for boreal caribou populations using Bayesian and Maximum Likelihood models with fixed and random effects.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://github.com/poissonconsulting/bboutools}
   \item \url{https://poissonconsulting.github.io/bboutools/}
   \item Report bugs at \url{https://github.com/poissonconsulting/bboutools/issues}
 }

@@ -13,16 +13,18 @@ coverage](https://codecov.io/gh/poissonconsulting/bboutools/branch/main/graph/ba
 <!-- badges: end -->
 
 `bboutools` is an R package to estimate the annual survival, recruitment
-and population growth for boreal caribou using Bayesian models to
-facilitate direct comparison of estimates across jurisdictions.
+and population growth for boreal caribou populations using Bayesian and
+Maximum Likelihood models with fixed and random effects. It was
+developed to facilitate direct comparison of estimates across
+jurisdictions.
 
 ## Installation
 
 To install the latest development version:
 
 ``` r
-# install.packages("pak")
-pak::pak("poissonconsulting/bboutools")
+# install.packages("remotes")
+remotes::install_github("poissonconsulting/bboutools")
 ```
 
 ## Introduction
