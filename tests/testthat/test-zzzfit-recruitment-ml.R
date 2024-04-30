@@ -70,7 +70,7 @@ test_that("can change fixed adult_female_proportion", {
   expect_snapshot_data(coef(fit), "fixed_adult_female_proportion")
 })
 
-test_that("can change fixed yearling_female_proportion", {
+test_that("can change fixed sex_ratio", {
   skip_on_ci()
   skip_on_covr()
 
@@ -78,7 +78,7 @@ test_that("can change fixed yearling_female_proportion", {
   x$Yearlings[5:10] <- 1
   fit <- bb_fit_recruitment_ml(
     data = x,
-    yearling_female_proportion = 0.2,
+    sex_ratio = 0.2,
     quiet = TRUE
   )
 
@@ -87,7 +87,7 @@ test_that("can change fixed yearling_female_proportion", {
   expect_s4_class(fit$summary, "AGHQuad_summary")
   expect_s4_class(fit$mle, "OptimResultNimbleList")
   expect_setequal(pars(fit), c("b0", "bAnnual", "sAnnual"))
-  expect_snapshot_data(coef(fit), "fixed_yearling_female_proportion")
+  expect_snapshot_data(coef(fit), "fixed_sex_ratio")
 })
 
 test_that("can estimate adult_female_proportion", {

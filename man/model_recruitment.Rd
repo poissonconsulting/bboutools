@@ -9,7 +9,7 @@ model_recruitment(
   year_random = TRUE,
   year_trend = TRUE,
   adult_female_proportion = 0.65,
-  yearling_female_proportion = 0.5,
+  sex_ratio = 0.5,
   demographic_stochasticity = TRUE,
   priors = NULL
 )
@@ -26,7 +26,7 @@ Year trend cannot be fit if there is also a fixed year effect (as opposed to ran
 If NULL, the proportion is estimated from the data (i.e., \code{Cows ~ Binomial(adult_female_proportion, Cows + Bulls)}) and a prior of dbeta(65, 35) is used.
 This prior can be changed via the \code{priors} argument.}
 
-\item{yearling_female_proportion}{A number between 0 and 1 of the expected proportion of yearlings that are female.}
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.}
 
 \item{demographic_stochasticity}{A flag indicating whether to include demographic_stochasticity in the recruitment model.}
 

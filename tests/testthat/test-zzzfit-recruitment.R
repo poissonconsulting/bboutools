@@ -133,7 +133,7 @@ test_that("can estimate adult_female_proportion", {
   expect_snapshot_data(coef(fit), "estimate_adult_female_proportion")
 })
 
-test_that("can change fixed yearling_female_proportion", {
+test_that("can change fixed sex_ratio", {
   skip_on_covr()
 
   x <- bboudata::bbourecruit_a
@@ -141,7 +141,7 @@ test_that("can change fixed yearling_female_proportion", {
   set.seed(101)
   fit <- bb_fit_recruitment(
     data = x, nthin = 1, niters = 100,
-    yearling_female_proportion = 0.2,
+    sex_ratio = 0.2,
     quiet = TRUE
   )
 
@@ -151,7 +151,7 @@ test_that("can change fixed yearling_female_proportion", {
   expect_s3_class(fit$samples, "mcmcr")
   expect_s3_class(fit$data, "data.frame")
   expect_setequal(pars(fit), c("b0", "bAnnual", "sAnnual"))
-  expect_snapshot_data(coef(fit), "yearling_female_proportion")
+  expect_snapshot_data(coef(fit), "sex_ratio")
 })
 
 test_that("can set priors", {

@@ -124,7 +124,7 @@ If `adult_female_proportion = NULL`, the adult female proportion is estimated fr
 By default, a biologically informative prior of `Beta(65,35)` is used. 
 This corresponds to an expected value of 65%.  
 
-The yearling female proportion can be set with `yearling_female_proportion`. 
+The yearling and calf female proportion can be set with `sex_ratio`. 
 The default value is 0.5.  
 
 The model can be fit with random effect of year, fixed effect of year and/or continuous effect of year (i.e., year trend). 
@@ -224,6 +224,8 @@ Recruitment is the adjusted recruitment using  methods from [@decesare_estimatin
 See the 'analytical methods' article for details. 
 
 Predictions of calf-cow ratio can also be made using `bb_predict_calf_cow_ratio()`. 
+
+The sex ratio can be adjusted with `sex_ratio`.
 
 #### Recruitment by year
 ```{r}
