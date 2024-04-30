@@ -21,8 +21,8 @@ facilitate direct comparison of estimates across jurisdictions.
 To install the latest development version:
 
 ``` r
-# install.packages("pak")
-pak::pak("poissonconsulting/bboutools")
+# install.packages("remotes")
+remotes::install_github("poissonconsulting/bboutools")
 ```
 
 ## Introduction
