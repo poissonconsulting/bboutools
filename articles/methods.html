@@ -135,9 +135,11 @@ models.</p>
 maximize the likelihood, i.e., have the greatest probability of having
 produced the data if they were true. It does this by searching parameter
 space for the combination of parameter values with the Maximum
-Likelihood. The CIs are calculated using the standard errors, assuming
-that the likelihood is normally distributed. This approach has the
-advantage of being fast.</p>
+Likelihood. Parameter estimates for random effects can be estimated
+using the Laplace approximation (i.e., with software packages <a href="https://arxiv.org/pdf/1509.00660.pdf" class="external-link">TMB</a> or <a href="https://r-nimble.org/html_manual/cha-AD.html#how-to-use-laplace-approximation" class="external-link">Nimble</a>).
+The CIs are calculated using the standard errors, assuming that the
+likelihood is normally distributed. This approach has the advantage of
+being fast.</p>
 <p>The Bayesian approach multiplies the likelihood by the prior
 probability of the parameter values being true to get the posterior
 probability of the parameter values being true based on the data.
