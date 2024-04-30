@@ -3,16 +3,15 @@ Title: Boreal Caribou Survival, Recruitment and Population Growth
 Version: 0.0.0.9006
 Authors@R: c(
     person("Seb", "Dalgarno", , "seb@poissonconsulting.ca", role = c("aut", "cre"),
-    comment = c(ORCID = "0000-0002-3658-4517")),
+           comment = c(ORCID = "0000-0002-3658-4517")),
     person("Joe", "Thorley", , "joe@poissonconsulting.ca", role = "aut",
            comment = c(ORCID = "0000-0002-7683-4592")),
     person("John", "Boulanger", role = "aut",
            comment = c(ORCID = "0000-0001-8222-1445")),
     person("Ayla", "Pearson", , "ayla@poissonconsulting.ca", role = "aut"),
-    person(given = "Environment and Climate Change Canada",
-             role = "cph")
+    person("Environment and Climate Change Canada", role = "cph")
   )
-Description: Estimates annual survival, recruitment and population growth 
+Description: Estimates annual survival, recruitment and population growth
     for boreal caribou populations using hierarchical Bayesian models.
 License: Apache License (== 2.0) | file LICENSE
 URL: https://poissonconsulting.github.io/bboutools/
