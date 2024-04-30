@@ -41,8 +41,8 @@ In order to install R [@r] the appropriate binary for the users operating system
 
 Once R is installed, the `bboutools` package can be installed from GitHub by executing the following code at the R console
 ```{r, eval=FALSE}
-install.packages("pak")
-pak::pak("poissonconsulting/bboutools")
+install.packages("remotes")
+remotes::install_github("poissonconsulting/bboutools")
 ```
 
 The `bboutools` package can then be loaded into the current session using
@@ -62,7 +62,8 @@ If you discover a bug in `bboutools` please file an issue with a [reprex](https:
 ## Providing Data
 
 Once the `bboutools` package has been loaded, the next task is to provide some data.
-An easy way to do this is to create a comma separated file (`.csv`) with spreadsheet software. Recruitment and survival data should be formatted as in the following anonymized datasets and can be checked to confirm it is in the correct format by using the `bboudata` functions:
+An easy way to do this is to create a comma separated file (`.csv`) with spreadsheet software. 
+Recruitment and survival data should be formatted as in the following anonymized datasets and can be checked to confirm it is in the correct format by using the `bboudata` functions:
 
 ```{r}
 # Recruitment data
@@ -107,7 +108,8 @@ If `adult_female_proportion = NULL`, the adult female proportion is estimated fr
 By default, a biologically informative prior of `Beta(65,35)` is used. 
 This corresponds to an expected value of 65%.  
 
-The yearling female proportion can be set with `yearling_female_proportion`. The default value is 0.5.  
+The yearling female proportion can be set with `yearling_female_proportion`. 
+The default value is 0.5.  
 
 The model can be fit with random effect of year, fixed effect of year and/or continuous effect of year (i.e., year trend). 
 The `min_random_year` argument dictates the minimum number of years in the dataset required to fit a random year effect; otherwise a fixed year effect is fit. 
@@ -132,12 +134,14 @@ glance(recruitment)
 
 Model convergence provides an indication of whether the parameter estimates are reliable. 
 
-Convergence is successful if `ess` > 33% of the number of iterations and `rhat` < 1.1. 
+Convergence is considered successful if `ess` > 33% of the number of iterations and `rhat` < 1.1. 
 `ess` (Effective Sample Size) represents the length of a chain (i.e., number of iterations) if each sample was independent of the one before it. 
 `rhat` evaluates whether the chains agree on the same values. 
 As the total variance of all the chains shrinks to the average variance within chains, r-hat approaches 1.  
 
-By default, the `bboutools` Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves). The number of samples saved can be adjusted with the `niters` argument. With `niters` set, the user can simply increment the thinning rate as required to achieve convergence (i.e., by increasing `ess` and/or decreasing `rhat`).
+By default, the `bboutools` Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves). 
+The number of samples saved can be adjusted with the `niters` argument. 
+With `niters` set, the user can simply increment the thinning rate as required to achieve convergence (i.e., by increasing `ess` and/or decreasing `rhat`).
 
 ### Summary
 Various generic functions in `bboutools` can be used to summarize or interrogate the output of model fitting functions.
@@ -157,7 +161,8 @@ Keep in mind that any reference to 'Year' or 'Annual' in these summary outputs r
 
 ### Priors
 In general, weakly informative priors are used by default [@gelman_prior_2017; @mcelreath_statistical_2016]. 
-The default prior distribution parameter values can be accessed from `bb_priors_recruitment()` and `bb_priors_survival()`. See the priors vignette for more information.
+The default prior distribution parameter values can be accessed from `bb_priors_recruitment()` and `bb_priors_survival()`. 
+See the priors vignette for more information.
 
 ```{r}
 bb_priors_recruitment()
@@ -170,7 +175,7 @@ For example, less informative priors for `adult_female_proportion` (e.g., `Beta(
 recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a, priors = c(adult_female_proportion_alpha = 1, adult_female_proportion_beta = 1, b0_mu = 0, b0_sd = 5))
 ```
 
-If the user is interested in fitting models without priors, see `bb_fit_recruitment_ml()`/`bb_fit_survival_ml()`, which use a Maximum Likelihood approach (see more details below). 
+If the user is interested in fitting models without any prior information, see `bb_fit_recruitment_ml()` and `bb_fit_survival_ml()`, which use a Maximum Likelihood approach (see more details below). 
 
 ## Survival
 The annual survival in boreal caribou population is typically estimated from the monthly fates of collared adult females. 
@@ -199,7 +204,8 @@ tidy(survival, include_random_effects = FALSE)
 ## Predictions
 A user can generate and plot predictions of recruitment, survival and population growth.
 
-Recruitment is the adjusted recruitment using  methods from [@decesare_estimating_2012]. See the 'analytical methods' vignette for details. 
+Recruitment is the adjusted recruitment using  methods from [@decesare_estimating_2012]. 
+See the 'analytical methods' article for details. 
 
 Predictions of calf-cow ratio can also be made using `bb_predict_calf_cow_ratio()`. 
 
@@ -258,6 +264,7 @@ bb_plot_year_population_change(predict_change)
 ```
 
 ## Maximum Likelihood
+
 Maximum Likelihood (ML) models can be fit using the `bb_fit_recruitment_ml()` and `bb_fit_survival_ml()` functions. 
 These functions take a few seconds to execute because Nimble must compile the model into C++ code.
 See the [Nimble documentation](https://r-nimble.org/html_manual/cha-AD.html#how-to-use-laplace-approximation) for more information and comparison to TMB.
