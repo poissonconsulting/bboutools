@@ -74,7 +74,7 @@
 <span>  year_random <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  year_trend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  adult_female_proportion <span class="op">=</span> <span class="fl">0.65</span>,</span>
-<span>  yearling_female_proportion <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  sex_ratio <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  demographic_stochasticity <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  priors <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -101,8 +101,8 @@ If NULL, the proportion is estimated from the data (i.e., <code>Cows ~ Binomial(
 This prior can be changed via the <code>priors</code> argument.</p></dd>
 
 
-<dt>yearling_female_proportion</dt>
-<dd><p>A number between 0 and 1 of the expected proportion of yearlings that are female.</p></dd>
+<dt>sex_ratio</dt>
+<dd><p>A number between 0 and 1 of the proportion of females at birth.</p></dd>
 
 
 <dt>demographic_stochasticity</dt>

@@ -245,8 +245,8 @@ is estimated from the data (i.e.,
 <code>Cows ~ Binomial(adult_female_proportion, Cows + Bulls)</code>). By
 default, a biologically informative prior of <code>Beta(65,35)</code> is
 used. This corresponds to an expected value of 65%.</p>
-<p>The yearling female proportion can be set with
-<code>yearling_female_proportion</code>. The default value is 0.5.</p>
+<p>The yearling and calf female proportion can be set with
+<code>sex_ratio</code>. The default value is 0.5.</p>
 <p>The model can be fit with random effect of year, fixed effect of year
 and/or continuous effect of year (i.e., year trend). The
 <code>min_random_year</code> argument dictates the minimum number of
@@ -398,6 +398,7 @@ population growth.</p>
 methods’ article for details.</p>
 <p>Predictions of calf-cow ratio can also be made using
 <code><a href="../reference/bb_predict_calf_cow_ratio.html">bb_predict_calf_cow_ratio()</a></code>.</p>
+<p>The sex ratio can be adjusted with <code>sex_ratio</code>.</p>
 <div class="section level4">
 <h4 id="recruitment-by-year">Recruitment by year<a class="anchor" aria-label="anchor" href="#recruitment-by-year"></a>
 </h4>

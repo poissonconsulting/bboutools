@@ -72,7 +72,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_fit_recruitment_ml</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  adult_female_proportion <span class="op">=</span> <span class="fl">0.65</span>,</span>
-<span>  yearling_female_proportion <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  sex_ratio <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  min_random_year <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  year_trend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  year_start <span class="op">=</span> <span class="fl">4L</span>,</span>
@@ -93,8 +93,9 @@ If NULL, the proportion is estimated from the data (i.e., <code>Cows ~ Binomial(
 This prior can be changed via the <code>priors</code> argument.</p></dd>
 
 
-<dt>yearling_female_proportion</dt>
-<dd><p>A number between 0 and 1 of the expected proportion of yearlings that are female.</p></dd>
+<dt>sex_ratio</dt>
+<dd><p>A number between 0 and 1 of the proportion of females at birth.
+This proportion is applied to yearlings.</p></dd>
 
 
 <dt>min_random_year</dt>
