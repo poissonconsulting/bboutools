@@ -11,17 +11,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-A prior distribution represents our prior understanding or belief in the value of an unknown parameter. 
+A prior distribution represents the existing uncertainty in the value of an unknown parameter. 
 The influence of a prior on the posterior distribution will decrease as the number of observations increases. 
-In general, `bboutools` uses biologically reasonable, weakly informative priors by default [@gelman_prior_2017; @mcelreath_statistical_2016].  
+`bboutools` uses weakly informative priors by default [@gelman_prior_2017; @mcelreath_statistical_2016].  
 
-If the user is interested in fitting models without priors, see `bb_fit_recruitment_ml()`/`bb_fit_survival_ml()`, which have identical models but use a frequentist approach (Maximum Likelihood) to parameter estimation. 
+If the user is interested in fitting models without priors, see `bb_fit_recruitment_ml()` and `bb_fit_survival_ml()`, which have identical models but use a frequentist approach (Maximum Likelihood) to parameter estimation. 
 Models fit with Maximum Likelihood are equivalent to Bayesian models with completely uninformative priors [@mcelreath_statistical_2016].  
 
 ### Survival
 
 Given the full model, the expected survival probability for the $i^{th}$ year and $j^{th}$ month is
-$$logit(Survival[i,j]) = b0 + bAnnual[i] + bMonth[j] + bYear \cdot Year[i]$$
+$$\text{logit}(Survival[i,j]) = b0 + bAnnual[i] + bMonth[j] + bYear \cdot Year[i]$$
 Where $bAnnual$ can be a fixed or random effect of categorical year on the intercept on the log-odds scale and $Year$ is the scaled continuous year.  
 
 This model has the following default priors in `bboutools`
@@ -194,6 +194,7 @@ ggplot(data = df) +
 ```
 
 
-As with the above example, the adult female proportion estimate for a Bayesian model with vague priors closely matches the Maximum Likelihood estimate, whereas the Bayesian model with informative prior pulls the estimate toward the prior belief.  
+As with the above example, the adult female proportion estimate for a Bayesian model with vague priors closely matches the Maximum Likelihood estimate, whereas the Bayesian model with informative prior gives less weight to the data.
 
-The $adult\_female\_proportion$ can also simply be fixed. See `bb_fit_recruitment()` for details.
+The $adult\_female\_proportion$ can also simply be fixed. 
+See `bb_fit_recruitment()` for details.
