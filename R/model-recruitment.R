@@ -34,7 +34,7 @@ model_recruitment <-
            year_random = TRUE,
            year_trend = TRUE,
            adult_female_proportion = 0.65,
-           yearling_female_proportion = 0.5,
+           sex_ratio = 0.5,
            demographic_stochasticity = TRUE,
            priors = NULL) {
     constants <- list(
@@ -46,7 +46,7 @@ model_recruitment <-
       bAnnual_sd = priors[["bAnnual_sd"]],
       adult_female_proportion_alpha = priors[["adult_female_proportion_alpha"]],
       adult_female_proportion_beta = priors[["adult_female_proportion_beta"]],
-      yearling_female_proportion = yearling_female_proportion,
+      sex_ratio = sex_ratio,
       year_random = year_random,
       year_trend = year_trend,
       fixed_proportion = !is.null(adult_female_proportion),
@@ -106,12 +106,12 @@ model_recruitment <-
 
       if (demographic_stochasticity) {
         for (i in 1:nObs) {
-          FemaleYearlings[i] ~ dbin(yearling_female_proportion, Yearlings[i])
+          FemaleYearlings[i] ~ dbin(sex_ratio, Yearlings[i])
           OtherAdultsFemales[i] ~ dbin(adult_female_proportion, UnknownAdults[i])
         }
       } else {
         for (i in 1:nObs) {
-          FemaleYearlings[i] <- round(yearling_female_proportion * Yearlings[i])
+          FemaleYearlings[i] <- round(sex_ratio * Yearlings[i])
           OtherAdultsFemales[i] <-
             round(adult_female_proportion * UnknownAdults[i])
         }

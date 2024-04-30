@@ -27,8 +27,6 @@ Year trend cannot be fit if there is also a fixed year effect (as opposed to ran
 
 \item{include_uncertain_morts}{A flag indicating whether to include uncertain mortalities in total mortalities.}
 
-\item{yearling_female_proportion}{A number between 0 and 1 of the expected proportion of yearlings that are female.}
-
 \item{adult_female_proportion}{A number between 0 and 1 of the expected proportion of adults that are female.
 If NULL, the proportion is estimated from the data (i.e., \code{Cows ~ Binomial(adult_female_proportion, Cows + Bulls)}) and a prior of dbeta(65, 35) is used.
 This prior can be changed via the \code{priors} argument.}

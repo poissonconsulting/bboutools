@@ -28,6 +28,8 @@
 #' The start month of the Caribou year can be adjusted with `year_start`.
 #'
 #' @inheritParams params
+#' @param sex_ratio A number between 0 and 1 of the proportion of females at birth. 
+#' This proportion is applied to yearlings. 
 #' @return A list of the Nimble model object, data and mcmcr samples.
 #' @export
 #' @family model
@@ -38,7 +40,7 @@
 bb_fit_recruitment <- function(
     data,
     adult_female_proportion = 0.65,
-    yearling_female_proportion = 0.5,
+    sex_ratio = 0.5,
     min_random_year = 5,
     year_trend = FALSE,
     year_start = 4L,
@@ -49,7 +51,7 @@ bb_fit_recruitment <- function(
   chk_data(data)
   bbd_chk_data_recruitment(data)
   chk_null_or(adult_female_proportion, vld = vld_range)
-  chk_range(yearling_female_proportion)
+  chk_range(sex_ratio)
   chk_whole_number(min_random_year)
   chk_gte(min_random_year)
   chk_flag(year_trend)
@@ -75,7 +77,7 @@ bb_fit_recruitment <- function(
     year_random = year_random,
     year_trend = year_trend,
     adult_female_proportion = adult_female_proportion,
-    yearling_female_proportion = yearling_female_proportion,
+    sex_ratio = sex_ratio,
     demographic_stochasticity = TRUE,
     priors = priors
   )
@@ -123,6 +125,8 @@ bb_fit_recruitment <- function(
 #' The start month of the Caribou year can be adjusted with `year_start`.
 #'
 #' @inheritParams params
+#' @param sex_ratio A number between 0 and 1 of the proportion of females at birth. 
+#' This proportion is applied to yearlings. 
 #' @return A list of the Nimble model object and Maximum Likelihood output with estimates and standard errors on the transformed scale.
 #' @export
 #' @family model
@@ -133,7 +137,7 @@ bb_fit_recruitment <- function(
 bb_fit_recruitment_ml <- function(
     data,
     adult_female_proportion = 0.65,
-    yearling_female_proportion = 0.5,
+    sex_ratio = 0.5,
     min_random_year = 5,
     year_trend = FALSE,
     year_start = 4L,
@@ -142,7 +146,7 @@ bb_fit_recruitment_ml <- function(
   chk_data(data)
   bbd_chk_data_recruitment(data)
   chk_null_or(adult_female_proportion, vld = vld_range)
-  chk_range(yearling_female_proportion)
+  chk_range(sex_ratio)
   chk_whole_number(min_random_year)
   chk_gte(min_random_year)
   chk_flag(year_trend)
@@ -163,7 +167,7 @@ bb_fit_recruitment_ml <- function(
     year_random = year_random,
     year_trend = year_trend,
     adult_female_proportion = adult_female_proportion,
-    yearling_female_proportion = yearling_female_proportion,
+    sex_ratio = sex_ratio,
     demographic_stochasticity = FALSE,
     # not actually used for ML
     priors = priors_recruitment()

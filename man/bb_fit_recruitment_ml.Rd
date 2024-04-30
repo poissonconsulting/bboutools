@@ -7,7 +7,7 @@
 bb_fit_recruitment_ml(
   data,
   adult_female_proportion = 0.65,
-  yearling_female_proportion = 0.5,
+  sex_ratio = 0.5,
   min_random_year = 5,
   year_trend = FALSE,
   year_start = 4L,
@@ -22,7 +22,8 @@ bb_fit_recruitment_ml(
 If NULL, the proportion is estimated from the data (i.e., \code{Cows ~ Binomial(adult_female_proportion, Cows + Bulls)}) and a prior of dbeta(65, 35) is used.
 This prior can be changed via the \code{priors} argument.}
 
-\item{yearling_female_proportion}{A number between 0 and 1 of the expected proportion of yearlings that are female.}
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.
+This proportion is applied to yearlings.}
 
 \item{min_random_year}{A whole number of the minimum number of years required to fit year as a random effect (as opposed to a fixed effect).}
 
