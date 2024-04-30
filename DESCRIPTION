@@ -12,7 +12,8 @@ Authors@R: c(
     person("Environment and Climate Change Canada", role = "cph")
   )
 Description: Estimates annual survival, recruitment and population growth
-    for boreal caribou populations using hierarchical Bayesian models.
+    for boreal caribou populations using Bayesian and Maximum Likelihood
+    models with fixed and random effects.
 License: Apache License (== 2.0) | file LICENSE
 URL: https://poissonconsulting.github.io/bboutools/
 BugReports: https://github.com/poissonconsulting/bboutools/issues
