@@ -199,7 +199,7 @@ sAnnual ~  Exponential(1)
 for(i in 1:nAnnual)  bAnnual[i] ~ Normal(0, sAnnual)
 
 for(i in 1:nAnnual) {
-  FemaleYearlings[i] ~ Binomial(0.5, Yearlings[i])
+  FemaleYearlings[i] ~ Binomial(sex_ratio, Yearlings[i])
   Cows[i] ~ Binomial(adult_female_proportion, CowsBulls[i])
   OtherAdultsFemales[i] ~ Binomial(adult_female_proportion, UnknownAdults[i])
   log(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
@@ -222,7 +222,7 @@ for(i in 1:nAnnual)  bAnnual[i] ~ Normal(0, sAnnual)
 
 for(i in 1:nAnnual) {
   Cows[i] ~ Binomial(adult_female_proportion, CowsBulls[i])
-  FemaleYearlings[i] <- round(0.5 * Yearlings[i])
+  FemaleYearlings[i] <- round(sex_ratio * Yearlings[i])
   OtherAdultsFemales[i] <- round(adult_female_proportion * UnknownAdults[i])
   logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
   AdultsFemales[i] <- max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
