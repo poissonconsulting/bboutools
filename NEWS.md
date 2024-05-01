@@ -1,5 +1,14 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# bboutools 0.0.0.9007
+
+- Added `bb_predict_calf_cow_ratio()`
+- `bb_predict_recruitment()` now predicts adjusted recruitment, following methods in DeCesare (2012). Previous output of `bb_predict_recruitment()` can now be obtained by running `bb_predict_calf_cow_ratio()`.
+- Renamed `yearling_proportion_female` argument in `bb_fit_recruitment()` to `sex_ratio`. This matches `bbouretro` language and arguments in `bb_predict_recruitment()`.
+- Changed default value of `include_uncertain_morts` argument in `bb_fit_survival()` to TRUE. This matches default behaviour in `bbouretro`.
+- Added article on 'Prior Selection and Influence'.
+- Added example to "Analytical Methods" article. 
+
 # bboutools 0.0.0.9006
 
 - Moved internal data checking functions to be exported function in `bboudata`.
