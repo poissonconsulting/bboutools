@@ -129,7 +129,7 @@ The default value is 0.5.
 
 The model can be fit with random effect of year, fixed effect of year and/or continuous effect of year (i.e., year trend). 
 The `min_random_year` argument dictates the minimum number of years in the dataset required to fit a random year effect; otherwise a fixed year effect is fit. 
-It is not recommended to fit a random year effect with fewer than 5 years. 
+It is not recommended to fit a random year effect with fewer than 5 years [@kery_bayesian_2011]. 
 A continuous fixed effect of year can be fit with `year_trend = TRUE`. 
 
 The user can set `quiet = FALSE` argument to see messages and sampling progress. 
