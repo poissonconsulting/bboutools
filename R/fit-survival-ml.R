@@ -14,19 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ml_converge_fail <- function(x) {
-  grepl(
-    "Warning: optim does not converge for the inner optimization of AGHQuad or Laplace approximation",
-    x$output
-  )
-}
-ml_se_fail <- function(x) {
-  any(is.nan(x$result$summary$params$stdErrors))
-}
-
-#' Fit Survival Model
+#' Fit Survival Model with Maximum Likelihood
 #'
-#' Fits hierarchical Bayesian survival model using Nimble.
+#' Fits hierarchical survival model with Maximum Likelihood using Nimble Laplace approximation.
 #'
 #' If the number of years is > `min_random_year`, a fixed-effects model is fit.
 #' Otherwise, a mixed-effects model is fit with random intercept for each year.
@@ -40,22 +30,20 @@ ml_se_fail <- function(x) {
 #' The start month of the Caribou year can be adjusted with `year_start`.
 #'
 #' @inheritParams params
-#' @return A list of the Nimble model object, data and mcmcr samples.
+#' @return A list of the Nimble model object and Maximum Likelihood output with estimates and standard errors on the transformed scale.
 #' @export
 #' @family model
 #' @examples
 #' if (interactive()) {
-#'   fit <- bb_fit_survival(bboudata::bbousurv_a)
+#'   fit <- bb_fit_survival_ml(bboudata::bbousurv_a)
 #' }
-bb_fit_survival <- function(data,
-                            min_random_year = 5,
-                            year_trend = FALSE,
-                            include_uncertain_morts = TRUE,
-                            year_start = 4L,
-                            nthin = 10,
-                            niters = 1000,
-                            priors = NULL,
-                            quiet = FALSE) {
+bb_fit_survival_ml <- function(data,
+                               min_random_year = 5,
+                               year_trend = FALSE,
+                               include_uncertain_morts = FALSE,
+                               year_start = 4L,
+                               inits = NULL,
+                               quiet = FALSE) {
   chk_data(data)
   bbd_chk_data_survival(data)
   chk_whole_number(min_random_year)
@@ -64,58 +52,60 @@ bb_fit_survival <- function(data,
   chk_flag(include_uncertain_morts)
   chk_whole_number(year_start)
   chk_range(year_start, c(1, 12))
-  chk_whole_number(nthin)
-  chk_gt(nthin)
-  chk_whole_number(niters)
-  chk_gt(niters)
-  default_priors <- priors_survival()
-  .chk_priors(priors, names(default_priors))
+  chk_null_or(inits, vld = vld_vector)
+  chk_null_or(inits, vld = vld_named)
   chk_flag(quiet)
-
-  priors <- replace_priors(default_priors, priors)
-  data <-
-    model_data_survival(data,
-      include_uncertain_morts = include_uncertain_morts,
-      year_start = year_start, quiet = quiet
-    )
-  year_random <- data$datal$nAnnual >= min_random_year
-  if (!year_random && year_trend) {
-    message_trend_fixed()
+  
+  # special treatment of intercept for ML fixed
+  data <- data_clean_survival(data, quiet = quiet)
+  data <- data_prep_survival(data,
+                             include_uncertain_morts = include_uncertain_morts,
+                             year_start = year_start
+  )
+  year_random <- length(unique(data$Year)) >= min_random_year
+  if (!year_random) {
+    data <- data_adjust_intercept(data)
   }
-
+  
+  datal <- data_list_survival(data)
+  data <- list(datal = datal, data = data)
+  
+  if (!year_random && year_trend) {
+    if (!quiet) message_trend_fixed()
+  }
+  
   model <-
     model_survival(
       data = data$datal,
       year_random = year_random,
       year_trend = year_trend,
-      priors = priors
+      priors = priors_survival()
     )
-
-  params <- params_survival()
-  vars <- model$getVarNames()
-  monitor <- params[params %in% vars]
-
-  fit <- run_nimble(
+  
+  fit <- quiet_run_nimble_ml(
     model = model,
-    monitor = monitor,
-    inits = NULL,
-    niters = niters,
-    nchains = 3L,
-    nthin = nthin,
+    inits = inits,
+    prior_inits = inits_survival(),
     quiet = quiet
   )
-
+  
+  convergence_fail <- ml_converge_fail(fit) || ml_se_fail(fit)
+  if (convergence_fail) {
+    if (!quiet) message_convergence_fail()
+  }
+  
+  fit <- fit$result
+  
   attrs <- list(
-    nthin = nthin,
-    niters = niters,
     nobs = nrow(data$data),
+    converged = !convergence_fail,
     year_trend = year_trend
   )
-
-  .attrs_bboufit(fit) <- attrs
+  
+  .attrs_bboufit_ml(fit) <- attrs
+  
   fit$data <- data$data
-  x <- model$getCode()
   fit$model_code <- model$getCode()
-  class(fit) <- c("bboufit_survival", "bboufit")
+  class(fit) <- c("bboufit_survival", "bboufit_ml")
   fit
 }

@@ -14,9 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Fit Recruitment Model
+#' Fit Recruitment Model with Maximum Likelihood
 #'
-#' Fit heirarchical Bayesian recruitment model using Nimble.
+#' Fit recruitment model with Maximum Likelihood using Nimble Laplace Approximation.
 #'
 #' If the number of years is > `min_random_year`, a fixed-effects model is fit.
 #' Otherwise, a mixed-effects model is fit with random intercept for each year.
@@ -30,23 +30,21 @@
 #' @inheritParams params
 #' @param sex_ratio A number between 0 and 1 of the proportion of females at birth. 
 #' This proportion is applied to yearlings. 
-#' @return A list of the Nimble model object, data and mcmcr samples.
+#' @return A list of the Nimble model object and Maximum Likelihood output with estimates and standard errors on the transformed scale.
 #' @export
 #' @family model
 #' @examples
 #' if (interactive()) {
-#'   fit <- bb_fit_recruitment(bboudata::bbourecruit_a)
+#'   fit <- bb_fit_recruitment_ml(bboudata::bbourecruit_a)
 #' }
-bb_fit_recruitment <- function(
+bb_fit_recruitment_ml <- function(
     data,
     adult_female_proportion = 0.65,
     sex_ratio = 0.5,
     min_random_year = 5,
     year_trend = FALSE,
     year_start = 4L,
-    nthin = 10,
-    niters = 1000,
-    priors = NULL,
+    inits = NULL,
     quiet = FALSE) {
   chk_data(data)
   bbd_chk_data_recruitment(data)
@@ -57,54 +55,52 @@ bb_fit_recruitment <- function(
   chk_flag(year_trend)
   chk_whole_number(year_start)
   chk_range(year_start, c(1, 12))
-  chk_whole_number(nthin)
-  chk_gt(nthin)
-  chk_whole_number(niters)
-  chk_gt(niters)
-  default_priors <- priors_recruitment()
-  .chk_priors(priors, names(default_priors))
+  chk_null_or(inits, vld = vld_vector)
+  chk_null_or(inits, vld = vld_named)
   chk_flag(quiet)
-
-  priors <- replace_priors(default_priors, priors)
+  
   data <- model_data_recruitment(data, year_start = year_start, quiet = quiet)
   year_random <- data$datal$nAnnual >= min_random_year
   if (!year_random && year_trend) {
-    message_trend_fixed()
+    if (!quiet) message_trend_fixed()
   }
-
+  
   model <- model_recruitment(
     data = data$datal,
     year_random = year_random,
     year_trend = year_trend,
     adult_female_proportion = adult_female_proportion,
     sex_ratio = sex_ratio,
-    demographic_stochasticity = TRUE,
-    priors = priors
+    demographic_stochasticity = FALSE,
+    # not actually used for ML
+    priors = priors_recruitment()
   )
-
-  vars <- model$getVarNames()
-  params <- params_recruitment()
-  monitor <- params[params %in% vars]
-  if (!is.null(adult_female_proportion)) {
-    monitor <- monitor[monitor != "adult_female_proportion"]
+  
+  fit <- quiet_run_nimble_ml(
+    model = model,
+    inits = inits,
+    # used to set default inits
+    prior_inits = inits_recruitment(),
+    quiet = quiet
+  )
+  
+  convergence_fail <- ml_converge_fail(fit) || ml_se_fail(fit)
+  if (convergence_fail) {
+    if (!quiet) message_convergence_fail()
   }
-
-  fit <- run_nimble(
-    model = model, monitor = monitor,
-    inits = NULL, niters = niters, nchains = 3L,
-    nthin = nthin, quiet = quiet
-  )
-
+  
+  fit <- fit$result
+  
   attrs <- list(
-    nthin = nthin,
-    niters = niters,
     nobs = nrow(data$data),
+    converged = !convergence_fail,
     year_trend = year_trend
   )
-
-  .attrs_bboufit(fit) <- attrs
+  
+  .attrs_bboufit_ml(fit) <- attrs
+  
   fit$data <- data$data
   fit$model_code <- model$getCode()
-  class(fit) <- c("bboufit_recruitment", "bboufit")
+  class(fit) <- c("bboufit_recruitment", "bboufit_ml")
   fit
 }
