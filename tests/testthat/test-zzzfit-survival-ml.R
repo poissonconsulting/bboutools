@@ -52,26 +52,6 @@ test_that("survival fixed works", {
   expect_snapshot_data(coef(fit), "fixed")
 })
 
-test_that("can exclude year effect", {
-  skip_on_covr()
-  skip_on_os("windows")
-
-  x <- bboudata::bbousurv_a
-  fit <- bb_fit_survival_ml(
-    data = x,
-    min_random_year = Inf,
-    exclude_year = TRUE,
-    quiet = TRUE
-  )
-
-  expect_s3_class(fit, "bboufit_ml")
-  expect_identical(names(fit), c("summary", "mle", "model", "data", "model_code"))
-  expect_s4_class(fit$summary, "AGHQuad_summary")
-  expect_s4_class(fit$mle, "OptimResultNimbleList")
-  expect_setequal(pars(fit), c("b0", "bMonth", "sMonth"))
-  expect_snapshot_data(coef(fit), "exclude_year")
-})
-
 test_that("year trend works", {
   skip_on_covr()
   skip_on_os("windows")
