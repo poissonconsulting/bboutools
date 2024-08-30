@@ -45,7 +45,7 @@ message_trend_fixed <- function() {
 }
 
 message_convergence_fail <- function() {
-  message("Warning: Model is failing to converge. This is likely caused by poor initial values or failure to estimate year effect. If running with a fixed year effect, try re-running with random year effect, year trend effect only, or without any year effect (`exclude_year = TRUE`).")
+  message("Warning: Model is failing to converge. This is likely caused by poor initial values or failure to estimate year effect. Try setting initial values, fit model with a year random effect or fit Bayesian model.")
 }
 
 exclude_random <- function(x, term_col = "term") {
