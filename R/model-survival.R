@@ -39,7 +39,6 @@ model_survival <- function(data,
                            year_random = TRUE,
                            year_trend = FALSE,
                            priors = NULL,
-                           exclude_year = FALSE,
                            build_derivs = TRUE) {
   constants <- list(
     b0_mu = priors[["b0_mu"]],
@@ -50,8 +49,7 @@ model_survival <- function(data,
     sMonth_rate = priors[["sMonth_rate"]],
     bAnnual_sd = priors[["bAnnual_sd"]],
     year_random = year_random,
-    year_trend = year_trend,
-    exclude_year = exclude_year
+    year_trend = year_trend
   )
 
   constants <- c(constants, data)
@@ -59,47 +57,39 @@ model_survival <- function(data,
   code <- nimbleCode({
     b0 ~ dnorm(b0_mu, sd = b0_sd)
 
-    if (!exclude_year) {
-      if (year_random) {
-        sAnnual ~ dexp(sAnnual_rate)
-        for (i in 1:nAnnual) {
-          bAnnual[i] ~ dnorm(0, sd = sAnnual)
-        }
-      } else if (!year_random & !year_trend) {
-        bAnnual[1] <- 0
-        for (i in 2:nAnnual) {
-          bAnnual[i] ~ dnorm(0, sd = bAnnual_sd)
-        }
+    if (year_random) {
+      sAnnual ~ dexp(sAnnual_rate)
+      for (i in 1:nAnnual) {
+        bAnnual[i] ~ dnorm(0, sd = sAnnual)
       }
-      if (year_trend) {
-        bYear ~ dnorm(bYear_mu, sd = bYear_sd)
+    } else if (!year_random & !year_trend) {
+      bAnnual[1] <- 0
+      for (i in 2:nAnnual) {
+        bAnnual[i] ~ dnorm(0, sd = bAnnual_sd)
       }
+    }
+    if (year_trend) {
+      bYear ~ dnorm(bYear_mu, sd = bYear_sd)
     }
 
     sMonth ~ dexp(sMonth_rate)
     for (i in 1:nMonth) {
       bMonth[i] ~ dnorm(0, sd = sMonth)
     }
-
-    if (!exclude_year) {
-      if (year_trend) {
-        if (year_random) {
-          for (i in 1:nObs) {
-            logit(eSurvival[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i] + bMonth[Month[i]]
-          }
-        } else {
-          for (i in 1:nObs) {
-            logit(eSurvival[i]) <- b0 + bYear * Year[i] + bMonth[Month[i]]
-          }
+    
+    if (year_trend) {
+      if (year_random) {
+        for (i in 1:nObs) {
+          logit(eSurvival[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i] + bMonth[Month[i]]
         }
       } else {
         for (i in 1:nObs) {
-          logit(eSurvival[i]) <- b0 + bAnnual[Annual[i]] + bMonth[Month[i]]
+          logit(eSurvival[i]) <- b0 + bYear * Year[i] + bMonth[Month[i]]
         }
       }
     } else {
       for (i in 1:nObs) {
-        logit(eSurvival[i]) <- b0 + bMonth[Month[i]]
+        logit(eSurvival[i]) <- b0 + bAnnual[Annual[i]] + bMonth[Month[i]]
       }
     }
 

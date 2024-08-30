@@ -120,8 +120,6 @@ bb_fit_recruitment <- function(
 #' If `year_trend` is TRUE and the number of years is <= `min_random_year`, the model
 #' will be fit with year as a continuous effect and a random intercept for each year.
 #'
-#' Year effect can be excluded with `exclude_year`. This can be useful if the ML model is failing to converge.
-#'
 #' The start month of the Caribou year can be adjusted with `year_start`.
 #'
 #' @inheritParams params

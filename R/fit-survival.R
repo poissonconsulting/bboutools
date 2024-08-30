@@ -114,6 +114,7 @@ bb_fit_survival <- function(data,
 
   .attrs_bboufit(fit) <- attrs
   fit$data <- data$data
+  x <- model$getCode()
   fit$model_code <- model$getCode()
   class(fit) <- c("bboufit_survival", "bboufit")
   fit
@@ -133,8 +134,6 @@ bb_fit_survival <- function(data,
 #'
 #' The model is always fit with random intercept for each month.
 #'
-#' Year effect can be excluded with `exclude_year`. This can be useful if the ML model is failing to converge.
-#'
 #' The start month of the Caribou year can be adjusted with `year_start`.
 #'
 #' @inheritParams params
@@ -150,7 +149,6 @@ bb_fit_survival_ml <- function(data,
                                year_trend = FALSE,
                                include_uncertain_morts = FALSE,
                                year_start = 4L,
-                               exclude_year = FALSE,
                                inits = NULL,
                                quiet = FALSE) {
   chk_data(data)
@@ -161,7 +159,6 @@ bb_fit_survival_ml <- function(data,
   chk_flag(include_uncertain_morts)
   chk_whole_number(year_start)
   chk_range(year_start, c(1, 12))
-  chk_flag(exclude_year)
   chk_null_or(inits, vld = vld_vector)
   chk_null_or(inits, vld = vld_named)
   chk_flag(quiet)
@@ -180,7 +177,7 @@ bb_fit_survival_ml <- function(data,
   datal <- data_list_survival(data)
   data <- list(datal = datal, data = data)
 
-  if (!year_random && year_trend && !exclude_year) {
+  if (!year_random && year_trend) {
     if (!quiet) message_trend_fixed()
   }
 
@@ -189,8 +186,7 @@ bb_fit_survival_ml <- function(data,
       data = data$datal,
       year_random = year_random,
       year_trend = year_trend,
-      priors = priors_survival(),
-      exclude_year = exclude_year
+      priors = priors_survival()
     )
 
   fit <- quiet_run_nimble_ml(

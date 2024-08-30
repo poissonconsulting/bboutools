@@ -48,7 +48,6 @@
 #' @param term A string of the term name.
 #' @param sig_fig A whole number of the significant figures to round estimates by.
 #' @param original_scale A flag indicating whether to return the estimates in the original scale.
-#' @param exclude_year A flag indicating whether to exclude the year effect.
 #' @param year_random A flag indicating whether to include year random effect. If FALSE, year is fitted as a fixed effect.
 #' @param year_start A whole number between 1 and 12 indicating the start of the caribou (i.e., biological) year. By default, April is set as the start of the caribou year.
 #' @param params A named list of the parameter names and values to simulate.
