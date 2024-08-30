@@ -332,7 +332,7 @@ bb_plot_year_growth(growth)
 ```
 
 Note that ML models can struggle to converge when there are sparse data, especially with a fixed year effect. 
-If these issues arise, the user can try estimating year as a random effect, continuous effect (`year_trend`), excluding year altogether (i.e., with `exclude_year = TRUE`), or fitting a Bayesian model. 
+If these issues arise, the user can try estimating year as a random effect, continuous effect (`year_trend`), or fitting a Bayesian model. 
 
 Another possible source of convergence issues is initial values. 
 By default, `bboutools` sets initial values based on the default priors used for parameters in the Bayesian models. 
