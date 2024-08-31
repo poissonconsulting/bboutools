@@ -21,8 +21,8 @@ data_clean_survival <- function(data, quiet) {
   data
 }
 
-data_prep_survival <- function(data, include_uncertain_morts,
-                               year_start) {
+data_prep_survival <- function(data, include_uncertain_morts = TRUE,
+                               year_start = 4L) {
   data$Mortalities <- data$MortalitiesCertain
   if (include_uncertain_morts) {
     data$Mortalities <- data$Mortalities + data$MortalitiesUncertain
