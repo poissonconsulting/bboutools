@@ -1,0 +1,37 @@
+code
+{
+"b0 ~ dnorm(b0_mu, sd = b0_sd)"
+"{
+    adult_female_proportion <- adult_female_prop
+}"
+"{
+    sAnnual ~ dexp(sAnnual_rate)
+    for (i in 1:nAnnual) {
+        bAnnual[i] ~ dnorm(0, sd = sAnnual)
+    }
+}"
+"{
+    bYear ~ dnorm(bYear_mu, sd = bYear_sd)
+}"
+"{
+    {
+        for (i in 1:nObs) {
+            logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
+        }
+    }
+}"
+"{
+    for (i in 1:nObs) {
+        Cows[i] ~ dbin(adult_female_proportion, CowsBulls[i])
+    }
+}"
+"{
+    for (i in 1:nObs) {
+        FemaleYearlings[i] ~ dbin(sex_ratio, Yearlings[i])
+        OtherAdultsFemales[i] ~ dbin(adult_female_proportion, UnknownAdults[i])
+    }
+}"
+"for (i in 1:nObs) {
+    AdultsFemales[i] <- ((FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]) < 1) + FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]
+    Calves[i] ~ dbin(eRecruitment[i], AdultsFemales[i])
+}"
