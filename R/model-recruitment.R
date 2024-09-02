@@ -138,7 +138,8 @@ model_recruitment <-
       # priors too vague - causes warning of logprob = -Inf unless inits constrained
       inits = list(b0 = rnorm(1, -1, 2)),
       buildDerivs = TRUE,
-      name = "bboumodel_recruitment"
+      name = "bboumodel_recruitment",
+      check = FALSE
     )
 
     # reset to user
