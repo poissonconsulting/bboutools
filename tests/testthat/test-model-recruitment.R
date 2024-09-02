@@ -16,7 +16,7 @@
 
 test_that("recruitment fixed model works", {
   skip_on_ci()
-  skip_on_covr()
+  # skip_on_covr()
   
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
@@ -31,7 +31,7 @@ test_that("recruitment fixed model works", {
 
 test_that("can change fixed adult_female_proportion", {
   skip_on_ci()
-  skip_on_covr()
+  # skip_on_covr()
   
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
@@ -51,7 +51,7 @@ test_that("can change fixed adult_female_proportion", {
 
 test_that("can change fixed sex_ratio", {
   skip_on_ci()
-  skip_on_covr()
+  # skip_on_covr()
   
   x <- bboudata::bbourecruit_a
   x$Yearlings[5:10] <- 1
@@ -71,7 +71,7 @@ test_that("can change fixed sex_ratio", {
 test_that("can estimate adult_female_proportion", {
   # minor number rounding differences in fixed year estimates
   skip_on_ci()
-  skip_on_covr()
+  # skip_on_covr()
   
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
@@ -88,7 +88,7 @@ test_that("can estimate adult_female_proportion", {
 })
 
 test_that("recruitment can set caribou year", {
-  skip_on_covr()
+  # skip_on_covr()
   
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x, year_start = 3L)
@@ -101,7 +101,7 @@ test_that("recruitment can set caribou year", {
 })
 
 test_that("recruitment trend works", {
-  skip_on_covr()
+  # skip_on_covr()
   
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
@@ -119,7 +119,7 @@ test_that("recruitment trend works", {
 })
 
 test_that("recruitment trend_only works", {
-  skip_on_covr()
+  # skip_on_covr()
   
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
@@ -137,7 +137,7 @@ test_that("recruitment trend_only works", {
 })
 
 test_that("can set priors", {
-  skip_on_covr()
+  # skip_on_covr()
   
   set.seed(101)
   mu <- 20
