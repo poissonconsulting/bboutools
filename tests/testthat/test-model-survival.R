@@ -15,7 +15,6 @@
 # limitations under the License.
 
 test_that("survival fixed model works", {
-  skip_on_ci()
   skip_on_covr()
   
   x <- bboudata::bbousurv_a
@@ -85,8 +84,6 @@ test_that("year trend only works", {
 })
 
 test_that("can include_uncertain_morts", {
-  # produces NaN se for some terms
-  skip_on_ci()
   skip_on_covr()
 
   set.seed(101)
