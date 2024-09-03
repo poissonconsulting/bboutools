@@ -15,7 +15,7 @@
 # limitations under the License.
 
 test_that("recruitment fixed model works", {
-  skip_on_ci()
+  
   skip_on_covr()
   
   x <- bboudata::bbourecruit_a
@@ -30,7 +30,6 @@ test_that("recruitment fixed model works", {
 })
 
 test_that("can change fixed adult_female_proportion", {
-  skip_on_ci()
   skip_on_covr()
   
   x <- bboudata::bbourecruit_a
@@ -50,7 +49,7 @@ test_that("can change fixed adult_female_proportion", {
 })
 
 test_that("can change fixed sex_ratio", {
-  skip_on_ci()
+  
   skip_on_covr()
   
   x <- bboudata::bbourecruit_a
@@ -69,8 +68,6 @@ test_that("can change fixed sex_ratio", {
 })
 
 test_that("can estimate adult_female_proportion", {
-  # minor number rounding differences in fixed year estimates
-  skip_on_ci()
   skip_on_covr()
   
   x <- bboudata::bbourecruit_a
