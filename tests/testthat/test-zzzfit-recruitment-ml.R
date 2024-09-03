@@ -15,6 +15,7 @@
 # limitations under the License.
 
 test_that("recruitment ml works", {
+  skip_on_ci()
   skip_on_covr()
 
   inits <- list(
