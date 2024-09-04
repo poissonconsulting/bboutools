@@ -15,23 +15,16 @@
 # limitations under the License.
 
 test_that("bb_predict_growth works", {
-  x <- bboudata::bbourecruit_a
-  set.seed(101)
-  fit_recruitment <- bb_fit_recruitment(
-    data = x, nthin = 10, year_start = 5,
-    quiet = TRUE
-  )
-  
-  x <- bboudata::bbousurv_a
-  set.seed(101)
-  fit_survival <- bb_fit_survival(
-    data = x, nthin = 10,
-    quiet = TRUE
-  )
-  
-  predict <- bb_predict_growth(fit_survival, fit_recruitment)
+  predict <- bb_predict_growth(bboutools:::fit_survival, bboutools:::fit_recruitment)
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_growth")
+})
+
+test_that("bb_predict_growth warning when different year start", {
+  survival <- fit_survival
+  recruitment <- fit_recruitment
+  .year_start_bboufit(survival) <- 5L
+  expect_warning(bb_predict_growth(survival, recruitment)) 
 })
 
 test_that("bb_predict_growth works with sex ratio", {
