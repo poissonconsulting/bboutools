@@ -99,7 +99,8 @@ bb_fit_survival_ml <- function(data,
   attrs <- list(
     nobs = nrow(data$data),
     converged = !convergence_fail,
-    year_trend = year_trend
+    year_trend = year_trend,
+    year_start = year_start
   )
   
   .attrs_bboufit_ml(fit) <- attrs

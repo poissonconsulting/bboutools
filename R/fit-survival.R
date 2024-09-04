@@ -109,7 +109,8 @@ bb_fit_survival <- function(data,
     nthin = nthin,
     niters = niters,
     nobs = nrow(data$data),
-    year_trend = year_trend
+    year_trend = year_trend,
+    year_start = year_start
   )
 
   .attrs_bboufit(fit) <- attrs

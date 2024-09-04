@@ -59,14 +59,23 @@
   attr(fit, "year_trend", exact = TRUE)
 }
 
+`.year_start_bboufit<-` <- function(fit, value) {
+  attr(fit, "year_start") <- value
+  fit
+}
+
+.year_start_bboufit <- function(fit) {
+  attr(fit, "year_start", exact = TRUE)
+}
+
 .attrs_bboufit <- function(fit) {
   attrs <- attributes(fit)
-  attrs[c("nthin", "nobs", "niters", "year_trend")]
+  attrs[c("nthin", "nobs", "niters", "year_trend", "year_start")]
 }
 
 .attrs_bboufit_ml <- function(fit) {
   attrs <- attributes(fit)
-  attrs[c("nobs", "converged", "year_trend")]
+  attrs[c("nobs", "converged", "year_trend", "year_start")]
 }
 
 `.attrs_bboufit<-` <- function(fit, value) {
@@ -74,6 +83,7 @@
   .niters_bboufit(fit) <- value$niters
   .nobs_bboufit(fit) <- value$nobs
   .year_trend_bboufit(fit) <- value$year_trend
+  .year_start_bboufit(fit) <- value$year_start
   fit
 }
 
@@ -81,5 +91,6 @@
   .converged_bboufit(fit) <- value$converged
   .nobs_bboufit(fit) <- value$nobs
   .year_trend_bboufit(fit) <- value$year_trend
+  .year_start_bboufit(fit) <- value$year_start
   fit
 }
