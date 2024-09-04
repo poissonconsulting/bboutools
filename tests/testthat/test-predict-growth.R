@@ -15,7 +15,21 @@
 # limitations under the License.
 
 test_that("bb_predict_growth works", {
-  predict <- bb_predict_growth(bboutools:::fit_survival, bboutools:::fit_recruitment)
+  x <- bboudata::bbourecruit_a
+  set.seed(101)
+  fit_recruitment <- bb_fit_recruitment(
+    data = x, nthin = 10, year_start = 5,
+    quiet = TRUE
+  )
+  
+  x <- bboudata::bbousurv_a
+  set.seed(101)
+  fit_survival <- bb_fit_survival(
+    data = x, nthin = 10,
+    quiet = TRUE
+  )
+  
+  predict <- bb_predict_growth(fit_survival, fit_recruitment)
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_growth")
 })
