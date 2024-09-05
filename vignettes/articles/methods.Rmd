@@ -255,5 +255,8 @@ where $S$ is the annual survival.
 $\lambda$ is calculated from $R_\Delta$ and $S$ as
 
 $$\lambda = \frac{S}{1-R_\Delta}$$
+More reliable estimates may be produced with an Integrated Population Model (IPM). 
+See for example methods used in @lamb_2024.
+However, an IPM is beyond the scope of this software as it requires estimates of abundance $N$, which is not typically available in all jurisdictions. 
 
 ## References
