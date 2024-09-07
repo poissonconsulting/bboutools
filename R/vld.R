@@ -44,6 +44,6 @@
   attr(x, "year_trend")
 }
 
-.vld_year_start_equal <- function(survival, recruitment){
+.vld_year_start_equal <- function(survival, recruitment) {
   .year_start_bboufit(survival) == .year_start_bboufit(recruitment)
 }

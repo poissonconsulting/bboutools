@@ -18,9 +18,11 @@
 # random effect, no trend
 x <- bboudata::bbousurv_a
 set.seed(101)
-fit_survival <- bb_fit_survival(data = x,
-                                nthin = 10,
-                                quiet = TRUE)
+fit_survival <- bb_fit_survival(
+  data = x,
+  nthin = 10,
+  quiet = TRUE
+)
 
 set.seed(101)
 fit_survival_fixed <- bb_fit_survival(
@@ -42,9 +44,11 @@ fit_survival_trend <- bb_fit_survival(
 
 fit_survival_ml <- bb_fit_survival_ml(data = x, quiet = TRUE, )
 
-fit_survival_ml_fixed <- bb_fit_survival_ml(data = x,
-                                            quiet = TRUE,
-                                            min_random_year = Inf)
+fit_survival_ml_fixed <- bb_fit_survival_ml(
+  data = x,
+  quiet = TRUE,
+  min_random_year = Inf
+)
 
 fit_survival_ml_trend <- bb_fit_survival_ml(
   data = x,
@@ -57,9 +61,11 @@ fit_survival_ml_trend <- bb_fit_survival_ml(
 # random effect, no trend
 x <- bboudata::bbourecruit_a
 set.seed(101)
-fit_recruitment <- bb_fit_recruitment(data = x,
-                                      nthin = 10,
-                                      quiet = TRUE)
+fit_recruitment <- bb_fit_recruitment(
+  data = x,
+  nthin = 10,
+  quiet = TRUE
+)
 
 # trend with random (for get started vignette)
 set.seed(101)
@@ -72,9 +78,11 @@ fit_recruitment_trend <- bb_fit_recruitment(
 
 fit_recruitment_ml <- bb_fit_recruitment_ml(data = x, quiet = TRUE, )
 
-fit_recruitment_ml_fixed <- bb_fit_recruitment_ml(data = x,
-                                                  quiet = TRUE,
-                                                  min_random_year = Inf)
+fit_recruitment_ml_fixed <- bb_fit_recruitment_ml(
+  data = x,
+  quiet = TRUE,
+  min_random_year = Inf
+)
 
 fit_recruitment_ml_trend <- bb_fit_recruitment_ml(
   data = x,

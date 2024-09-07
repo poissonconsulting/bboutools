@@ -76,7 +76,7 @@ model_survival <- function(data,
     for (i in 1:nMonth) {
       bMonth[i] ~ dnorm(0, sd = sMonth)
     }
-    
+
     if (year_trend) {
       if (year_random) {
         for (i in 1:nObs) {

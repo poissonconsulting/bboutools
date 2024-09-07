@@ -28,8 +28,8 @@
 #' The start month of the Caribou year can be adjusted with `year_start`.
 #'
 #' @inheritParams params
-#' @param sex_ratio A number between 0 and 1 of the proportion of females at birth. 
-#' This proportion is applied to yearlings. 
+#' @param sex_ratio A number between 0 and 1 of the proportion of females at birth.
+#' This proportion is applied to yearlings.
 #' @return A list of the Nimble model object and Maximum Likelihood output with estimates and standard errors on the transformed scale.
 #' @export
 #' @family model
@@ -58,13 +58,13 @@ bb_fit_recruitment_ml <- function(
   chk_null_or(inits, vld = vld_vector)
   chk_null_or(inits, vld = vld_named)
   chk_flag(quiet)
-  
+
   data <- model_data_recruitment(data, year_start = year_start, quiet = quiet)
   year_random <- data$datal$nAnnual >= min_random_year
   if (!year_random && year_trend) {
     if (!quiet) message_trend_fixed()
   }
-  
+
   model <- model_recruitment(
     data = data$datal,
     year_random = year_random,
@@ -75,7 +75,7 @@ bb_fit_recruitment_ml <- function(
     # not actually used for ML
     priors = priors_recruitment()
   )
-  
+
   fit <- quiet_run_nimble_ml(
     model = model,
     inits = inits,
@@ -83,23 +83,23 @@ bb_fit_recruitment_ml <- function(
     prior_inits = inits_recruitment(),
     quiet = quiet
   )
-  
+
   convergence_fail <- ml_converge_fail(fit) || ml_se_fail(fit)
   if (convergence_fail) {
     if (!quiet) message_convergence_fail()
   }
-  
+
   fit <- fit$result
-  
+
   attrs <- list(
     nobs = nrow(data$data),
     converged = !convergence_fail,
     year_trend = year_trend,
     year_start = year_start
   )
-  
+
   .attrs_bboufit_ml(fit) <- attrs
-  
+
   fit$data <- data$data
   fit$model_code <- model$getCode()
   class(fit) <- c("bboufit_recruitment", "bboufit_ml")

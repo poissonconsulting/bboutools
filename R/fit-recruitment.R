@@ -28,8 +28,8 @@
 #' The start month of the Caribou year can be adjusted with `year_start`.
 #'
 #' @inheritParams params
-#' @param sex_ratio A number between 0 and 1 of the proportion of females at birth. 
-#' This proportion is applied to yearlings. 
+#' @param sex_ratio A number between 0 and 1 of the proportion of females at birth.
+#' This proportion is applied to yearlings.
 #' @return A list of the Nimble model object, data and mcmcr samples.
 #' @export
 #' @family model

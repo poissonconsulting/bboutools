@@ -15,23 +15,24 @@
 # limitations under the License.
 
 test_that("recruitment fixed model works", {
-  
   skip_on_covr()
-  
+
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
   x <- data_list_recruitment(x)
-  model <- model_recruitment(data = x,
-                             year_random = FALSE,
-                             priors = priors_recruitment())
-  
+  model <- model_recruitment(
+    data = x,
+    year_random = FALSE,
+    priors = priors_recruitment()
+  )
+
   expect_snapshot_data(code_to_df(model$getCode()), "fixed_code")
   expect_snapshot_data(vars_to_df(model$getConstants()), "fixed_const")
 })
 
 test_that("can change fixed adult_female_proportion", {
   skip_on_covr()
-  
+
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
   x <- data_list_recruitment(x)
@@ -41,7 +42,7 @@ test_that("can change fixed adult_female_proportion", {
     adult_female_proportion = prop,
     priors = priors_recruitment()
   )
-  
+
   const <- model$getConstants()
   expect_identical(const$adult_female_prop, prop)
   expect_snapshot_data(code_to_df(model$getCode()), "female_prop_code")
@@ -49,18 +50,19 @@ test_that("can change fixed adult_female_proportion", {
 })
 
 test_that("can change fixed sex_ratio", {
-  
   skip_on_covr()
-  
+
   x <- bboudata::bbourecruit_a
   x$Yearlings[5:10] <- 1
   x <- data_prep_recruitment(x)
   x <- data_list_recruitment(x)
   sr <- 0.2
-  model <- model_recruitment(data = x,
-                             sex_ratio = sr,
-                             priors = priors_recruitment())
-  
+  model <- model_recruitment(
+    data = x,
+    sex_ratio = sr,
+    priors = priors_recruitment()
+  )
+
   const <- model$getConstants()
   expect_identical(const$sex_ratio, sr)
   expect_snapshot_data(code_to_df(model$getCode()), "sex_ratio_code")
@@ -69,7 +71,7 @@ test_that("can change fixed sex_ratio", {
 
 test_that("can estimate adult_female_proportion", {
   skip_on_covr()
-  
+
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
   x <- data_list_recruitment(x)
@@ -78,7 +80,7 @@ test_that("can estimate adult_female_proportion", {
     adult_female_proportion = NULL,
     priors = priors_recruitment()
   )
-  
+
   const <- model$getConstants()
   expect_snapshot_data(code_to_df(model$getCode()), "est_female_prop_code")
   expect_snapshot_data(vars_to_df(const), "est_female_prop_const")
@@ -86,12 +88,12 @@ test_that("can estimate adult_female_proportion", {
 
 test_that("recruitment can set caribou year", {
   skip_on_covr()
-  
+
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x, year_start = 3L)
   x <- data_list_recruitment(x)
   model <- model_recruitment(data = x, priors = priors_recruitment())
-  
+
   const <- model$getConstants()
   expect_snapshot_data(code_to_df(model$getCode()), "caribou_year_code")
   expect_snapshot_data(vars_to_df(const), "caribou_year_const")
@@ -99,7 +101,7 @@ test_that("recruitment can set caribou year", {
 
 test_that("recruitment trend works", {
   skip_on_covr()
-  
+
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
   x <- data_list_recruitment(x)
@@ -109,7 +111,7 @@ test_that("recruitment trend works", {
     year_trend = TRUE,
     priors = priors_recruitment()
   )
-  
+
   const <- model$getConstants()
   expect_snapshot_data(code_to_df(model$getCode()), "trend_code")
   expect_snapshot_data(vars_to_df(const), "trend_const")
@@ -117,7 +119,7 @@ test_that("recruitment trend works", {
 
 test_that("recruitment trend_only works", {
   skip_on_covr()
-  
+
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
   x <- data_list_recruitment(x)
@@ -127,7 +129,7 @@ test_that("recruitment trend_only works", {
     year_trend = TRUE,
     priors = priors_recruitment()
   )
-  
+
   const <- model$getConstants()
   expect_snapshot_data(code_to_df(model$getCode()), "trend_only_code")
   expect_snapshot_data(vars_to_df(const), "trend_only_const")
@@ -135,11 +137,11 @@ test_that("recruitment trend_only works", {
 
 test_that("can set priors", {
   skip_on_covr()
-  
+
   set.seed(101)
   mu <- 20
   priors <- c(b0_mu = mu, b0_sd = 0.5)
-    priors <- replace_priors(priors_recruitment(), priors)
+  priors <- replace_priors(priors_recruitment(), priors)
   x <- bboudata::bbourecruit_a
   x <- data_prep_recruitment(x)
   x <- data_list_recruitment(x)

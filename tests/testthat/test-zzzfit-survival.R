@@ -57,7 +57,7 @@ test_that("can set niters", {
       quiet = TRUE
     )
   })
-  
+
   expect_s3_class(fit, "bboufit")
   expect_s3_class(fit, "bboufit_survival")
   expect_identical(names(fit), c("model", "samples", "data", "model_code"))

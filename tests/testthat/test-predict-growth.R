@@ -24,7 +24,7 @@ test_that("bb_predict_growth warning when different year start", {
   survival <- fit_survival
   recruitment <- fit_recruitment
   .year_start_bboufit(survival) <- 5L
-  expect_warning(bb_predict_growth(survival, recruitment)) 
+  expect_warning(bb_predict_growth(survival, recruitment))
 })
 
 test_that("bb_predict_growth works with sex ratio", {

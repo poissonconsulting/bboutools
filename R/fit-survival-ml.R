@@ -55,25 +55,25 @@ bb_fit_survival_ml <- function(data,
   chk_null_or(inits, vld = vld_vector)
   chk_null_or(inits, vld = vld_named)
   chk_flag(quiet)
-  
+
   # special treatment of intercept for ML fixed
   data <- data_clean_survival(data, quiet = quiet)
   data <- data_prep_survival(data,
-                             include_uncertain_morts = include_uncertain_morts,
-                             year_start = year_start
+    include_uncertain_morts = include_uncertain_morts,
+    year_start = year_start
   )
   year_random <- length(unique(data$Year)) >= min_random_year
   if (!year_random) {
     data <- data_adjust_intercept(data)
   }
-  
+
   datal <- data_list_survival(data)
   data <- list(datal = datal, data = data)
-  
+
   if (!year_random && year_trend) {
     if (!quiet) message_trend_fixed()
   }
-  
+
   model <-
     model_survival(
       data = data$datal,
@@ -81,30 +81,30 @@ bb_fit_survival_ml <- function(data,
       year_trend = year_trend,
       priors = priors_survival()
     )
-  
+
   fit <- quiet_run_nimble_ml(
     model = model,
     inits = inits,
     prior_inits = inits_survival(),
     quiet = quiet
   )
-  
+
   convergence_fail <- ml_converge_fail(fit) || ml_se_fail(fit)
   if (convergence_fail) {
     if (!quiet) message_convergence_fail()
   }
-  
+
   fit <- fit$result
-  
+
   attrs <- list(
     nobs = nrow(data$data),
     converged = !convergence_fail,
     year_trend = year_trend,
     year_start = year_start
   )
-  
+
   .attrs_bboufit_ml(fit) <- attrs
-  
+
   fit$data <- data$data
   fit$model_code <- model$getCode()
   class(fit) <- c("bboufit_survival", "bboufit_ml")

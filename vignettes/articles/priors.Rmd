@@ -101,9 +101,10 @@ set.seed(1)
 data <- bboudata::bbousurv_c
 
 # force model to fit fixed year effect, use default priors
-fit <- bb_fit_survival(data, 
-  min_random_year = Inf, 
-  quiet = TRUE)
+fit <- bb_fit_survival(data,
+  min_random_year = Inf,
+  quiet = TRUE
+)
 
 # tighten prior on bAnnual by changing SD from default 10 to 1
 fit_prior <- bb_fit_survival(data,
@@ -112,9 +113,10 @@ fit_prior <- bb_fit_survival(data,
 )
 
 # fit maximum likelihood model for comparison
-fit_ml <- bb_fit_survival_ml(data, 
-  min_random_year = Inf, 
-  quiet = TRUE)
+fit_ml <- bb_fit_survival_ml(data,
+  min_random_year = Inf,
+  quiet = TRUE
+)
 ```
 
 ```{r, echo=FALSE,fig.width=6,fig.height=4}
@@ -145,12 +147,13 @@ We compare estimates from very informative, informative (default) and vague prio
 ```{r}
 set.seed(1)
 data <- bboudata::bbourecruit_c
-fit <- bb_fit_recruitment(data, 
-  adult_female_proportion = NULL, 
-  quiet = TRUE)
+fit <- bb_fit_recruitment(data,
+  adult_female_proportion = NULL,
+  quiet = TRUE
+)
 
 fit_inf <- bb_fit_recruitment(data,
-  adult_female_proportion = NULL, 
+  adult_female_proportion = NULL,
   quiet = TRUE,
   priors = c(
     "adult_female_proportion_alpha" = 650,
@@ -159,7 +162,7 @@ fit_inf <- bb_fit_recruitment(data,
 )
 
 fit_vague <- bb_fit_recruitment(data,
-  adult_female_proportion = NULL, 
+  adult_female_proportion = NULL,
   quiet = TRUE,
   priors = c(
     "adult_female_proportion_alpha" = 1,
@@ -167,10 +170,10 @@ fit_vague <- bb_fit_recruitment(data,
   )
 )
 
-fit_ml <- bb_fit_recruitment_ml(data, 
+fit_ml <- bb_fit_recruitment_ml(data,
   adult_female_proportion = NULL,
-  quiet = TRUE)
-
+  quiet = TRUE
+)
 ```
 
 ```{r, echo=FALSE,fig.width=6,fig.height=4}

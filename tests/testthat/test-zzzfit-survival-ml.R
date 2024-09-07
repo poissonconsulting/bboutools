@@ -23,7 +23,7 @@ test_that("survival ml works", {
     sAnnual = 0.2,
     sMonth = 0.2
   )
-  
+
   x <- bboudata::bbousurv_a
   fit <- bb_fit_survival_ml(
     data = x,

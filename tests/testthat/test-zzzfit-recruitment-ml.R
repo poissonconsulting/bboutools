@@ -22,7 +22,7 @@ test_that("recruitment ml works", {
     b0 = -1.5,
     sAnnual = 0.1
   )
-  
+
   x <- bboudata::bbourecruit_a
   fit <- bb_fit_recruitment_ml(
     data = x,
