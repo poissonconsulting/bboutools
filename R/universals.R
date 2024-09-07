@@ -204,8 +204,9 @@ universals::converged
 #' @inheritParams params
 #' @return A flag indicating convergence.
 #' @export
-converged.bboufit <- function(x, ...) {
-  mcmcr::converged(samples(x), ...)
+converged.bboufit <- function(x, rhat = 1.05, ...) {
+  chk_range(rhat, c(1,10))
+  mcmcr::converged(samples(x), rhat = rhat, esr = 0, ...)
 }
 
 #' Get Convergence of bboufit_ml Object

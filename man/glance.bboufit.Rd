@@ -4,10 +4,12 @@
 \alias{glance.bboufit}
 \title{Get a Glance Summary of bboufit Object}
 \usage{
-\method{glance}{bboufit}(x, ...)
+\method{glance}{bboufit}(x, rhat = 1.05, ...)
 }
 \arguments{
 \item{x}{The object.}
+
+\item{rhat}{A number greater than 1 of the maximum rhat value required for model convergence.}
 
 \item{...}{Unused parameters.}
 }

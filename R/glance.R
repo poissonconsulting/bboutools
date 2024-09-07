@@ -30,8 +30,9 @@ generics::glance
 #'   fit <- bb_fit_survival(bboudata::bbousurv_a)
 #'   glance(fit)
 #' }
-glance.bboufit <- function(x, ...) {
+glance.bboufit <- function(x, rhat = 1.05, ...) {
   .chk_fit(x)
+  converge <- converged(x, rhat = rhat)
   tibble::tibble(
     n = nobs(x),
     K = npars(x),
@@ -40,7 +41,7 @@ glance.bboufit <- function(x, ...) {
     nthin = .nthin_bboufit(x),
     ess = .ess(x),
     rhat = rhat(x),
-    converged = converged(x)
+    converged = converge
   )
 }
 

@@ -65,6 +65,8 @@ If NULL, all parameters are assigned a default value of 0.}
 
 \item{year_start}{A whole number between 1 and 12 indicating the start of the caribou (i.e., biological) year. By default, April is set as the start of the caribou year.}
 
+\item{rhat}{A number greater than 1 of the maximum rhat value required for model convergence.}
+
 \item{params}{A named list of the parameter names and values to simulate.}
 }
 \description{
