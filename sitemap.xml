@@ -1,195 +1,67 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/404.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/articles/bboutools.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/articles/methods.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/articles/priors.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/index.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/augment.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/augment.bboufit_ml.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment_ml.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival_ml.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_month.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_month_survival.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_growth.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_population_change.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_recruitment.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_survival.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_trend_recruitment.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_trend_survival.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_calf_cow_ratio.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_growth.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_population_change.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_recruitment.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_recruitment_trend.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival_trend.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/bboutools-package.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/coef.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/coef.bboufit_ml.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/converged.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/converged.bboufit_ml.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/esr.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/estimates.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/estimates.bboufit_ml.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/glance.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/glance.bboufit_ml.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/model_code.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/model_recruitment.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/model_survival.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/nchains.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/niters.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/npars.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/npars.bboufit_ml.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/nterms.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/nterms.bboufit_ml.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/params.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/pars.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/pars.bboufit_ml.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/predict.bboufit_recruitment.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/predict.bboufit_survival.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/rhat.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/samples.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/tidy.bboufit.html</loc>
-  </url>
-  <url>
-    <loc>https://poissonconsulting.github.io/bboutools/reference/tidy.bboufit_ml.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://poissonconsulting.github.io/bboutools/404.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/LICENSE-text.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/articles/bboutools.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/articles/index.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/articles/methods.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/articles/priors.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/authors.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/index.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/news/index.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/augment.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/augment.bboufit_ml.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment_ml.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival_ml.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_month.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_month_survival.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_growth.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_population_change.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_recruitment.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_survival.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_trend_recruitment.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_trend_survival.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_calf_cow_ratio.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_growth.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_population_change.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_recruitment.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_recruitment_trend.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival_trend.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/bboutools-package.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/coef.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/coef.bboufit_ml.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/converged.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/converged.bboufit_ml.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/esr.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/estimates.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/estimates.bboufit_ml.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/glance.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/glance.bboufit_ml.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/index.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/model_code.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/model_recruitment.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/model_survival.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/nchains.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/niters.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/npars.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/npars.bboufit_ml.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/nterms.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/nterms.bboufit_ml.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/params.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/pars.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/pars.bboufit_ml.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/predict.bboufit_recruitment.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/predict.bboufit_survival.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/reexports.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/rhat.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/samples.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/tidy.bboufit.html</loc></url>
+<url><loc>https://poissonconsulting.github.io/bboutools/reference/tidy.bboufit_ml.html</loc></url>
 </urlset>
+
