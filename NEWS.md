@@ -1,5 +1,11 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# bboutools 0.1.0
+
+- added `rhat` argument to `glance()` and `converged()` to adjust convergence threshold, with default value of 1.05. Convergence no longer depends on `ess`.
+- removed `exclude_year` argument in `bb_fit_survival_ml()` as failure to fit fixed year effect resolved with intercept adjustment. 
+- provide warning to user if start of caribou year (`year_start`) not matching for survival and recruitment model fits in `bb_predict_growth()`.
+
 # bboutools 0.0.0.9007
 
 - Added `bb_predict_calf_cow_ratio()`

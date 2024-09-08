@@ -1,6 +1,6 @@
 Package: bboutools
 Title: Boreal Caribou Survival, Recruitment and Population Growth
-Version: 0.0.0.9007
+Version: 0.1.0
 Authors@R: c(
     person("Seb", "Dalgarno", , "seb@poissonconsulting.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-3658-4517")),
