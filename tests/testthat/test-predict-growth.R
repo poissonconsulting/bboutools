@@ -20,6 +20,13 @@ test_that("bb_predict_growth works", {
   expect_snapshot_data(predict, "bb_predict_growth")
 })
 
+test_that("bb_predict_growth warning when different year start", {
+  survival <- fit_survival
+  recruitment <- fit_recruitment
+  .year_start_bboufit(survival) <- 5L
+  expect_warning(bb_predict_growth(survival, recruitment))
+})
+
 test_that("bb_predict_growth works with sex ratio", {
   predict <- bb_predict_growth(bboutools:::fit_survival, bboutools:::fit_recruitment, sex_ratio = 0.7)
   expect_s3_class(predict, "tbl")

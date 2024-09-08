@@ -1,0 +1,22 @@
+code
+{
+"b0 ~ dnorm(b0_mu, sd = b0_sd)"
+"{
+}"
+"{
+    bYear ~ dnorm(bYear_mu, sd = bYear_sd)
+}"
+sMonth ~ dexp(sMonth_rate)
+"for (i in 1:nMonth) {
+    bMonth[i] ~ dnorm(0, sd = sMonth)
+}"
+"{
+    {
+        for (i in 1:nObs) {
+            logit(eSurvival[i]) <- b0 + bYear * Year[i] + bMonth[Month[i]]
+        }
+    }
+}"
+"for (i in 1:nObs) {
+    Mortalities[i] ~ dbin(1 - eSurvival[i], StartTotal[i])
+}"

@@ -9,7 +9,6 @@ model_survival(
   year_random = TRUE,
   year_trend = FALSE,
   priors = NULL,
-  exclude_year = FALSE,
   build_derivs = TRUE
 )
 }
@@ -24,8 +23,6 @@ Year trend cannot be fit if there is also a fixed year effect (as opposed to ran
 \item{priors}{A named vector of the parameter prior distribution values.
 Any missing values are assigned their default values in \code{priors_survival()} and \code{priors_recruitment()}.
 If NULL, all parameters are assigned their default priors.}
-
-\item{exclude_year}{A flag indicating whether to exclude the year effect.}
 
 \item{build_derivs}{A flag indicating whether to build derivatives Laplace approximation.}
 }

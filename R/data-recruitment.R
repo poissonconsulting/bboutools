@@ -25,7 +25,7 @@ data_clean_recruitment <- function(data, quiet = FALSE) {
   data
 }
 
-data_prep_recruitment <- function(data, year_start) {
+data_prep_recruitment <- function(data, year_start = 4L) {
   data$CowsBulls <- data$Cows + data$Bulls
   data$Year <- caribou_year(data$Year, data$Month, year_start = year_start)
   data <-

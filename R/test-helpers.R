@@ -39,3 +39,17 @@ expect_snapshot_data <- function(x, name) {
   path <- save_csv(x)
   testthat::expect_snapshot_file(path, paste0(name, ".csv"))
 }
+
+vars_to_df <- function(x) {
+  y <- lapply(x, function(y) {
+    if (!length(y)) {
+      return(NA)
+    }
+    y
+  })
+  as.data.frame(y)
+}
+
+code_to_df <- function(x) {
+  as.data.frame(list(code = as.character(x)))
+}

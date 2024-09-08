@@ -78,3 +78,10 @@ xname <- function(x, col) {
   }
   abort_chk("Model fit object does not contain a year trend. See `bb_fit_survival()` and `bb_fit_recruitment()` for details.")
 }
+
+.chk_year_start_equal <- function(survival, recruitment) {
+  if (.vld_year_start_equal(survival, recruitment)) {
+    return(invisible(survival))
+  }
+  warning("Recruitment and survival models were fit with a different month of caribou year start. This can be adjusted with the `year_start` argument in model fitting functions.")
+}

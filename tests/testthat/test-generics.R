@@ -26,6 +26,11 @@ test_that("glance ml works", {
   expect_snapshot_data(glance_ml, "glance_ml")
 })
 
+test_that("glance rhat works", {
+  glance <- glance(bboutools:::fit_survival, rhat = 1.001)
+  expect_false(glance$converged)
+})
+
 test_that("augment works", {
   augment <- augment(bboutools:::fit_survival)
   expect_s3_class(augment, "tbl")
@@ -138,6 +143,6 @@ test_that("get attributes ml works", {
 
 test_that("convergence works", {
   expect_equal(rhat(bboutools:::fit_survival), 1.024)
-  expect_false(converged(bboutools:::fit_survival))
+  expect_true(converged(bboutools:::fit_survival))
   expect_equal(esr(bboutools:::fit_survival), 0.034)
 })
