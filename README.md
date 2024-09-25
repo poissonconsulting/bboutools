@@ -9,7 +9,7 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/poissonconsulting/bboutools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/poissonconsulting/bboutools/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/poissonconsulting/bboutools/branch/main/graph/badge.svg)](https://app.codecov.io/gh/poissonconsulting/bboutools?branch=main)
+coverage](https://codecov.io/gh/poissonconsulting/bboutools/graph/badge.svg)](https://app.codecov.io/gh/poissonconsulting/bboutools)
 <!-- badges: end -->
 
 `bboutools` is an R package to estimate the annual survival, recruitment
@@ -64,7 +64,7 @@ glance(surv_fit)
 #> # A tibble: 1 × 8
 #>       n     K nchains niters nthin   ess  rhat converged
 #>   <int> <int>   <int>  <int> <dbl> <int> <dbl> <lgl>    
-#> 1   363     5       3   1000    10   111  1.03 FALSE
+#> 1   363     5       3   1000    10   111  1.03 TRUE
 ```
 
 Predictions can then be generated using `bb_predict_survival()`.

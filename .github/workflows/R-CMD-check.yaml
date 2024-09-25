@@ -8,6 +8,8 @@ on:
 
 name: R-CMD-check
 
+permissions: read-all
+
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
@@ -43,16 +45,8 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
-          
-      - if: runner.os != 'Windows'
-        uses: r-lib/actions/check-r-package@v2
+
+      - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
-
-      - if: runner.os == 'Windows'
-        uses: r-lib/actions/check-r-package@v2
-        with:
-          upload-snapshots: true
-          build_args: 'c("--no-build-vignettes")'
-          args: 'c("--ignore-vignettes", "--no-manual")'
