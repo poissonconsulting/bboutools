@@ -154,7 +154,7 @@ The `rhat` threshold can be adjusted by the user.
 `rhat` evaluates whether the chains agree on the same values. 
 As the total variance of all the chains shrinks to the average variance within chains, r-hat approaches 1.  
 Output of `glance()` also includes `ess` (Effective Sample Size), which represents the length of a chain (i.e., number of iterations) if each sample was independent of the one before it. 
-` 
+ 
 By default, the `bboutools` Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves). 
 The number of samples saved can be adjusted with the `niters` argument. 
 With `niters` set, the user can simply increment the thinning rate as required to achieve convergence (i.e., by decreasing `rhat`).
