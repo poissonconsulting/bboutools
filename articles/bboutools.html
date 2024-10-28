@@ -279,8 +279,13 @@ shrinks to the average variance within chains, r-hat approaches 1.<br>
 Output of <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance()</a></code> also includes <code>ess</code>
 (Effective Sample Size), which represents the length of a chain (i.e.,
 number of iterations) if each sample was independent of the one before
-it.
-<code>By default, the</code>bboutools<code>Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves).  The number of samples saved can be adjusted with the</code>niters<code>argument.  With</code>niters<code>set, the user can simply increment the thinning rate as required to achieve convergence (i.e., by decreasing</code>rhat`).</p>
+it.</p>
+<p>By default, the <code>bboutools</code> Bayesian method saves 1,000
+MCMC samples from each of three chains (after discarding the first
+halves). The number of samples saved can be adjusted with the
+<code>niters</code> argument. With <code>niters</code> set, the user can
+simply increment the thinning rate as required to achieve convergence
+(i.e., by decreasing <code>rhat</code>).</p>
 </div>
 <div class="section level3">
 <h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
