@@ -21,7 +21,7 @@ ml_converge_fail <- function(x) {
   )
 }
 ml_se_fail <- function(x) {
-  any(is.nan(x$result$summary$params$stdErrors))
+  any(is.nan(x$result$summary$params$stdError))
 }
 
 #' Fit Survival Model

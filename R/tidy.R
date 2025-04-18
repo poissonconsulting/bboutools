@@ -30,8 +30,8 @@ ci_upper <- function(x, se, conf_level) {
 
 .stderr <- function(x) {
   se <- c(
-    x$summary$params$stdErrors,
-    x$summary$randomEffects$stdErrors
+    x$summary$params$stdError,
+    x$summary$randomEffects$stdError
   )
   names(se) <- terms_ml(x)
   se <- tibble::as_tibble(se, rownames = "term")

@@ -27,8 +27,8 @@ pars_ml <- function(x) {
 
 estimates_ml <- function(x) {
   c(
-    x$summary$params$estimates,
-    x$summary$randomEffects$estimates
+    x$summary$params$estimate,
+    x$summary$randomEffects$estimate
   )
 }
 
