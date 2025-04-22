@@ -112,7 +112,7 @@ test_that("summary ml works", {
 test_that("summary ml matches estimates correctly", {
   x <- summary(bboutools:::fit_survival_ml_fixed)
   x <- x$bAnnual[2]
-  expect_equal(bboutools:::fit_survival_ml_fixed$summary$params$estimates[2], x)
+  expect_equal(bboutools:::fit_survival_ml_fixed$summary$params$estimate[2], x)
 })
 
 test_that("estimate works", {
