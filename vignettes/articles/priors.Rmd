@@ -1,5 +1,6 @@
 ---
 title: "Prior Selection and Influence"
+bibliography: bibliography.bib
 ---
 
 <!-- # Copyright 2022 Environment and Climate Change Canada -->
@@ -217,3 +218,5 @@ As with the above example, the adult female proportion estimate for a Bayesian m
 
 The $adult\_female\_proportion$ can also simply be fixed. 
 See `bb_fit_recruitment()` for details.
+
+## References
