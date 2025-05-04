@@ -10,6 +10,5 @@ licensing_md()
 A string of markdown code indicating the licensing of the code
 and documentation
 }
-\examples{
-licensing_md()
-}
+\keyword{internal}
+\keyword{licensing_md()}

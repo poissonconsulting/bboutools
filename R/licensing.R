@@ -19,6 +19,7 @@
 #' and documentation
 #' @export
 #' @examples
+#' @keywords internal
 #' licensing_md()
 licensing_md <- function() {
   "## Licensing
