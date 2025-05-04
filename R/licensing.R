@@ -13,29 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get Model Code
+#' Licensing Markdown
 #'
-#' Get code from Nimble model.
-#' @inheritParams params
+#' A string of markdown code indicating the licensing of the code
+#' and documentation
 #' @export
-model_code <- function(x, ...) {
-  UseMethod("model_code")
-}
+#' @examples
+#' @keywords internal
+#' licensing_md()
+licensing_md <- function() {
+  "## Licensing
+  Copyright 2022-2023 Environment and Climate Change Canada\\
+  Copyright 2024 Province of Alberta\\
 
-#' @describeIn model_code Get model code from bboufit object.
-#'
-#' @export
-model_code.bboufit <- function(x, ...) {
-  chk_unused(...)
-  .chk_fit(x)
-  x$model_code
-}
+  The documentation is released under the
+  [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/)
 
-#' @describeIn model_code Get model code from bboufit_ml object.
-#'
-#' @export
-model_code.bboufit_ml <- function(x, ...) {
-  chk_unused(...)
-  .chk_fit_ml(x)
-  x$model_code
+  The code is released under the
+  [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+"
 }
