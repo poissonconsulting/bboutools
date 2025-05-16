@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](https://github.com/poissonconsulting/bboutools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/poissonconsulting/bboutools/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/poissonconsulting/bboutools/graph/badge.svg)](https://app.codecov.io/gh/poissonconsulting/bboutools)
@@ -39,6 +39,11 @@ library(tibble) # for printing data frames
 library(ggplot2) # for plotting
 
 library(bboudata) # for boreal caribou datasets
+#> 
+#> Attaching package: 'bboudata'
+#> The following object is masked from 'package:bboutools':
+#> 
+#>     licensing_md
 library(bboutools)
 
 surv_data <- bboudata::bbousurv_a
