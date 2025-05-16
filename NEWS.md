@@ -1,5 +1,63 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# bboutools 0.1.1
+
+- Merge pull request #68 from poissonconsulting/joss_review.
+
+  Joss review
+
+- Merge pull request #67 from poissonconsulting/fix_RCMD.
+
+  Fix R-CMD check - JOSS review
+
+- Merge.
+
+  Merge branch 'main' of github.com:poissonconsulting/bboutools
+
+  # Conflicts:
+  # bboutools.Rproj
+
+- Merge pull request #65 from poissonconsulting/upkeep.
+
+  Upkeep
+
+- Merge pull request #64 from poissonconsulting/dev.
+
+  tackle some remaining issues for bboutools
+
+- Merge pull request #62 from poissonconsulting/sex_ratio.
+
+  change yearling_female_proportion to sex_ratio
+
+- Add license to all scripts, closes #56.
+
+- Merge pull request #59 from poissonconsulting/reviewjoe.
+
+  review
+
+- Merge branch 'dev'.
+
+- Merge pull request #54 from poissonconsulting/dev.
+
+  better docs and speedy vignettes
+
+- Merge pull request #48 from poissonconsulting/dev.
+
+  add inits to b0 to remove log prob warnings
+
+- Merge pull request #42 from poissonconsulting/dev.
+
+  Update recruitment, priors
+
+- Merge pull request #27 from poissonconsulting/dev.
+
+  minor change to adult female proportion estimation explanation
+
+- Merge pull request #26 from poissonconsulting/dev.
+
+  add predict/plot functionality for ML fit objects
+
+
 # bboutools 0.1.0
 
 - added `rhat` argument to `glance()` and `converged()` to adjust convergence threshold, with default value of 1.05. Convergence no longer depends on `ess`.
