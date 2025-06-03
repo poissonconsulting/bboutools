@@ -9,7 +9,8 @@ Authors@R: c(
     person("John", "Boulanger", role = "aut",
            comment = c(ORCID = "0000-0001-8222-1445")),
     person("Ayla", "Pearson", , "ayla@poissonconsulting.ca", role = "aut"),
-    person("Environment and Climate Change Canada", role = "cph")
+    person("Environment and Climate Change Canada", role = "cph"),
+    person("Province of Alberta", role = "cph")
   )
 Description: Estimates annual survival, recruitment and population growth
     for boreal caribou populations using Bayesian and Maximum Likelihood
