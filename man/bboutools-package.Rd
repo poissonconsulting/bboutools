@@ -30,6 +30,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Environment and Climate Change Canada [copyright holder]
+  \item Province of Alberta [copyright holder]
 }
 
 }
