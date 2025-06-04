@@ -1,4 +1,3 @@
-
 # Copyright 2022-2023 Integrated Ecological Research and Poisson Consulting Ltd.
 # Copyright 2024 Province of Alberta
 #
@@ -13,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 model_data_recruitment <- function(data, year_start = year_start, quiet) {
   data <- data_clean_recruitment(data, quiet = quiet)
   data <- data_prep_recruitment(data, year_start = year_start)

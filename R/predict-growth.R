@@ -1,4 +1,3 @@
-
 # Copyright 2022-2023 Integrated Ecological Research and Poisson Consulting Ltd.
 # Copyright 2024 Province of Alberta
 #
@@ -13,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 predict_lambda <- function(survival, recruitment, sex_ratio) {
   chkor_vld(.vld_fit(survival), .vld_fit_ml(survival))
   chk_s3_class(survival, "bboufit_survival")
