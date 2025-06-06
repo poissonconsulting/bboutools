@@ -140,5 +140,5 @@ Please report any [issues](https://github.com/poissonconsulting/bboutools/issues
 Please note that the `bboutools` project is released with a [Contributor Code of Conduct](https://poissonconsulting.github.io/bboutools/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 
 ```{r, results = "asis", echo = FALSE}
-cat(licensing_md())
+cat(bboutools::licensing_md())
 ```

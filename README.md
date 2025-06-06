@@ -205,7 +205,8 @@ By contributing to this project, you agree to abide by its terms.
 
 ## Licensing
 
-Copyright 2022-2023 Environment and Climate Change Canada  
+Copyright 2022-2023 Integrated Ecological Research and Poisson
+Consulting Ltd.  
 Copyright 2024 Province of Alberta  
 
 The documentation is released under the [CC BY 4.0
