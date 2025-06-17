@@ -30,6 +30,7 @@ Survival fit object provided must be created with \code{year_trend = TRUE}.
 \seealso{
 Other analysis: 
 \code{\link{bb_predict_calf_cow_ratio}()},
+\code{\link{bb_predict_calf_cow_ratio_trend}()},
 \code{\link{bb_predict_growth}()},
 \code{\link{bb_predict_population_change}()},
 \code{\link{bb_predict_recruitment}()},
