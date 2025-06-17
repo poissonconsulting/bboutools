@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# bboutools 1.1.0
+
+- Internal changes only.
+
+
 # bboutools 1.0.0
 
 - cleaned up documentation following JOSS review.
