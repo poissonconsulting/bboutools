@@ -1,5 +1,14 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# bboutools 1.2.0
+
+- added `bb_plot_year_calf_cow_ratio()` and `bb_plot_year_trend_calf_cow_ratio()`.
+- adjusted y-axis label in recruitment plots to 'Adjusted Recruitment' to be more explicit.
+
+# bboutools 1.1.0
+
+- added `bb_predict_calf_cow_ratio_trend()` to mirror `bb_predict_recruitment_trend()` but for calf-cow ratio. 
+
 # bboutools 1.0.0
 
 - cleaned up documentation following JOSS review.

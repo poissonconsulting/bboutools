@@ -36,7 +36,7 @@ bb_plot_year_recruitment.data.frame <- function(x, ...) {
   chk_unused(...)
 
   bb_plot_year(x) +
-    scale_y_continuous("Recruitment") +
+    scale_y_continuous('Adjusted Recruitment') +
     expand_limits(y = 0)
 }
 

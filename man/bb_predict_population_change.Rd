@@ -43,6 +43,7 @@ if (interactive()) {
 \seealso{
 Other analysis: 
 \code{\link{bb_predict_calf_cow_ratio}()},
+\code{\link{bb_predict_calf_cow_ratio_trend}()},
 \code{\link{bb_predict_growth}()},
 \code{\link{bb_predict_recruitment}()},
 \code{\link{bb_predict_recruitment_trend}()},

@@ -61,6 +61,7 @@ Mortality and Rate of Change” 27: 65–73.
 \seealso{
 Other analysis: 
 \code{\link{bb_predict_calf_cow_ratio}()},
+\code{\link{bb_predict_calf_cow_ratio_trend}()},
 \code{\link{bb_predict_population_change}()},
 \code{\link{bb_predict_recruitment}()},
 \code{\link{bb_predict_recruitment_trend}()},

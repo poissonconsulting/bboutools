@@ -13,30 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-plot_year_trend <- function(x, ...) {
-  chk_unused(...)
-  check_data(x, values = list(
-    CaribouYear = 1L,
-    estimate = c(0, Inf),
-    lower = c(0, Inf, NA),
-    upper = c(0, Inf, NA)
-  ))
+test_that("bb_plot_year_trend_calf_cow_ratio.bboufit_recruitment works", {
+  plot <- bb_plot_year_trend_calf_cow_ratio(bboutools:::fit_recruitment_trend)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_trend_calf_cow_ratio")
+})
 
-  gp <- ggplot(data = x) +
-    aes(
-      x = as.integer(.data$CaribouYear),
-      y = .data$estimate
-    ) +
-    geom_line() +
-    xlab(" Caribou Year")
-
-  if (any(is.na(x$lower))) {
-    return(gp)
-  }
-
-  gp +
-    geom_ribbon(aes(
-      ymin = .data$lower,
-      ymax = .data$upper
-    ), alpha = 0.2)
-}
+test_that("bb_plot_year_trend_calf_cow_ratio.data.frame works", {
+  prediction <- bb_predict_calf_cow_ratio_trend(bboutools:::fit_recruitment_trend)
+  plot <- bb_plot_year_trend_calf_cow_ratio(prediction)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_trend_calf_cow_ratio_df")
+})
