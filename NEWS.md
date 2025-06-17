@@ -2,8 +2,8 @@
 
 # bboutools 1.2.0
 
-- Internal changes only.
-
+- added `bb_plot_year_calf_cow_ratio()` and `bb_plot_year_trend_calf_cow_ratio()`.
+- adjusted y-axis label in recruitment plots to 'Adjusted Recruitment' to be more explicit.
 
 # bboutools 1.1.0
 
