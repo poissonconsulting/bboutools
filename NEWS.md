@@ -2,8 +2,7 @@
 
 # bboutools 1.1.0
 
-- Internal changes only.
-
+- added `bb_predict_calf_cow_ratio_trend()` to mirror `bb_predict_recruitment_trend()` but for calf-cow ratio. 
 
 # bboutools 1.0.0
 
