@@ -41,7 +41,7 @@ fit_survival_trend <- bb_fit_survival(
   year_trend = TRUE
 )
 
-fit_survival_ml <- bb_fit_survival_ml(data = x, quiet = TRUE, )
+fit_survival_ml <- bb_fit_survival_ml(data = x, quiet = TRUE)
 
 fit_survival_ml_fixed <- bb_fit_survival_ml(
   data = x,
@@ -75,7 +75,7 @@ fit_recruitment_trend <- bb_fit_recruitment(
   year_trend = TRUE
 )
 
-fit_recruitment_ml <- bb_fit_recruitment_ml(data = x, quiet = TRUE, )
+fit_recruitment_ml <- bb_fit_recruitment_ml(data = x, quiet = TRUE)
 
 fit_recruitment_ml_fixed <- bb_fit_recruitment_ml(
   data = x,
