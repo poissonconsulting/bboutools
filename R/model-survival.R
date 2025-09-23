@@ -79,11 +79,11 @@ model_survival <- function(data,
     if (year_trend) {
       if (year_random) {
         for (i in 1:nObs) {
-          logit(eSurvival[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i] + bMonth[Month[i]]
+          logit(eSurvival[i]) <- b0 + bAnnual[Annual[i]] + bYear * CaribouYear[i] + bMonth[Month[i]]
         }
       } else {
         for (i in 1:nObs) {
-          logit(eSurvival[i]) <- b0 + bYear * Year[i] + bMonth[Month[i]]
+          logit(eSurvival[i]) <- b0 + bYear * CaribouYear[i] + bMonth[Month[i]]
         }
       }
     } else {

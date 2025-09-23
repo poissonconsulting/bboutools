@@ -54,10 +54,10 @@ derived_expr_recruitment <- function(fit, year) {
 
 derived_expr_recruitment_trend <- function() {
   "for(i in 1:length(Annual)) {
-  logit(prediction[i]) <- b0 + bYear * Year[i]\n}"
+  logit(prediction[i]) <- b0 + bYear * CaribouYear[i]\n}"
 }
 
 derived_expr_survival_trend <- function() {
   "for(i in 1:length(Annual)) {
-  logit(prediction[i]) <- logit(ilogit(b0 + bYear * Year[i])^12)\n}"
+  logit(prediction[i]) <- logit(ilogit(b0 + bYear * CaribouYear[i])^12)\n}"
 }

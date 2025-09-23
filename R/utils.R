@@ -72,7 +72,7 @@ month_levels <- function(first, n) {
 year_intercept <- function(x) {
   y <-
     x %>%
-    dplyr::group_by(Year) %>%
+    dplyr::group_by(CaribouYear) %>%
     dplyr::summarize(
       mean_start = mean(.data$StartTotal),
       any_morts = sum(.data$Mortalities) >= 1
@@ -82,7 +82,7 @@ year_intercept <- function(x) {
 
   if (nrow(y) == 0) {
     message("Warning: All years have 0 mortalities. Estimation of Confidence Intervals may not be reliable.")
-    return(min(x$Year))
+    return(min(x$CaribouYear))
   }
 
   y <-
@@ -90,5 +90,5 @@ year_intercept <- function(x) {
     arrange(.data$mean_start) %>%
     dplyr::slice(dplyr::n())
 
-  y$Year
+  y$CaribouYear
 }

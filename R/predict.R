@@ -53,8 +53,8 @@ new_data_ym <- function(x, year, month) {
     data = x,
     seq = seq
   )
-  df$Year <- factor_to_integer(df$Annual)
-  df <- rescale(df, data2 = x, scale = "Year")
+  df$CaribouYear <- factor_to_integer(df$Annual)
+  df <- rescale(df, data2 = x, scale = "CaribouYear")
   df
 }
 

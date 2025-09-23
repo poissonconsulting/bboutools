@@ -61,7 +61,7 @@ bb_fit_survival_ml <- function(data,
     include_uncertain_morts = include_uncertain_morts,
     year_start = year_start
   )
-  year_random <- length(unique(data$Year)) >= min_random_year
+  year_random <- length(unique(data$CaribouYear)) >= min_random_year
   if (!year_random) {
     data <- data_adjust_intercept(data)
   }
