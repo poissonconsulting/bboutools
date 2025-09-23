@@ -1,4 +1,4 @@
-b0_mu,b0_sd,bYear_mu,bYear_sd,sAnnual_rate,sMonth_rate,bAnnual_sd,year_random,year_trend,nObs,StartTotal,nMonth,Month,nAnnual,Year,Annual
+b0_mu,b0_sd,bYear_mu,bYear_sd,sAnnual_rate,sMonth_rate,bAnnual_sd,year_random,year_trend,nObs,StartTotal,nMonth,Month,nAnnual,CaribouYear,Annual
 20,0.5,0,2,1,1,10,TRUE,FALSE,364,0,12,10,32,-1.71,1
 20,0.5,0,2,1,1,10,TRUE,FALSE,364,8,12,11,32,-1.71,1
 20,0.5,0,2,1,1,10,TRUE,FALSE,364,8,12,12,32,-1.71,1

@@ -16,7 +16,7 @@ code
 "{
     {
         for (i in 1:nObs) {
-            logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
+            logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * CaribouYear[i]
         }
     }
 }"

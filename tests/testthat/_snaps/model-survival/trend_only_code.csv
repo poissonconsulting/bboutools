@@ -13,7 +13,7 @@ sMonth ~ dexp(sMonth_rate)
 "{
     {
         for (i in 1:nObs) {
-            logit(eSurvival[i]) <- b0 + bYear * Year[i] + bMonth[Month[i]]
+            logit(eSurvival[i]) <- b0 + bYear * CaribouYear[i] + bMonth[Month[i]]
         }
     }
 }"

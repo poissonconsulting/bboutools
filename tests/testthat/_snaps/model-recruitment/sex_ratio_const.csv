@@ -1,4 +1,4 @@
-b0_mu,b0_sd,bYear_mu,bYear_sd,sAnnual_rate,bAnnual_sd,adult_female_proportion_alpha,adult_female_proportion_beta,sex_ratio,year_random,year_trend,fixed_proportion,adult_female_prop,demographic_stochasticity,nObs,CowsBulls,UnknownAdults,Yearlings,nAnnual,Year,Annual
+b0_mu,b0_sd,bYear_mu,bYear_sd,sAnnual_rate,bAnnual_sd,adult_female_proportion_alpha,adult_female_proportion_beta,sex_ratio,year_random,year_trend,fixed_proportion,adult_female_prop,demographic_stochasticity,nObs,CowsBulls,UnknownAdults,Yearlings,nAnnual,CaribouYear,Annual
 -1,5,0,2,1,5,65,35,0.2,TRUE,TRUE,TRUE,0.65,TRUE,27,84,0,6,27,-1.6378460497066512,1
 -1,5,0,2,1,5,65,35,0.2,TRUE,TRUE,TRUE,0.65,TRUE,27,214,28,0,27,-1.5118578920369088,2
 -1,5,0,2,1,5,65,35,0.2,TRUE,TRUE,TRUE,0.65,TRUE,27,129,2,0,27,-1.3858697343671664,3
