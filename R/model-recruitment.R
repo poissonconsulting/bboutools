@@ -84,11 +84,11 @@ model_recruitment <-
       if (year_trend) {
         if (year_random) {
           for (i in 1:nObs) {
-            logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
+            logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * CaribouYear[i]
           }
         } else {
           for (i in 1:nObs) {
-            logit(eRecruitment[i]) <- b0 + bYear * Year[i]
+            logit(eRecruitment[i]) <- b0 + bYear * CaribouYear[i]
           }
         }
       } else {

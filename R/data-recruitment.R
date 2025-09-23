@@ -26,10 +26,10 @@ data_clean_recruitment <- function(data, quiet = FALSE) {
 
 data_prep_recruitment <- function(data, year_start = 4L) {
   data$CowsBulls <- data$Cows + data$Bulls
-  data$Year <- caribou_year(data$Year, data$Month, year_start = year_start)
+  data$CaribouYear <- caribou_year(data$Year, data$Month, year_start = year_start)
   data <-
     data %>%
-    dplyr::group_by(Year) %>%
+    dplyr::group_by(CaribouYear) %>%
     dplyr::summarize(
       Cows = sum(.data$Cows),
       CowsBulls = sum(.data$CowsBulls),
@@ -39,13 +39,13 @@ data_prep_recruitment <- function(data, year_start = 4L) {
       PopulationName = dplyr::first(.data$PopulationName)
     ) %>%
     dplyr::ungroup()
-  data$Annual <- factor(data$Year)
+  data$Annual <- factor(data$CaribouYear)
 
   data
 }
 
 data_list_recruitment <- function(data, model) {
-  data <- rescale(data, scale = "Year")
+  data <- rescale(data, scale = "CaribouYear")
   x <- list(
     nObs = nrow(data),
     Cows = data$Cows,
@@ -54,7 +54,7 @@ data_list_recruitment <- function(data, model) {
     Yearlings = data$Yearlings,
     Calves = data$Calves,
     nAnnual = length(unique(data$Annual)),
-    Year = data$Year,
+    CaribouYear = data$CaribouYear,
     Annual = as.integer(data$Annual)
   )
   x

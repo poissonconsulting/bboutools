@@ -14,7 +14,7 @@
 # limitations under the License.
 
 utils::globalVariables(c(
-  "Cows", "Month", "UnknownAdults", "Year", "Annual", "Yearlings",
+  "Cows", "Month", "UnknownAdults", "Year", "CaribouYear", "Annual", "Yearlings",
   "adult_female_prop", "b0", "bMonth", "bYear", "fixed_proportion",
   "log<-", "logit<-", "nMonth", "nObs", "nAnnual", "year_random"
 ))

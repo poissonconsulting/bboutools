@@ -32,8 +32,8 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
   data <- data_sur[data_sur$Annual %in% data_rec$Annual, ]
 
   if (!nrow(data)) {
-    data <- data["Year"]
-    data$Year <- as.integer(data$Year)
+    data <- data["CaribouYear"]
+    data$CaribouYear <- as.integer(data$CaribouYear)
     data$estimate <- numeric(0)
     data$lower <- numeric(0)
     data$upper <- numeric(0)
