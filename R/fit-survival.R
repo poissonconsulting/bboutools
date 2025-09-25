@@ -66,22 +66,24 @@ bb_fit_survival <- function(data,
   chk_whole_number(nthin)
   chk_gt(nthin)
   chk_whole_number(niters)
-  chk_gt(niters)
+  chk_gte(niters)
   default_priors <- priors_survival()
   .chk_priors(priors, names(default_priors))
   chk_flag(quiet)
-
+  
   priors <- replace_priors(default_priors, priors)
   data <-
-    model_data_survival(data,
+    model_data_survival(
+      data,
       include_uncertain_morts = include_uncertain_morts,
-      year_start = year_start, quiet = quiet
+      year_start = year_start,
+      quiet = quiet
     )
   year_random <- data$datal$nAnnual >= min_random_year
   if (!year_random && year_trend) {
     message_trend_fixed()
   }
-
+  
   model <-
     model_survival(
       data = data$datal,
@@ -89,11 +91,11 @@ bb_fit_survival <- function(data,
       year_trend = year_trend,
       priors = priors
     )
-
+  
   params <- params_survival()
   vars <- model$getVarNames()
   monitor <- params[params %in% vars]
-
+  
   fit <- run_nimble(
     model = model,
     monitor = monitor,
@@ -103,7 +105,7 @@ bb_fit_survival <- function(data,
     nthin = nthin,
     quiet = quiet
   )
-
+  
   attrs <- list(
     nthin = nthin,
     niters = niters,
@@ -111,7 +113,7 @@ bb_fit_survival <- function(data,
     year_trend = year_trend,
     year_start = year_start
   )
-
+  
   .attrs_bboufit(fit) <- attrs
   fit$data <- data$data
   x <- model$getCode()

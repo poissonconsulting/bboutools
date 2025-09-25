@@ -13,6 +13,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+sample_empty <- function(model, monitor, nchains){
+  model_mcmc <- buildMCMC(model, monitors = monitor)
+  
+  invisible(capture.output({
+    samples <- runMCMC(model_mcmc,
+                       niter = 0,
+                       nburnin = 0,
+                       thin = 1,
+                       nchains = nchains,
+                       samplesAsCodaMCMC = TRUE, 
+                       progressBar = FALSE
+    )
+  }, type = "output"))
+  samples
+}
+
+sample_some <- function(model, monitor, inits, niters, nburnin, nthin, nchains, quiet){
+  cmodel <- compileNimble(model, showCompilerOutput = FALSE)
+  model_mcmc <- buildMCMC(cmodel, monitors = monitor)
+  cmodel_mcmc <- compileNimble(model_mcmc, project = model, resetFunctions = TRUE)
+  if (!is.null(inits)) {
+    cmodel$setInits(inits)
+  }
+  
+  runMCMC(cmodel_mcmc,
+          niter = niters, nburnin = nburnin,
+          thin = nthin, nchains = nchains,
+          samplesAsCodaMCMC = TRUE, progressBar = !quiet
+  )
+}
+
 run_nimble <- function(model, monitor, inits, niters, nchains, nthin, quiet) {
   verbose <- nimbleOptions("verbose")
   nimbleOptions(verbose = FALSE)
@@ -20,23 +51,16 @@ run_nimble <- function(model, monitor, inits, niters, nchains, nthin, quiet) {
   niters <- niters * nthin * 2
   nburnin <- niters / 2
 
-  cmodel <- compileNimble(model, showCompilerOutput = FALSE)
-  model_mcmc <- buildMCMC(cmodel, monitors = monitor)
-  cmodel_mcmc <- compileNimble(model_mcmc, project = model, resetFunctions = TRUE)
-  if (!is.null(inits)) {
-    cmodel$setInits(inits)
+  if(niters == 0){
+    samples <- sample_empty(model, monitor = monitor, nchains = nchains)
+  } else {
+    samples <- sample_some(model, monitor = monitor, inits = inits,
+                           niters = niters, nburnin = nburnin, 
+                           nthin = nthin, nchains = nchains, quiet = quiet)
   }
-
-  samples <- runMCMC(cmodel_mcmc,
-    niter = niters, nburnin = nburnin,
-    thin = nthin, nchains = nchains,
-    samplesAsCodaMCMC = TRUE, progressBar = !quiet
-  )
-
+  
   nimbleOptions(verbose = verbose)
-
   samples <- mcmcr::as.mcmcr(samples)
-
   list(model = model, samples = samples)
 }
 

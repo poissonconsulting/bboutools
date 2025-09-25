@@ -59,7 +59,7 @@ bb_fit_recruitment <- function(
   chk_whole_number(nthin)
   chk_gt(nthin)
   chk_whole_number(niters)
-  chk_gt(niters)
+  chk_gte(niters)
   default_priors <- priors_recruitment()
   .chk_priors(priors, names(default_priors))
   chk_flag(quiet)
