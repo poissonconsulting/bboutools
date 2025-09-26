@@ -13,7 +13,7 @@ test_that("survival niters 0 works", {
   expect_identical(names(fit), c("model", "samples", "data", "model_code"))
   expect_s3_class(fit$samples, "mcmcr")
   expect_s3_class(fit$data, "data.frame")
-  expect_snapshot_data(as.data.frame(unlist(summary(fit))), "empty_samples")
+  expect_snapshot_data(as.data.frame(unlist(summary(fit))), "empty_samples_survival")
 })
 
 test_that("recruitment niters 0 works", {
@@ -31,5 +31,5 @@ test_that("recruitment niters 0 works", {
   expect_identical(names(fit), c("model", "samples", "data", "model_code"))
   expect_s3_class(fit$samples, "mcmcr")
   expect_s3_class(fit$data, "data.frame")
-  expect_snapshot_data(as.data.frame(unlist(summary(fit))), "empty_samples")
+  expect_snapshot_data(as.data.frame(unlist(summary(fit))), "empty_samples_recruitment")
 })
