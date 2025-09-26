@@ -51,6 +51,29 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
   list(lambda = lambda, data = data)
 }
 
+#' Predict Population Growth Lambda Samples
+#'
+#' Predicts population growth (lambda) from survival and recruitment fit objects using the Hatter-Bergerud equation
+#' (Hatter and Bergerud, 1991).
+#'
+#' @inheritParams params
+#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @export
+#' @references Hatter, Ian, and Wendy Bergerud. 1991. "Moose Recruitment, Adult
+#'   Mortality and Rate of Change" 27: 65–73.
+#' @family analysis
+bb_predict_growth_samples <- function(survival,
+                                      recruitment,
+                                      sex_ratio = 0.5) {
+  chk_number(sex_ratio)
+  chk_range(sex_ratio)
+
+  predict_lambda(survival,
+    recruitment = recruitment,
+    sex_ratio = sex_ratio
+  )
+}
+
 #' Predict Population Growth Lambda
 #'
 #' Predicts population growth (lambda) from survival and recruitment fit objects using the Hatter-Bergerud equation
@@ -59,8 +82,8 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
 #' @inheritParams params
 #' @return A tibble of the lambda estimates with upper and lower credible intervals.
 #' @export
-#' @references Hatter, Ian, and Wendy Bergerud. 1991. “Moose Recruitment, Adult
-#'   Mortality and Rate of Change” 27: 65–73.
+#' @references Hatter, Ian, and Wendy Bergerud. 1991. "Moose Recruitment, Adult
+#'   Mortality and Rate of Change" 27: 65–73.
 #' @family analysis
 #' @examples
 #' if (interactive()) {
@@ -74,13 +97,11 @@ bb_predict_growth <- function(survival,
                               conf_level = 0.95,
                               estimate = median,
                               sig_fig = 3) {
-  chk_number(sex_ratio)
-  chk_range(sex_ratio)
   chk_range(conf_level, c(0, 1))
   chk_is(estimate, "function")
   chk_whole_number(sig_fig)
 
-  lambda <- predict_lambda(survival,
+  lambda <- bb_predict_growth_samples(survival,
     recruitment = recruitment,
     sex_ratio = sex_ratio
   )
@@ -97,6 +118,44 @@ bb_predict_growth <- function(survival,
   )
   coef$Month <- NULL
   coef
+}
+
+#' Predict Population Change Samples
+#'
+#' Predicts population change (%) from survival and recruitment fit objects.
+#' Population change is the cumulative product of population growth rate (i.e., output of [`bb_predict_growth()`])
+#'
+#' @inheritParams params
+#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @export
+#' @family analysis
+bb_predict_population_change_samples <- function(survival,
+                                                 recruitment,
+                                                 sex_ratio = 0.5) {
+  chk_number(sex_ratio)
+  chk_range(sex_ratio)
+
+  lambda <- predict_lambda(survival,
+    recruitment = recruitment,
+    sex_ratio = sex_ratio
+  )
+  data <- lambda$data
+  # no years in common
+  if (!nrow(data)) {
+    return(lambda)
+  }
+
+  lambda_array <- lambda$lambda
+  dims <- dim(lambda_array)
+  pop_change <- array(dim = dims)
+  for (chain in 1:dims[1]) {
+    for (iter in 1:dims[2]) {
+      pop_change[chain, iter, ] <- cumprod(lambda_array[chain, iter, ])
+    }
+  }
+  class(pop_change) <- "mcmcarray"
+
+  list(lambda = pop_change, data = data)
 }
 
 #' Predict Population Change
@@ -120,13 +179,11 @@ bb_predict_population_change <- function(survival,
                                          conf_level = 0.95,
                                          estimate = median,
                                          sig_fig = 3) {
-  chk_number(sex_ratio)
-  chk_range(sex_ratio)
   chk_range(conf_level, c(0, 1))
   chk_is(estimate, "function")
   chk_whole_number(sig_fig)
 
-  lambda <- predict_lambda(survival,
+  lambda <- bb_predict_population_change_samples(survival,
     recruitment = recruitment,
     sex_ratio = sex_ratio
   )
@@ -136,15 +193,7 @@ bb_predict_population_change <- function(survival,
     return(data)
   }
 
-  lambda <- lambda$lambda
-  dims <- dim(lambda)
-  pop_change <- array(dim = dims)
-  for (chain in 1:dims[1]) {
-    for (iter in 1:dims[2]) {
-      pop_change[chain, iter, ] <- cumprod(lambda[chain, iter, ])
-    }
-  }
-  class(pop_change) <- "mcmcarray"
+  pop_change <- lambda$lambda
   coef <- predict_coef(pop_change,
     new_data = data, include_pop = FALSE,
     conf_level = conf_level, estimate = estimate,

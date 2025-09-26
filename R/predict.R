@@ -119,6 +119,24 @@ predict.bboufit_survival <- function(object,
   bb_predict_survival(object, year, month, conf_level, estimate, sig_fig)
 }
 
+#' Predict Calf-Cow Ratio Samples
+#'
+#' Predict calves per adult female by year.
+#' If year is FALSE, predictions are made for a 'typical' year.
+#'
+#' @inheritParams params
+#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @export
+#' @family analysis
+bb_predict_calf_cow_ratio_samples <- function(recruitment,
+                                      year = TRUE) {
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
+  chk_s3_class(recruitment, "bboufit_recruitment")
+  chk_flag(year)
+
+  predict_calf_cow(fit = recruitment, year = year)
+}
+
 #' Predict Calf-Cow Ratio
 #'
 #' Predict calves per adult female by year.
@@ -133,14 +151,12 @@ bb_predict_calf_cow_ratio <- function(recruitment,
                                       conf_level = 0.95,
                                       estimate = median,
                                       sig_fig = 3) {
-  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
-  chk_s3_class(recruitment, "bboufit_recruitment")
-  chk_flag(year)
+
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
 
-  predicted <- predict_calf_cow(fit = recruitment, year = year)
+  predicted <- bb_predict_calf_cow_ratio_samples(recruitment, year = year)
   coef <- predict_coef(
     samples = predicted$samples,
     new_data = predicted$data,
@@ -149,6 +165,40 @@ bb_predict_calf_cow_ratio <- function(recruitment,
     sig_fig = sig_fig
   )
   coef
+}
+
+#' Predict Recruitment Samples
+#'
+#' Predict adjusted recruitment by year using DeCesare et al. (2012) methods.
+#' If year is FALSE, predictions are made for a 'typical' year.
+#' See [bb_predict_calf_cow_ratio()] for unadjusted recruitment.
+#'
+#' @inheritParams params
+#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @export
+#' @references
+#'   DeCesare, Nicholas J., Mark Hebblewhite, Mark Bradley, Kirby G. Smith,
+#'   David Hervieux, and Lalenia Neufeld. 2012 “Estimating Ungulate Recruitment
+#'   and Growth Rates Using Age Ratios.” The Journal of Wildlife Management
+#'   76 (1): 144–53 https://doi.org/10.1002/jwmg.244.
+#' @family analysis
+bb_predict_recruitment_samples <- function(recruitment,
+                                   year = TRUE,
+                                   sex_ratio = 0.5) {
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
+  chk_s3_class(recruitment, "bboufit_recruitment")
+  chk_flag(year)
+  chk_number(sex_ratio)
+  chk_range(sex_ratio)
+  
+  predicted <- predict_calf_cow(fit = recruitment, year = year)
+  rec <- predicted$samples
+  class(rec) <- "mcmcarray"
+  rec <- rec * sex_ratio
+  rec <- rec / (1 + rec)
+  predicted$samples <- rec
+  predicted
+
 }
 
 #' Predict Recruitment
@@ -197,6 +247,26 @@ bb_predict_recruitment <- function(recruitment,
   coef
 }
 
+#' Predict Survival Samples
+#'
+#' Predict survival by year and/or month.
+#' If year and month are FALSE, predictions are made for a 'typical' year and month.
+#'
+#' @inheritParams params
+#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @export
+#' @family analysis
+bb_predict_survival_samples <- function(survival,
+                                        year = TRUE,
+                                        month = FALSE) {
+  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival))
+  chk_s3_class(survival, "bboufit_survival")
+  chk_flag(year)
+  chk_flag(month)
+
+  predict_survival(survival, year = year, month = month)
+}
+
 #' Predict Survival
 #'
 #' Predict survival by year and/or month.
@@ -212,15 +282,11 @@ bb_predict_survival <- function(survival,
                                 conf_level = 0.95,
                                 estimate = median,
                                 sig_fig = 3) {
-  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival))
-  chk_s3_class(survival, "bboufit_survival")
-  chk_flag(year)
-  chk_flag(month)
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
 
-  predicted <- predict_survival(survival, year = year, month = month)
+  predicted <- bb_predict_survival_samples(survival, year = year, month = month)
   coef <- predict_coef(
     samples = predicted$samples,
     new_data = predicted$data,
