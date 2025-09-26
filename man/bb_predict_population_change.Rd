@@ -43,11 +43,19 @@ if (interactive()) {
 \seealso{
 Other analysis: 
 \code{\link{bb_predict_calf_cow_ratio}()},
+\code{\link{bb_predict_calf_cow_ratio_samples}()},
 \code{\link{bb_predict_calf_cow_ratio_trend}()},
+\code{\link{bb_predict_calf_cow_ratio_trend_samples}()},
 \code{\link{bb_predict_growth}()},
+\code{\link{bb_predict_growth_samples}()},
+\code{\link{bb_predict_population_change_samples}()},
 \code{\link{bb_predict_recruitment}()},
+\code{\link{bb_predict_recruitment_samples}()},
 \code{\link{bb_predict_recruitment_trend}()},
+\code{\link{bb_predict_recruitment_trend_samples}()},
 \code{\link{bb_predict_survival}()},
-\code{\link{bb_predict_survival_trend}()}
+\code{\link{bb_predict_survival_samples}()},
+\code{\link{bb_predict_survival_trend}()},
+\code{\link{bb_predict_survival_trend_samples}()}
 }
 \concept{analysis}
