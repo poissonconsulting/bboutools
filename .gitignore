@@ -13,3 +13,7 @@ annual_recruitment.csv
 annual_survival.csv
 data_survival.csv
 data_recruitment.csv
+
+# Claude Code files
+CLAUDE.md
+.claude/
