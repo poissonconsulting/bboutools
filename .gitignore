@@ -17,3 +17,5 @@ data_recruitment.csv
 # Claude Code files
 CLAUDE.md
 .claude/
+/.quarto/
+**/*.quarto_ipynb
