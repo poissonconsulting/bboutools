@@ -90,6 +90,21 @@ fit_recruitment_ml_trend <- bb_fit_recruitment_ml(
   min_random_year = Inf
 )
 
+# multi-population -----------------------------------------------------------
+set.seed(101)
+fit_survival_multi <- bb_fit_survival(
+  data = bboudata::bbousurv_multi,
+  nthin = 10,
+  quiet = TRUE
+)
+
+set.seed(101)
+fit_recruitment_multi <- bb_fit_recruitment(
+  data = bboudata::bbourecruit_multi,
+  nthin = 10,
+  quiet = TRUE
+)
+
 # model object is too large to store and not required for testing downstream functions
 fit_recruitment$model <- NULL
 fit_recruitment_trend$model <- NULL
@@ -102,6 +117,8 @@ fit_survival_ml$model <- NULL
 fit_survival_ml_fixed$model <- NULL
 fit_recruitment_ml_trend$model <- NULL
 fit_survival_ml_trend$model <- NULL
+fit_survival_multi$model <- NULL
+fit_recruitment_multi$model <- NULL
 
 usethis::use_data(
   fit_recruitment,
@@ -115,6 +132,8 @@ usethis::use_data(
   fit_recruitment_ml_fixed,
   fit_survival_ml_trend,
   fit_recruitment_ml_trend,
+  fit_survival_multi,
+  fit_recruitment_multi,
   internal = TRUE,
   overwrite = TRUE
 )
