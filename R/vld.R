@@ -43,6 +43,13 @@
   attr(x, "year_trend")
 }
 
+.vld_population_multi <- function(survival, recruitment) {
+  identical(
+    levels(survival$data$PopulationName),
+    levels(recruitment$data$PopulationName)
+  )
+}
+
 .vld_year_start_equal <- function(survival, recruitment) {
   .year_start_bboufit(survival) == .year_start_bboufit(recruitment)
 }

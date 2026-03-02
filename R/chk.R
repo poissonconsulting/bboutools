@@ -78,6 +78,29 @@ xname <- function(x, col) {
   abort_chk("Model fit object does not contain a year trend. See `bb_fit_survival()` and `bb_fit_recruitment()` for details.")
 }
 
+.chk_population_multi <- function(survival, recruitment) {
+  if (.vld_population_multi(survival, recruitment)) {
+    return(invisible())
+  }
+  surv_pops <- levels(survival$data$PopulationName)
+  rec_pops <- levels(recruitment$data$PopulationName)
+  surv_only <- setdiff(surv_pops, rec_pops)
+  rec_only <- setdiff(rec_pops, surv_pops)
+  details <- character(0)
+  if (length(surv_only)) {
+    details <- c(details, paste0("In survival only: ", paste(surv_only, collapse = ", ")))
+  }
+  if (length(rec_only)) {
+    details <- c(details, paste0("In recruitment only: ", paste(rec_only, collapse = ", ")))
+  }
+  msg <- paste0(
+    "Survival and recruitment models must have the same populations.\n",
+    paste(details, collapse = "\n"),
+    "\nFilter input data to shared populations before fitting."
+  )
+  abort_chk(msg)
+}
+
 .chk_year_start_equal <- function(survival, recruitment) {
   if (.vld_year_start_equal(survival, recruitment)) {
     return(invisible(survival))
