@@ -34,11 +34,7 @@ test_that("recruitment ml works", {
   expect_identical(names(fit), c("summary", "mle", "model", "data", "model_code"))
   expect_s4_class(fit$summary, "AGHQuad_summary")
   expect_s4_class(fit$mle, "OptimResultNimbleList")
-  expect_setequal(pars(fit), c("b0", "bAnnual", "sAnnual"))
+  expect_setequal(pars(fit), c("b0", "bAnnual", "bYear", "sAnnual"))
   expect_snapshot_data(coef(fit), "default")
 })
 
-test_that("fails with multiple populations", {
-  x <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
-  expect_chk_error(bb_fit_recruitment_ml(x, quiet = TRUE), "'PopulationName' can only contain one unique value.")
-})
