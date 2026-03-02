@@ -37,13 +37,62 @@ summary_ml <- function(x) {
     parameter = pars_ml(x),
     estimate = estimates_ml(x)
   )
-  if (!("bAnnual[1]" %in% y$term) && any(grepl("bAnnual", y$term))) {
+
+  # Remap 1D terms to 2D for multi-pop model compatibility.
+  # Old single-pop ML fits have names like "bAnnual[2]", "bMonth[3]", "b0"
+  # but model code now uses 2D: bAnnual[i,k], bMonth[i,k], b0[k].
+  multipop_params <- c("b0", "bAnnual", "bMonth", "bYear")
+  needs_remap <- y$parameter %in% multipop_params & !grepl(",", y$term)
+  if (any(needs_remap)) {
+    y$term[needs_remap] <- term::as_term(vapply(
+      as.character(y$term[needs_remap]),
+      function(t) {
+        if (grepl("\\[", t)) {
+          sub("\\]$", ", 1]", t)
+        } else {
+          paste0(t, "[1]")
+        }
+      },
+      character(1),
+      USE.NAMES = FALSE
+    ))
+  }
+
+  nPop <- max(term::pdims(y$term[y$parameter == "b0"])$b0)
+  nAnnual <- nlevels(x$data$Annual)
+
+  # Add bAnnual = 0 for trend-only models (needed by derived expressions)
+  if (!any(y$parameter == "bAnnual")) {
+    bAnnual_terms <- paste0(
+      "bAnnual[",
+      rep(seq_len(nAnnual), nPop), ", ",
+      rep(seq_len(nPop), each = nAnnual), "]"
+    )
     y <- bind_rows(y, tibble(
-      term = term::as_term("bAnnual[1]"),
+      term = term::as_term(bAnnual_terms),
       parameter = "bAnnual",
       estimate = 0
     ))
   }
+
+  if (!("bAnnual[1, 1]" %in% y$term) && any(grepl("bAnnual", y$term))) {
+    y <- bind_rows(y, tibble(
+      term = term::as_term("bAnnual[1, 1]"),
+      parameter = "bAnnual",
+      estimate = 0
+    ))
+  }
+
+  # Add bYear = 0 for non-trend models (needed by derived expressions)
+  if (!any(y$parameter == "bYear")) {
+    bYear_terms <- paste0("bYear[", seq_len(nPop), "]")
+    y <- bind_rows(y, tibble(
+      term = term::as_term(bYear_terms),
+      parameter = "bYear",
+      estimate = 0
+    ))
+  }
+
   arrange(y, .data$term)
 }
 

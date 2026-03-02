@@ -48,7 +48,7 @@ bb_fit_recruitment <- function(
     priors = NULL,
     quiet = FALSE) {
   chk_data(data)
-  bbd_chk_data_recruitment(data)
+  bbd_chk_data_recruitment(data, multi_population = TRUE)
   chk_null_or(adult_female_proportion, vld = vld_range)
   chk_range(sex_ratio)
   chk_whole_number(min_random_year)
@@ -81,8 +81,8 @@ bb_fit_recruitment <- function(
     priors = priors
   )
 
-  vars <- model$getVarNames()
   params <- params_recruitment()
+  vars <- model$getVarNames()
   monitor <- params[params %in% vars]
   if (!is.null(adult_female_proportion)) {
     monitor <- monitor[monitor != "adult_female_proportion"]

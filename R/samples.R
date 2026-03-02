@@ -33,5 +33,15 @@ samples.bboufit <- function(x) {
 #'
 #' @export
 samples.bboufit_ml <- function(x) {
-  mcmcr::as.mcmcr(estimates(x))
+  y <- summary_ml(x)
+  dims <- term::pdims(y$term)
+
+  est <- estimates(x)
+  for (par in names(est)) {
+    d <- dims[[par]]
+    if (length(d) > 1) {
+      dim(est[[par]]) <- d
+    }
+  }
+  mcmcr::as.mcmcr(est)
 }

@@ -29,17 +29,17 @@ data_prep_recruitment <- function(data, year_start = 4L) {
   data$CaribouYear <- caribou_year(data$Year, data$Month, year_start = year_start)
   data <-
     data %>%
-    dplyr::group_by(CaribouYear) %>%
+    dplyr::group_by(CaribouYear, PopulationName) %>%
     dplyr::summarize(
       Cows = sum(.data$Cows),
       CowsBulls = sum(.data$CowsBulls),
       UnknownAdults = sum(.data$UnknownAdults),
       Yearlings = sum(.data$Yearlings),
       Calves = sum(.data$Calves),
-      PopulationName = dplyr::first(.data$PopulationName)
-    ) %>%
-    dplyr::ungroup()
+      .groups = "drop"
+    )
   data$Annual <- factor(data$CaribouYear)
+  data$PopulationName <- factor(data$PopulationName)
 
   data
 }
@@ -53,9 +53,11 @@ data_list_recruitment <- function(data, model) {
     UnknownAdults = data$UnknownAdults,
     Yearlings = data$Yearlings,
     Calves = data$Calves,
-    nAnnual = length(unique(data$Annual)),
+    nAnnual = length(levels(data$Annual)),
     CaribouYear = data$CaribouYear,
-    Annual = as.integer(data$Annual)
+    Annual = as.integer(data$Annual),
+    PopulationName = as.integer(data$PopulationName),
+    nPopulation = length(levels(data$PopulationName))
   )
   x
 }

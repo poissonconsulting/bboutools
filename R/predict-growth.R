@@ -19,6 +19,7 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
   chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
   chk_s3_class(recruitment, "bboufit_recruitment")
   .chk_year_start_equal(survival, recruitment)
+  .chk_population_multi(survival, recruitment)
 
   pred_sur <- predict_survival(survival, year = TRUE, month = FALSE)
   pred_rec <- predict_calf_cow(recruitment, year = TRUE)
@@ -29,10 +30,14 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
   sur <- pred_sur$samples
   rec <- pred_rec$samples
 
-  data <- data_sur[data_sur$Annual %in% data_rec$Annual, ]
+  # match on both Annual and PopulationName
+  key_sur <- interaction(data_sur$Annual, data_sur$PopulationName, drop = TRUE)
+  key_rec <- interaction(data_rec$Annual, data_rec$PopulationName, drop = TRUE)
+
+  data <- data_sur[key_sur %in% key_rec, ]
 
   if (!nrow(data)) {
-    data <- data["CaribouYear"]
+    data <- data[c("PopulationName", "CaribouYear")]
     data$CaribouYear <- as.integer(data$CaribouYear)
     data$estimate <- numeric(0)
     data$lower <- numeric(0)
@@ -40,8 +45,8 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
     return(list(lambda = list(), data = data))
   }
 
-  sur <- sur[, , data_sur$Annual %in% data_rec$Annual, drop = FALSE]
-  rec <- rec[, , data_rec$Annual %in% data_sur$Annual, drop = FALSE]
+  sur <- sur[, , key_sur %in% key_rec, drop = FALSE]
+  rec <- rec[, , key_rec %in% key_sur, drop = FALSE]
   class(sur) <- "mcmcarray"
   class(rec) <- "mcmcarray"
 
@@ -112,7 +117,7 @@ bb_predict_growth <- function(survival,
   }
   lambda <- lambda$lambda
   coef <- predict_coef(lambda,
-    new_data = data, include_pop = FALSE,
+    new_data = data, include_pop = TRUE,
     conf_level = conf_level, estimate = estimate,
     sig_fig = sig_fig
   )
@@ -148,9 +153,14 @@ bb_predict_population_change_samples <- function(survival,
   lambda_array <- lambda$lambda
   dims <- dim(lambda_array)
   pop_change <- array(dim = dims)
+
+  populations <- unique(data$PopulationName)
   for (chain in 1:dims[1]) {
     for (iter in 1:dims[2]) {
-      pop_change[chain, iter, ] <- cumprod(lambda_array[chain, iter, ])
+      for (pop in populations) {
+        idx <- which(data$PopulationName == pop)
+        pop_change[chain, iter, idx] <- cumprod(lambda_array[chain, iter, idx])
+      }
     }
   }
   class(pop_change) <- "mcmcarray"
@@ -195,13 +205,21 @@ bb_predict_population_change <- function(survival,
 
   pop_change <- lambda$lambda
   coef <- predict_coef(pop_change,
-    new_data = data, include_pop = FALSE,
+    new_data = data, include_pop = TRUE,
     conf_level = conf_level, estimate = estimate,
     sig_fig = sig_fig
   )
   coef$Month <- NULL
-  start <- tibble::tibble(CaribouYear = min(coef$CaribouYear) - 1L, estimate = 1, lower = 1, upper = 1)
+  populations <- unique(coef$PopulationName)
+  start <- tibble::tibble(
+    PopulationName = populations,
+    CaribouYear = min(coef$CaribouYear) - 1L,
+    estimate = 1,
+    lower = 1,
+    upper = 1
+  )
   coef <- rbind(start, coef)
+  coef <- dplyr::arrange(coef, .data$PopulationName, .data$CaribouYear)
   coef
 }
 

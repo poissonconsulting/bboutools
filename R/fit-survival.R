@@ -12,7 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 ml_converge_fail <- function(x) {
   grepl(
     "Warning: optim does not converge for the inner optimization of AGHQuad or Laplace approximation",
@@ -21,6 +20,11 @@ ml_converge_fail <- function(x) {
 }
 ml_se_fail <- function(x) {
   any(is.nan(x$result$summary$params$stdError))
+}
+
+stochastic_var_names <- function(model) {
+  nodes <- model$getNodeNames(stochOnly = TRUE, includeData = FALSE)
+  unique(sub("\\[.*\\]", "", nodes))
 }
 
 #' Fit Survival Model
@@ -46,17 +50,19 @@ ml_se_fail <- function(x) {
 #' if (interactive()) {
 #'   fit <- bb_fit_survival(bboudata::bbousurv_a)
 #' }
-bb_fit_survival <- function(data,
-                            min_random_year = 5,
-                            year_trend = FALSE,
-                            include_uncertain_morts = TRUE,
-                            year_start = 4L,
-                            nthin = 10,
-                            niters = 1000,
-                            priors = NULL,
-                            quiet = FALSE) {
+bb_fit_survival <- function(
+  data,
+  min_random_year = 5,
+  year_trend = FALSE,
+  include_uncertain_morts = TRUE,
+  year_start = 4L,
+  nthin = 10,
+  niters = 1000,
+  priors = NULL,
+  quiet = FALSE
+) {
   chk_data(data)
-  bbd_chk_data_survival(data)
+  bbd_chk_data_survival(data, multi_population = TRUE)
   chk_whole_number(min_random_year)
   chk_gte(min_random_year)
   chk_flag(year_trend)
@@ -70,7 +76,7 @@ bb_fit_survival <- function(data,
   default_priors <- priors_survival()
   .chk_priors(priors, names(default_priors))
   chk_flag(quiet)
-  
+
   priors <- replace_priors(default_priors, priors)
   data <-
     model_data_survival(
@@ -83,7 +89,7 @@ bb_fit_survival <- function(data,
   if (!year_random && year_trend) {
     message_trend_fixed()
   }
-  
+
   model <-
     model_survival(
       data = data$datal,
@@ -91,11 +97,11 @@ bb_fit_survival <- function(data,
       year_trend = year_trend,
       priors = priors
     )
-  
+
   params <- params_survival()
   vars <- model$getVarNames()
   monitor <- params[params %in% vars]
-  
+
   fit <- run_nimble(
     model = model,
     monitor = monitor,
@@ -105,7 +111,7 @@ bb_fit_survival <- function(data,
     nthin = nthin,
     quiet = quiet
   )
-  
+
   attrs <- list(
     nthin = nthin,
     niters = niters,
@@ -113,10 +119,9 @@ bb_fit_survival <- function(data,
     year_trend = year_trend,
     year_start = year_start
   )
-  
+
   .attrs_bboufit(fit) <- attrs
   fit$data <- data$data
-  x <- model$getCode()
   fit$model_code <- model$getCode()
   class(fit) <- c("bboufit_survival", "bboufit")
   fit

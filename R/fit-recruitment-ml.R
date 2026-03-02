@@ -46,7 +46,7 @@ bb_fit_recruitment_ml <- function(
     inits = NULL,
     quiet = FALSE) {
   chk_data(data)
-  bbd_chk_data_recruitment(data)
+  bbd_chk_data_recruitment(data, multi_population = TRUE)
   chk_null_or(adult_female_proportion, vld = vld_range)
   chk_range(sex_ratio)
   chk_whole_number(min_random_year)

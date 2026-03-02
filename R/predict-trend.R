@@ -150,7 +150,7 @@ bb_predict_survival_trend_samples <- function(survival) {
 
   predict_trend(
     fit = survival,
-    derived_expr = derived_expr_survival_trend()
+    derived_expr = derived_expr_survival_trend(survival)
   )
 }
 

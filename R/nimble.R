@@ -15,14 +15,14 @@
 
 sample_empty <- function(model, monitor, nchains){
   model_mcmc <- buildMCMC(model, monitors = monitor)
-
+  
   invisible(capture.output({
     samples <- runMCMC(model_mcmc,
                        niter = 0,
                        nburnin = 0,
                        thin = 1,
                        nchains = nchains,
-                       samplesAsCodaMCMC = TRUE,
+                       samplesAsCodaMCMC = TRUE, 
                        progressBar = FALSE
     )
   }, type = "output"))
@@ -36,7 +36,7 @@ sample_some <- function(model, monitor, inits, niters, nburnin, nthin, nchains, 
   if (!is.null(inits)) {
     cmodel$setInits(inits)
   }
-
+  
   runMCMC(cmodel_mcmc,
           niter = niters, nburnin = nburnin,
           thin = nthin, nchains = nchains,
@@ -55,10 +55,10 @@ run_nimble <- function(model, monitor, inits, niters, nchains, nthin, quiet) {
     samples <- sample_empty(model, monitor = monitor, nchains = nchains)
   } else {
     samples <- sample_some(model, monitor = monitor, inits = inits,
-                           niters = niters, nburnin = nburnin,
+                           niters = niters, nburnin = nburnin, 
                            nthin = nthin, nchains = nchains, quiet = quiet)
   }
-
+  
   nimbleOptions(verbose = verbose)
   samples <- mcmcr::as.mcmcr(samples)
   list(model = model, samples = samples)
@@ -70,7 +70,8 @@ run_nimble_ml <- function(model, inits, prior_inits, quiet) {
 
   cmodel <- compileNimble(model, resetFunctions = TRUE)
   params <- setupMargNodes(model)$paramNodes
-  chk_subset(names(inits), params, x_name = "Names in `inits`")
+  params_base <- unique(gsub("\\[.*", "", params))
+  chk_subset(names(inits), params_base, x_name = "Names in `inits`")
 
   # need to deal with special case when estimating adult_female_proportion
   # nimble does not guess default param nodes correctly
@@ -105,6 +106,7 @@ run_nimble_ml <- function(model, inits, prior_inits, quiet) {
   summ <- claplace$summary(mle, randomEffectsStdError = TRUE, originalScale = FALSE)
 
   # nimbleQuad >= 1.4.0 returns generic names (param_trans_1, re_trans_1) on
+
   # the transformed scale. Get proper names from the original-scale summary.
   summ_names <- claplace$summary(mle, randomEffectsStdError = TRUE, originalScale = TRUE)
   summ$params$names <- summ_names$params$names

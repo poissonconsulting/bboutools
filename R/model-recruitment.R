@@ -56,7 +56,9 @@ model_recruitment <-
     constants <- c(constants, data)
 
     code <- nimbleCode({
-      b0 ~ dnorm(b0_mu, sd = b0_sd)
+      for (k in 1:nPopulation) {
+        b0[k] ~ dnorm(b0_mu, sd = b0_sd)
+      }
       if (fixed_proportion) {
         adult_female_proportion <- adult_female_prop
       } else {
@@ -69,32 +71,41 @@ model_recruitment <-
       if (year_random) {
         sAnnual ~ dexp(sAnnual_rate)
         for (i in 1:nAnnual) {
-          bAnnual[i] ~ dnorm(0, sd = sAnnual)
+          for (k in 1:nPopulation) {
+            bAnnual[i,k] ~ dnorm(0, sd = sAnnual)
+          }
         }
       } else if (!year_random & !year_trend) {
-        bAnnual[1] <- 0
-        for (i in 2:nAnnual) {
-          bAnnual[i] ~ dnorm(0, sd = bAnnual_sd)
-        }
-      }
-      if (year_trend) {
-        bYear ~ dnorm(bYear_mu, sd = bYear_sd)
-      }
-
-      if (year_trend) {
-        if (year_random) {
-          for (i in 1:nObs) {
-            logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * CaribouYear[i]
-          }
-        } else {
-          for (i in 1:nObs) {
-            logit(eRecruitment[i]) <- b0 + bYear * CaribouYear[i]
+        for (k in 1:nPopulation) {
+          bAnnual[1,k] <- 0
+          for (i in 2:nAnnual) {
+            bAnnual[i,k] ~ dnorm(0, sd = bAnnual_sd)
           }
         }
       } else {
-        for (i in 1:nObs) {
-          logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]]
+        # no annual offsets if using year trend only
+        for (i in 1:nAnnual) {
+          for (k in 1:nPopulation) {
+            bAnnual[i,k] <- 0
+          }
         }
+      }
+
+      if (year_trend) {
+        for (k in 1:nPopulation) {
+          bYear[k] ~ dnorm(bYear_mu, sd = bYear_sd)
+        }
+      } else {
+        for (k in 1:nPopulation) {
+          bYear[k] <- 0
+        }
+      }
+
+      for (i in 1:nObs) {
+        logit(eRecruitment[i]) <-
+          b0[PopulationName[i]] +
+          bAnnual[Annual[i], PopulationName[i]] +
+          bYear[PopulationName[i]] * CaribouYear[i]
       }
 
       if (!fixed_proportion | demographic_stochasticity) {
@@ -135,7 +146,7 @@ model_recruitment <-
     model <- nimbleModel(code,
       constants = constants,
       # priors too vague - causes warning of logprob = -Inf unless inits constrained
-      inits = list(b0 = rnorm(1, -1, 2)),
+      inits = list(b0 = rnorm(data$nPopulation, -1, 2)),
       buildDerivs = TRUE,
       name = "bboumodel_recruitment"
     )

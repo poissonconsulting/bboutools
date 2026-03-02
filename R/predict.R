@@ -48,7 +48,7 @@ predict_calf_cow <- function(fit, year) {
 }
 
 new_data_ym <- function(x, year, month) {
-  seq <- c("Annual", "Month")[c(year, month)]
+  seq <- c("PopulationName", "Annual", "Month")[c(TRUE, year, month)]
   df <- newdata::new_data(
     data = x,
     seq = seq

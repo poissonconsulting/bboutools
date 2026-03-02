@@ -21,22 +21,31 @@ extract_lik <- function(x) {
 
 extract_lik_year <- function(x) {
   x <- extract_lik(x)
-  gsub(" + bMonth[Month[i]]", "", x, fixed = TRUE)
+  gsub(" + bMonth[Month[i], PopulationName[i]]", "", x, fixed = TRUE)
 }
 
 derived_expr_survival <- function(fit, year, month) {
   lik_year <- extract_lik_year(fit)
   if (year) {
+    
     if (month) {
-      pred <- paste0("logit(ilogit(", lik_year, " + bMonth[Month[i]])^12)")
+      pred <- paste0("logit(ilogit(", lik_year, " + bMonth[Month[i], PopulationName[i]])^12)")
     } else {
-      pred <- paste0("logit(ilogit(", lik_year, ")^12)")
+      if(length(levels(fit$data$Month)) > 1){
+        pred <- paste0("logit(ilogit(", lik_year, ")^12)")
+      }else{
+        pred <- paste0("logit(ilogit(", lik_year, "))")
+      }
     }
   } else {
     if (month) {
-      pred <- "logit(ilogit(b0 + bMonth[Month[i]])^12)"
+      pred <- "logit(ilogit(b0[PopulationName[i]] + bMonth[Month[i], PopulationName[i]])^12)"
     } else {
-      pred <- "logit(ilogit(b0)^12)"
+      if(length(levels(fit$data$Month)) > 1){
+        pred <- "logit(ilogit(b0[PopulationName[i]])^12)"
+      }else{
+        pred <- "logit(ilogit(b0[PopulationName[i]]))"
+      }
     }
   }
   paste0("for(i in 1:length(Annual)) {
@@ -44,7 +53,7 @@ derived_expr_survival <- function(fit, year, month) {
 }
 
 derived_expr_recruitment <- function(fit, year) {
-  lik <- "b0"
+  lik <- "b0[PopulationName[i]]"
   if (year) {
     lik <- extract_lik(fit)
   }
@@ -54,10 +63,15 @@ derived_expr_recruitment <- function(fit, year) {
 
 derived_expr_recruitment_trend <- function() {
   "for(i in 1:length(Annual)) {
-  logit(prediction[i]) <- b0 + bYear * CaribouYear[i]\n}"
+  logit(prediction[i]) <- b0[PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]\n}"
 }
 
-derived_expr_survival_trend <- function() {
-  "for(i in 1:length(Annual)) {
-  logit(prediction[i]) <- logit(ilogit(b0 + bYear * CaribouYear[i])^12)\n}"
+derived_expr_survival_trend <- function(fit) {
+  if (length(levels(fit$data$Month)) > 1) {
+    "for(i in 1:length(Annual)) {
+  logit(prediction[i]) <- logit(ilogit(b0[PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i])^12)\n}"
+  } else {
+    "for(i in 1:length(Annual)) {
+  logit(prediction[i]) <- b0[PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]\n}"
+  }
 }
