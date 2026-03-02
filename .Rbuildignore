@@ -19,3 +19,4 @@
 ^vignettes/articles$
 ^CLAUDE\.md$
 ^\.claude$
+^test-data$
