@@ -125,19 +125,19 @@ test_that("estimate ml works", {
 })
 
 test_that("get attributes works", {
-  expect_identical(npars(bboutools:::fit_survival), 5L)
+  expect_identical(npars(bboutools:::fit_survival), 6L)
   expect_identical(niters(bboutools:::fit_survival), 1000L)
   expect_identical(nobs(bboutools:::fit_survival), 363L)
   expect_identical(nchains(bboutools:::fit_survival), 3L)
-  expect_identical(nterms(bboutools:::fit_recruitment), 29L)
-  expect_identical(pars(bboutools:::fit_recruitment), c("b0", "bAnnual", "sAnnual"))
+  expect_identical(nterms(bboutools:::fit_recruitment), 30L)
+  expect_identical(pars(bboutools:::fit_recruitment), c("b0", "bAnnual", "bYear", "sAnnual"))
 })
 
 test_that("get attributes ml works", {
-  expect_identical(npars(bboutools:::fit_survival_ml), 5L)
+  expect_identical(npars(bboutools:::fit_survival_ml), 6L)
   expect_identical(nobs(bboutools:::fit_survival_ml), 363L)
-  expect_identical(nterms(bboutools:::fit_recruitment_ml), 29L)
-  expect_identical(pars(bboutools:::fit_recruitment_ml), c("b0", "bAnnual", "sAnnual"))
+  expect_identical(nterms(bboutools:::fit_recruitment_ml), 30L)
+  expect_identical(pars(bboutools:::fit_recruitment_ml), c("b0", "bAnnual", "bYear", "sAnnual"))
 })
 
 test_that("convergence works", {
