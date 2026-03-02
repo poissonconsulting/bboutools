@@ -1,25 +1,31 @@
 code
 {
-"b0 ~ dnorm(b0_mu, sd = b0_sd)"
+"for (k in 1:nPopulation) {
+    b0[k] ~ dnorm(b0_mu, sd = b0_sd)
+}"
 "{
     sAnnual ~ dexp(sAnnual_rate)
     for (i in 1:nAnnual) {
-        bAnnual[i] ~ dnorm(0, sd = sAnnual)
-    }
-}"
-"{
-    bYear ~ dnorm(bYear_mu, sd = bYear_sd)
-}"
-sMonth ~ dexp(sMonth_rate)
-"for (i in 1:nMonth) {
-    bMonth[i] ~ dnorm(0, sd = sMonth)
-}"
-"{
-    {
-        for (i in 1:nObs) {
-            logit(eSurvival[i]) <- b0 + bAnnual[Annual[i]] + bYear * CaribouYear[i] + bMonth[Month[i]]
+        for (k in 1:nPopulation) {
+            bAnnual[i, k] ~ dnorm(0, sd = sAnnual)
         }
     }
+}"
+"{
+    for (k in 1:nPopulation) {
+        bYear[k] ~ dnorm(bYear_mu, sd = bYear_sd)
+    }
+}"
+"{
+    sMonth ~ dexp(sMonth_rate)
+    for (i in 1:nMonth) {
+        for (k in 1:nPopulation) {
+            bMonth[i, k] ~ dnorm(0, sd = sMonth)
+        }
+    }
+}"
+"for (i in 1:nObs) {
+    logit(eSurvival[i]) <- b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i] + bMonth[Month[i], PopulationName[i]]
 }"
 "for (i in 1:nObs) {
     Mortalities[i] ~ dbin(1 - eSurvival[i], StartTotal[i])

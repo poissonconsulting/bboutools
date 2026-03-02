@@ -1,20 +1,25 @@
 code
 {
-"b0 ~ dnorm(b0_mu, sd = b0_sd)"
+"for (k in 1:nPopulation) {
+    b0[k] ~ dnorm(b0_mu, sd = b0_sd)
+}"
 "{
     adult_female_proportion <- adult_female_prop
 }"
 "{
-}"
-"{
-    bYear ~ dnorm(bYear_mu, sd = bYear_sd)
-}"
-"{
-    {
-        for (i in 1:nObs) {
-            logit(eRecruitment[i]) <- b0 + bYear * CaribouYear[i]
+    for (i in 1:nAnnual) {
+        for (k in 1:nPopulation) {
+            bAnnual[i, k] <- 0
         }
     }
+}"
+"{
+    for (k in 1:nPopulation) {
+        bYear[k] ~ dnorm(bYear_mu, sd = bYear_sd)
+    }
+}"
+"for (i in 1:nObs) {
+    logit(eRecruitment[i]) <- b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]
 }"
 "{
     for (i in 1:nObs) {
