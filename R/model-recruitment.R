@@ -13,11 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-model_data_recruitment <- function(data, year_start = year_start, quiet) {
+model_data_recruitment <- function(data, year_start = year_start,
+                                   allow_missing = FALSE, quiet) {
+  if (allow_missing) {
+    placeholder <- is.na(data$Month)
+    unobserved_years <- caribou_year(data$Year[placeholder], year_start, year_start = year_start)
+    data <- data[!placeholder, ]
+  }
   data <- data_clean_recruitment(data, quiet = quiet)
   data <- data_prep_recruitment(data, year_start = year_start)
+  nAnnualObserved <- length(levels(data$Annual))
+  if (allow_missing) {
+    all_years <- sort(union(levels(data$Annual), as.character(unobserved_years)))
+    data$Annual <- factor(data$Annual, levels = all_years)
+  }
   datal <- data_list_recruitment(data)
-  list(datal = datal, data = data)
+  list(datal = datal, data = data, nAnnualObserved = nAnnualObserved)
 }
 
 #' Build Nimble recruitment model.

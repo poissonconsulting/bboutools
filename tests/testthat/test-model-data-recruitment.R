@@ -30,3 +30,26 @@ test_that("prep model data with single population", {
   expect_true(x2$datal$nAnnual > 0L)
   expect_true(x2$datal$nObs > 0L)
 })
+
+test_that("allow_missing single pop", {
+  x <- bboudata::bbourecruit_missing
+  x2 <- model_data_recruitment(x, year_start = 4L, allow_missing = TRUE, quiet = TRUE)
+
+  # nAnnual includes unobserved years
+  expect_gt(x2$datal$nAnnual, x2$nAnnualObserved)
+  # nObs excludes placeholder rows
+  expect_identical(x2$datal$nObs, nrow(x2$data))
+  # Annual factor levels include unobserved years
+  expect_identical(x2$datal$nAnnual, length(levels(x2$data$Annual)))
+  expect_identical(x2$datal$nPopulation, 1L)
+})
+
+test_that("allow_missing multi pop", {
+  x <- bboudata::bbourecruit_multi
+  x2 <- model_data_recruitment(x, year_start = 4L, allow_missing = TRUE, quiet = TRUE)
+
+  # nAnnual includes unobserved year
+  expect_gt(x2$datal$nAnnual, x2$nAnnualObserved)
+  expect_identical(x2$datal$nObs, nrow(x2$data))
+  expect_identical(x2$datal$nPopulation, 3L)
+})

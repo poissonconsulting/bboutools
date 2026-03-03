@@ -55,3 +55,39 @@ test_that("data annual single pop", {
   expect_identical(x2$datal$nPopulation, 1L)
   expect_identical(x2$datal$nMonth, 1L)
 })
+
+test_that("allow_missing single pop", {
+  x <- bboudata::bbousurv_missing
+  x2 <- model_data_survival(
+    x,
+    include_uncertain_morts = TRUE,
+    year_start = 4L,
+    allow_missing = TRUE,
+    quiet = TRUE
+  )
+
+  # nAnnual includes unobserved years
+  expect_gt(x2$datal$nAnnual, x2$nAnnualObserved)
+  # nObs excludes placeholder rows
+  expect_identical(x2$datal$nObs, nrow(x2$data))
+  expect_true(all(!is.na(x2$data$Month)))
+  # Annual factor levels include unobserved years
+  expect_identical(x2$datal$nAnnual, length(levels(x2$data$Annual)))
+})
+
+test_that("allow_missing multi pop", {
+  x <- bboudata::bbousurv_multi
+  x2 <- model_data_survival(
+    x,
+    include_uncertain_morts = TRUE,
+    year_start = 4L,
+    allow_missing = TRUE,
+    quiet = TRUE
+  )
+
+  # nAnnual includes unobserved year (2015)
+  expect_gt(x2$datal$nAnnual, x2$nAnnualObserved)
+  expect_identical(x2$datal$nObs, nrow(x2$data))
+  expect_true(all(!is.na(x2$data$Month)))
+  expect_identical(x2$datal$nPopulation, 3L)
+})

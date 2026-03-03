@@ -84,6 +84,40 @@ test_that("can set niters", {
   expect_snapshot_data(coef(fit), "niters")
 })
 
+test_that("survival allow_missing works", {
+  skip_on_covr()
+
+  x <- bboudata::bbousurv_missing
+  set.seed(101)
+  fit <- bb_fit_survival(
+    data = x,
+    nthin = 1,
+    allow_missing = TRUE,
+    quiet = TRUE
+  )
+
+  expect_s3_class(fit, "bboufit")
+  expect_s3_class(fit, "bboufit_survival")
+  expect_s3_class(fit$samples, "mcmcr")
+
+  pred <- bb_predict_survival(fit)
+  # predictions include unobserved years
+  caribou_years <- unique(pred$CaribouYear)
+  expect_true(length(caribou_years) > length(unique(fit$data$CaribouYear)))
+})
+
+test_that("survival allow_missing errors with fixed year", {
+  x <- bboudata::bbousurv_missing
+  expect_chk_error(
+    bb_fit_survival(
+      data = x,
+      allow_missing = TRUE,
+      min_random_year = Inf,
+      quiet = TRUE
+    )
+  )
+})
+
 test_that("survival annual works", {
   skip_on_covr()
 

@@ -44,6 +44,39 @@ test_that("fails with wrong prior", {
   )
 })
 
+test_that("recruitment allow_missing works", {
+  skip_on_covr()
+
+  x <- bboudata::bbourecruit_missing
+  set.seed(101)
+  fit <- bb_fit_recruitment(
+    data = x,
+    nthin = 1,
+    allow_missing = TRUE,
+    quiet = TRUE
+  )
+
+  expect_s3_class(fit, "bboufit")
+  expect_s3_class(fit, "bboufit_recruitment")
+  expect_s3_class(fit$samples, "mcmcr")
+
+  pred <- bb_predict_recruitment(fit)
+  caribou_years <- unique(pred$CaribouYear)
+  expect_true(length(caribou_years) > length(unique(fit$data$CaribouYear)))
+})
+
+test_that("recruitment allow_missing errors with fixed year", {
+  x <- bboudata::bbourecruit_missing
+  expect_chk_error(
+    bb_fit_recruitment(
+      data = x,
+      allow_missing = TRUE,
+      min_random_year = Inf,
+      quiet = TRUE
+    )
+  )
+})
+
 test_that("recruitment multi population", {
   skip_on_covr()
 
