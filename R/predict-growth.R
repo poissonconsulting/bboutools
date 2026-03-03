@@ -45,8 +45,8 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
     return(list(lambda = list(), data = data))
   }
 
-  sur <- sur[, , key_sur %in% key_rec, drop = FALSE]
-  rec <- rec[, , key_rec %in% key_sur, drop = FALSE]
+  sur <- sur[,, key_sur %in% key_rec, drop = FALSE]
+  rec <- rec[,, key_rec %in% key_sur, drop = FALSE]
   class(sur) <- "mcmcarray"
   class(rec) <- "mcmcarray"
 
@@ -67,16 +67,11 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
 #' @references Hatter, Ian, and Wendy Bergerud. 1991. "Moose Recruitment, Adult
 #'   Mortality and Rate of Change" 27: 65–73.
 #' @family analysis
-bb_predict_growth_samples <- function(survival,
-                                      recruitment,
-                                      sex_ratio = 0.5) {
+bb_predict_growth_samples <- function(survival, recruitment, sex_ratio = 0.5) {
   chk_number(sex_ratio)
   chk_range(sex_ratio)
 
-  predict_lambda(survival,
-    recruitment = recruitment,
-    sex_ratio = sex_ratio
-  )
+  predict_lambda(survival, recruitment = recruitment, sex_ratio = sex_ratio)
 }
 
 #' Predict Population Growth Lambda
@@ -96,17 +91,20 @@ bb_predict_growth_samples <- function(survival,
 #'   recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a)
 #'   growth <- bb_predict_growth(survival, recruitment)
 #' }
-bb_predict_growth <- function(survival,
-                              recruitment,
-                              sex_ratio = 0.5,
-                              conf_level = 0.95,
-                              estimate = median,
-                              sig_fig = 3) {
+bb_predict_growth <- function(
+  survival,
+  recruitment,
+  sex_ratio = 0.5,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 3
+) {
   chk_range(conf_level, c(0, 1))
   chk_is(estimate, "function")
   chk_whole_number(sig_fig)
 
-  lambda <- bb_predict_growth_samples(survival,
+  lambda <- bb_predict_growth_samples(
+    survival,
     recruitment = recruitment,
     sex_ratio = sex_ratio
   )
@@ -116,9 +114,12 @@ bb_predict_growth <- function(survival,
     return(data)
   }
   lambda <- lambda$lambda
-  coef <- predict_coef(lambda,
-    new_data = data, include_pop = TRUE,
-    conf_level = conf_level, estimate = estimate,
+  coef <- predict_coef(
+    lambda,
+    new_data = data,
+    include_pop = TRUE,
+    conf_level = conf_level,
+    estimate = estimate,
     sig_fig = sig_fig
   )
   coef$Month <- NULL
@@ -134,13 +135,16 @@ bb_predict_growth <- function(survival,
 #' @return A 'mcmcarray' object with the modified MCMC samples.
 #' @export
 #' @family analysis
-bb_predict_population_change_samples <- function(survival,
-                                                 recruitment,
-                                                 sex_ratio = 0.5) {
+bb_predict_population_change_samples <- function(
+  survival,
+  recruitment,
+  sex_ratio = 0.5
+) {
   chk_number(sex_ratio)
   chk_range(sex_ratio)
 
-  lambda <- predict_lambda(survival,
+  lambda <- predict_lambda(
+    survival,
     recruitment = recruitment,
     sex_ratio = sex_ratio
   )
@@ -183,17 +187,20 @@ bb_predict_population_change_samples <- function(survival,
 #'   recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a)
 #'   change <- bb_predict_population_change(survival, recruitment)
 #' }
-bb_predict_population_change <- function(survival,
-                                         recruitment,
-                                         sex_ratio = 0.5,
-                                         conf_level = 0.95,
-                                         estimate = median,
-                                         sig_fig = 3) {
+bb_predict_population_change <- function(
+  survival,
+  recruitment,
+  sex_ratio = 0.5,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 3
+) {
   chk_range(conf_level, c(0, 1))
   chk_is(estimate, "function")
   chk_whole_number(sig_fig)
 
-  lambda <- bb_predict_population_change_samples(survival,
+  lambda <- bb_predict_population_change_samples(
+    survival,
     recruitment = recruitment,
     sex_ratio = sex_ratio
   )
@@ -204,9 +211,12 @@ bb_predict_population_change <- function(survival,
   }
 
   pop_change <- lambda$lambda
-  coef <- predict_coef(pop_change,
-    new_data = data, include_pop = TRUE,
-    conf_level = conf_level, estimate = estimate,
+  coef <- predict_coef(
+    pop_change,
+    new_data = data,
+    include_pop = TRUE,
+    conf_level = conf_level,
+    estimate = estimate,
     sig_fig = sig_fig
   )
   coef$Month <- NULL
@@ -225,13 +235,21 @@ bb_predict_population_change <- function(survival,
 
 #' @describeIn bb_predict_growth Deprecated for `bb_predict_growth()` `r lifecycle::badge('deprecated')`
 #' @export
-bb_predict_lambda <- function(survival,
-                              recruitment,
-                              conf_level = 0.95,
-                              estimate = median,
-                              sig_fig = 3) {
-  lifecycle::deprecate_soft("v0.0.1", "bb_predict_lambda()", "bb_predict_growth()")
-  bb_predict_growth(survival, recruitment,
+bb_predict_lambda <- function(
+  survival,
+  recruitment,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 3
+) {
+  lifecycle::deprecate_soft(
+    "v0.0.1",
+    "bb_predict_lambda()",
+    "bb_predict_growth()"
+  )
+  bb_predict_growth(
+    survival,
+    recruitment,
     conf_level = conf_level,
     estimate = estimate,
     sig_fig = sig_fig

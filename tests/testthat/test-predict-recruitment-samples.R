@@ -23,7 +23,10 @@ test_that("bb_predict_recruitment_samples works", {
 })
 
 test_that("bb_predict_recruitment_samples one works", {
-  predict <- bb_predict_recruitment_samples(bboutools:::fit_recruitment, year = FALSE)
+  predict <- bb_predict_recruitment_samples(
+    bboutools:::fit_recruitment,
+    year = FALSE
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")
@@ -32,7 +35,10 @@ test_that("bb_predict_recruitment_samples one works", {
 })
 
 test_that("bb_predict_recruitment_samples sex_ratio works", {
-  predict <- bb_predict_recruitment_samples(bboutools:::fit_recruitment, sex_ratio = 0.7)
+  predict <- bb_predict_recruitment_samples(
+    bboutools:::fit_recruitment,
+    sex_ratio = 0.7
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")

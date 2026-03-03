@@ -23,7 +23,11 @@ test_that("bb_predict_survival_samples works", {
 })
 
 test_that("bb_predict_survival_samples month works", {
-  predict <- bb_predict_survival_samples(bboutools:::fit_survival, year = FALSE, month = TRUE)
+  predict <- bb_predict_survival_samples(
+    bboutools:::fit_survival,
+    year = FALSE,
+    month = TRUE
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")
@@ -32,7 +36,11 @@ test_that("bb_predict_survival_samples month works", {
 })
 
 test_that("bb_predict_survival_samples month year works", {
-  predict <- bb_predict_survival_samples(bboutools:::fit_survival, year = TRUE, month = TRUE)
+  predict <- bb_predict_survival_samples(
+    bboutools:::fit_survival,
+    year = TRUE,
+    month = TRUE
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")
@@ -41,7 +49,11 @@ test_that("bb_predict_survival_samples month year works", {
 })
 
 test_that("bb_predict_survival_samples one works", {
-  predict <- bb_predict_survival_samples(bboutools:::fit_survival, year = FALSE, month = FALSE)
+  predict <- bb_predict_survival_samples(
+    bboutools:::fit_survival,
+    year = FALSE,
+    month = FALSE
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")

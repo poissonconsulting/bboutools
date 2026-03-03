@@ -31,10 +31,12 @@ test_that("recruitment ml works", {
   )
 
   expect_s3_class(fit, "bboufit_ml")
-  expect_identical(names(fit), c("summary", "mle", "model", "data", "model_code"))
+  expect_identical(
+    names(fit),
+    c("summary", "mle", "model", "data", "model_code")
+  )
   expect_s4_class(fit$summary, "AGHQuad_summary")
   expect_s4_class(fit$mle, "OptimResultNimbleList")
   expect_setequal(pars(fit), c("b0", "bAnnual", "bYear", "sAnnual"))
   expect_snapshot_data(coef(fit), "default")
 })
-

@@ -28,7 +28,7 @@ bb_plot_year_calf_cow_ratio <- function(x, ...) {
 #' @export
 bb_plot_year_calf_cow_ratio.data.frame <- function(x, ...) {
   chk_unused(...)
-  
+
   bb_plot_year(x) +
     scale_y_continuous('Calves per Adult Female') +
     expand_limits(y = 0)
@@ -37,8 +37,17 @@ bb_plot_year_calf_cow_ratio.data.frame <- function(x, ...) {
 #' @describeIn bb_plot_year_calf_cow_ratio Plot annual calf-cow ratio estimates for a bboufit_recruitment object.
 #' @inheritParams params
 #' @export
-bb_plot_year_calf_cow_ratio.bboufit_recruitment <- function(x, conf_level = 0.95, estimate = median, ...) {
+bb_plot_year_calf_cow_ratio.bboufit_recruitment <- function(
+  x,
+  conf_level = 0.95,
+  estimate = median,
+  ...
+) {
   chk_unused(...)
-  x <- bb_predict_calf_cow_ratio(x, conf_level = conf_level, estimate = estimate)
+  x <- bb_predict_calf_cow_ratio(
+    x,
+    conf_level = conf_level,
+    estimate = estimate
+  )
   bb_plot_year_calf_cow_ratio(x)
 }

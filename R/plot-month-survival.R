@@ -37,8 +37,19 @@ bb_plot_month_survival.data.frame <- function(x, ...) {
 #' @describeIn bb_plot_month_survival Plot monthly survival estimates for a bboufit_survival object.
 #' @inheritParams params
 #' @export
-bb_plot_month_survival.bboufit_survival <- function(x, conf_level = 0.95, estimate = median, ...) {
+bb_plot_month_survival.bboufit_survival <- function(
+  x,
+  conf_level = 0.95,
+  estimate = median,
+  ...
+) {
   chk_unused(...)
-  x <- predict(x, year = FALSE, month = TRUE, conf_level = conf_level, estimate = estimate)
+  x <- predict(
+    x,
+    year = FALSE,
+    month = TRUE,
+    conf_level = conf_level,
+    estimate = estimate
+  )
   bb_plot_month_survival(x)
 }

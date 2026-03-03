@@ -32,13 +32,17 @@ test_that("bb_predict_recruitment on fit with trend works", {
 })
 
 test_that("bb_predict_recruitment on fit with trend one works", {
-  predict <- bb_predict_recruitment(bboutools:::fit_recruitment_trend, year = FALSE)
+  predict <- bb_predict_recruitment(
+    bboutools:::fit_recruitment_trend,
+    year = FALSE
+  )
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_recruitment_trend_1")
 })
 
 test_that("bb_predict_recruitment conf_level works", {
-  predict <- bb_predict_recruitment(bboutools:::fit_recruitment,
+  predict <- bb_predict_recruitment(
+    bboutools:::fit_recruitment,
     year = FALSE,
     conf_level = 0.5
   )
@@ -47,7 +51,8 @@ test_that("bb_predict_recruitment conf_level works", {
 })
 
 test_that("bb_predict_recruitment estimate works", {
-  predict <- bb_predict_recruitment(bboutools:::fit_recruitment,
+  predict <- bb_predict_recruitment(
+    bboutools:::fit_recruitment,
     year = FALSE,
     estimate = max
   )

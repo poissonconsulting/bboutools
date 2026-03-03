@@ -21,7 +21,9 @@ xname <- function(x, col) {
   if (.vld_sum_less(x, colsum, coltot)) {
     return(invisible())
   }
-  abort_chk(glue("Sum of {chk::cc(colsum, ' and ')} must not be greater than '{coltot}'."))
+  abort_chk(glue(
+    "Sum of {chk::cc(colsum, ' and ')} must not be greater than '{coltot}'."
+  ))
 }
 
 .chk_date <- function(year, month, day) {
@@ -58,8 +60,11 @@ xname <- function(x, col) {
     return(invisible(x))
   }
   x_name <- deparse_backtick_chk(substitute(x))
-  abort_chk(x_name, "must be a valid Bayesian model fit object with S3 class 'bboufit'.
-            See `bb_fit_survival()` and `bb_fit_recruitment()` for details.")
+  abort_chk(
+    x_name,
+    "must be a valid Bayesian model fit object with S3 class 'bboufit'.
+            See `bb_fit_survival()` and `bb_fit_recruitment()` for details."
+  )
 }
 
 .chk_fit_ml <- function(x) {
@@ -67,15 +72,20 @@ xname <- function(x, col) {
     return(invisible(x))
   }
   x_name <- deparse_backtick_chk(substitute(x))
-  abort_chk(x_name, "must be a valid Maximum Likelihood model fit object with S3 class 'bboufit_ml'.
-            See `bb_fit_survival_ml()` and `bb_fit_recruitment_ml()` for details.")
+  abort_chk(
+    x_name,
+    "must be a valid Maximum Likelihood model fit object with S3 class 'bboufit_ml'.
+            See `bb_fit_survival_ml()` and `bb_fit_recruitment_ml()` for details."
+  )
 }
 
 .chk_year_trend <- function(x) {
   if (.vld_year_trend(x)) {
     return(invisible(x))
   }
-  abort_chk("Model fit object does not contain a year trend. See `bb_fit_survival()` and `bb_fit_recruitment()` for details.")
+  abort_chk(
+    "Model fit object does not contain a year trend. See `bb_fit_survival()` and `bb_fit_recruitment()` for details."
+  )
 }
 
 .chk_population_multi <- function(survival, recruitment) {
@@ -88,10 +98,16 @@ xname <- function(x, col) {
   rec_only <- setdiff(rec_pops, surv_pops)
   details <- character(0)
   if (length(surv_only)) {
-    details <- c(details, paste0("In survival only: ", paste(surv_only, collapse = ", ")))
+    details <- c(
+      details,
+      paste0("In survival only: ", paste(surv_only, collapse = ", "))
+    )
   }
   if (length(rec_only)) {
-    details <- c(details, paste0("In recruitment only: ", paste(rec_only, collapse = ", ")))
+    details <- c(
+      details,
+      paste0("In recruitment only: ", paste(rec_only, collapse = ", "))
+    )
   }
   msg <- paste0(
     "Survival and recruitment models must have the same populations.\n",
@@ -105,5 +121,7 @@ xname <- function(x, col) {
   if (.vld_year_start_equal(survival, recruitment)) {
     return(invisible(survival))
   }
-  warning("Recruitment and survival models were fit with a different month of caribou year start. This can be adjusted with the `year_start` argument in model fitting functions.")
+  warning(
+    "Recruitment and survival models were fit with a different month of caribou year start. This can be adjusted with the `year_start` argument in model fitting functions."
+  )
 }

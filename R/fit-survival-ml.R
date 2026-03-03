@@ -36,13 +36,15 @@
 #' if (interactive()) {
 #'   fit <- bb_fit_survival_ml(bboudata::bbousurv_a)
 #' }
-bb_fit_survival_ml <- function(data,
-                               min_random_year = 5,
-                               year_trend = FALSE,
-                               include_uncertain_morts = FALSE,
-                               year_start = 4L,
-                               inits = NULL,
-                               quiet = FALSE) {
+bb_fit_survival_ml <- function(
+  data,
+  min_random_year = 5,
+  year_trend = FALSE,
+  include_uncertain_morts = FALSE,
+  year_start = 4L,
+  inits = NULL,
+  quiet = FALSE
+) {
   chk_data(data)
   bbd_chk_data_survival(data, multi_population = FALSE)
   chk_whole_number(min_random_year)
@@ -57,7 +59,8 @@ bb_fit_survival_ml <- function(data,
 
   # special treatment of intercept for ML fixed
   data <- data_clean_survival(data, quiet = quiet)
-  data <- data_prep_survival(data,
+  data <- data_prep_survival(
+    data,
     include_uncertain_morts = include_uncertain_morts,
     year_start = year_start
   )

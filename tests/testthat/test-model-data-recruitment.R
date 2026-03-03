@@ -33,7 +33,12 @@ test_that("prep model data with single population", {
 
 test_that("allow_missing single pop", {
   x <- bboudata::bbourecruit_missing
-  x2 <- model_data_recruitment(x, year_start = 4L, allow_missing = TRUE, quiet = TRUE)
+  x2 <- model_data_recruitment(
+    x,
+    year_start = 4L,
+    allow_missing = TRUE,
+    quiet = TRUE
+  )
 
   # nAnnual includes unobserved years
   expect_gt(x2$datal$nAnnual, x2$nAnnualObserved)
@@ -46,7 +51,12 @@ test_that("allow_missing single pop", {
 
 test_that("allow_missing multi pop", {
   x <- bboudata::bbourecruit_multi
-  x2 <- model_data_recruitment(x, year_start = 4L, allow_missing = TRUE, quiet = TRUE)
+  x2 <- model_data_recruitment(
+    x,
+    year_start = 4L,
+    allow_missing = TRUE,
+    quiet = TRUE
+  )
 
   # nAnnual includes unobserved year
   expect_gt(x2$datal$nAnnual, x2$nAnnualObserved)

@@ -33,7 +33,9 @@ test_that("bb_plot_year_trend_recruitment.bboufit_recruitment ML works", {
 })
 
 test_that("bb_plot_year_trend_recruitment.data.frame ML works", {
-  prediction <- bb_predict_recruitment_trend(bboutools:::fit_recruitment_ml_trend)
+  prediction <- bb_predict_recruitment_trend(
+    bboutools:::fit_recruitment_ml_trend
+  )
   plot <- bb_plot_year_trend_recruitment(prediction)
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "plot_year_trend_recruitment_ml_df")
@@ -41,12 +43,12 @@ test_that("bb_plot_year_trend_recruitment.data.frame ML works", {
 
 test_that("bb_plot_year_trend_recruitment.data.frame no rows", {
   prediction <- tibble::tribble(
-    ~CaribouYear, ~estimate, ~lower, ~upper,
-    1L, 0.5, 0.4, 0.6
+    ~CaribouYear , ~estimate , ~lower , ~upper ,
+    1L           , 0.5       , 0.4    , 0.6
   )
-  
+
   prediction <- prediction[-1, ]
-  
+
   plot <- bb_plot_year_trend_recruitment(prediction)
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "plot_year_trend_0")

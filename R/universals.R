@@ -65,32 +65,43 @@ summary_ml <- function(x) {
   if (!any(y$parameter == "bAnnual")) {
     bAnnual_terms <- paste0(
       "bAnnual[",
-      rep(seq_len(nAnnual), nPop), ", ",
-      rep(seq_len(nPop), each = nAnnual), "]"
+      rep(seq_len(nAnnual), nPop),
+      ", ",
+      rep(seq_len(nPop), each = nAnnual),
+      "]"
     )
-    y <- bind_rows(y, tibble(
-      term = term::as_term(bAnnual_terms),
-      parameter = "bAnnual",
-      estimate = 0
-    ))
+    y <- bind_rows(
+      y,
+      tibble(
+        term = term::as_term(bAnnual_terms),
+        parameter = "bAnnual",
+        estimate = 0
+      )
+    )
   }
 
   if (!("bAnnual[1, 1]" %in% y$term) && any(grepl("bAnnual", y$term))) {
-    y <- bind_rows(y, tibble(
-      term = term::as_term("bAnnual[1, 1]"),
-      parameter = "bAnnual",
-      estimate = 0
-    ))
+    y <- bind_rows(
+      y,
+      tibble(
+        term = term::as_term("bAnnual[1, 1]"),
+        parameter = "bAnnual",
+        estimate = 0
+      )
+    )
   }
 
   # Add bYear = 0 for non-trend models (needed by derived expressions)
   if (!any(y$parameter == "bYear")) {
     bYear_terms <- paste0("bYear[", seq_len(nPop), "]")
-    y <- bind_rows(y, tibble(
-      term = term::as_term(bYear_terms),
-      parameter = "bYear",
-      estimate = 0
-    ))
+    y <- bind_rows(
+      y,
+      tibble(
+        term = term::as_term(bYear_terms),
+        parameter = "bYear",
+        estimate = 0
+      )
+    )
   }
 
   arrange(y, .data$term)
@@ -145,7 +156,12 @@ estimates.bboufit_ml <- function(x, term = NULL, original_scale = FALSE, ...) {
     terms_exp <- y$term[y$term %in% c("sAnnual", "sMonth")]
     terms_ilogit <- y$term[y$term %in% c("adult_female_proportion")]
     y <- transform_cols(y, terms_exp, transform = exp, cols = "estimate")
-    y <- transform_cols(y, terms_ilogit, transform = nimble::ilogit, cols = "estimate")
+    y <- transform_cols(
+      y,
+      terms_ilogit,
+      transform = nimble::ilogit,
+      cols = "estimate"
+    )
   }
   y <- map(split(y, y$parameter), \(x) x$estimate)
   if (!length(term)) {

@@ -13,24 +13,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-model_data_survival <- function(data,
-                                include_uncertain_morts,
-                                year_start,
-                                allow_missing = FALSE,
-                                quiet) {
+model_data_survival <- function(
+  data,
+  include_uncertain_morts,
+  year_start,
+  allow_missing = FALSE,
+  quiet
+) {
   if (allow_missing) {
     placeholder <- is.na(data$Month)
-    unobserved_years <- caribou_year(data$Year[placeholder], year_start, year_start = year_start)
+    unobserved_years <- caribou_year(
+      data$Year[placeholder],
+      year_start,
+      year_start = year_start
+    )
     data <- data[!placeholder, ]
   }
   data <- data_clean_survival(data, quiet = quiet)
-  data <- data_prep_survival(data,
+  data <- data_prep_survival(
+    data,
     include_uncertain_morts = include_uncertain_morts,
     year_start = year_start
   )
   nAnnualObserved <- length(levels(data$Annual))
   if (allow_missing) {
-    all_years <- sort(union(levels(data$Annual), as.character(unobserved_years)))
+    all_years <- sort(union(
+      levels(data$Annual),
+      as.character(unobserved_years)
+    ))
     data$Annual <- factor(data$Annual, levels = all_years)
   }
   datal <- data_list_survival(data)
@@ -45,11 +55,13 @@ model_data_survival <- function(data,
 #' @param build_derivs A flag indicating whether to build derivatives Laplace approximation.
 #' @export
 #' @keywords Internal
-model_survival <- function(data,
-                           year_random = TRUE,
-                           year_trend = FALSE,
-                           priors = NULL,
-                           build_derivs = TRUE) {
+model_survival <- function(
+  data,
+  year_random = TRUE,
+  year_trend = FALSE,
+  priors = NULL,
+  build_derivs = TRUE
+) {
   constants <- list(
     b0_mu = priors[["b0_mu"]],
     b0_sd = priors[["b0_sd"]],
@@ -68,31 +80,31 @@ model_survival <- function(data,
     for (k in 1:nPopulation) {
       b0[k] ~ dnorm(b0_mu, sd = b0_sd)
     }
-    
+
     if (year_random) {
       sAnnual ~ dexp(sAnnual_rate)
       for (i in 1:nAnnual) {
         for (k in 1:nPopulation) {
-          bAnnual[i,k] ~ dnorm(0, sd = sAnnual)
+          bAnnual[i, k] ~ dnorm(0, sd = sAnnual)
         }
       }
     } else if (!year_random & !year_trend) {
-      # fixed year effect 
+      # fixed year effect
       for (k in 1:nPopulation) {
-        bAnnual[1,k] <- 0
+        bAnnual[1, k] <- 0
         for (i in 2:nAnnual) {
-          bAnnual[i,k] ~ dnorm(0, sd = bAnnual_sd)
+          bAnnual[i, k] ~ dnorm(0, sd = bAnnual_sd)
         }
       }
     } else {
       # no annual offsets if using year trend only
       for (i in 1:nAnnual) {
         for (k in 1:nPopulation) {
-          bAnnual[i,k] <- 0
+          bAnnual[i, k] <- 0
         }
       }
     }
-    
+
     if (year_trend) {
       for (k in 1:nPopulation) {
         bYear[k] ~ dnorm(bYear_mu, sd = bYear_sd)
@@ -102,53 +114,54 @@ model_survival <- function(data,
         bYear[k] <- 0
       }
     }
-    
+
     if (nMonth > 1) {
       sMonth ~ dexp(sMonth_rate)
       for (i in 1:nMonth) {
         for (k in 1:nPopulation) {
-          bMonth[i,k] ~ dnorm(0, sd = sMonth)
+          bMonth[i, k] ~ dnorm(0, sd = sMonth)
         }
       }
     } else {
       # no month effect if only one level
       for (i in 1:nMonth) {
         for (k in 1:nPopulation) {
-          bMonth[i,k] <- 0
+          bMonth[i, k] <- 0
         }
       }
     }
-    
+
     for (i in 1:nObs) {
-      logit(eSurvival[i]) <- 
+      logit(eSurvival[i]) <-
         b0[PopulationName[i]] +
         bAnnual[Annual[i], PopulationName[i]] +
         bYear[PopulationName[i]] * CaribouYear[i] +
         bMonth[Month[i], PopulationName[i]]
     }
-    
+
     for (i in 1:nObs) {
       Mortalities[i] ~ dbin(1 - eSurvival[i], StartTotal[i])
     }
   })
-  
+
   # always quiet
   verbose <- nimbleOptions("verbose")
   enable_derivs <- nimbleOptions("enableDerivs")
   nimbleOptions(verbose = FALSE)
   nimbleOptions(enableDerivs = TRUE)
-  
-  model <- nimbleModel(code,
-                       constants = constants,
-                       # priors too vague - causes warning of logprob = -Inf unless inits constrained
-                       inits = list(b0 = rnorm(data$nPopulation, 3, 2)),
-                       buildDerivs = build_derivs,
-                       name = "bboumodel_survival"
+
+  model <- nimbleModel(
+    code,
+    constants = constants,
+    # priors too vague - causes warning of logprob = -Inf unless inits constrained
+    inits = list(b0 = rnorm(data$nPopulation, 3, 2)),
+    buildDerivs = build_derivs,
+    name = "bboumodel_survival"
   )
-  
+
   # reset to user
   nimbleOptions(verbose = verbose)
   nimbleOptions(enableDerivs = enable_derivs)
-  
+
   model
 }

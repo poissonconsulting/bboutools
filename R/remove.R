@@ -31,11 +31,17 @@ remove_0 <- function(x, col = "StartTotal", quiet = FALSE) {
   x2
 }
 
-remove_sum0 <- function(x, cols = c("Cows", "Bulls", "UnknownAdults", "Yearlings", "Calves"), quiet = FALSE) {
+remove_sum0 <- function(
+  x,
+  cols = c("Cows", "Bulls", "UnknownAdults", "Yearlings", "Calves"),
+  quiet = FALSE
+) {
   x2 <- x[rowSums(x[cols]) != 0, ]
   rows <- nrow(x) - nrow(x2)
   if (rows > 0 && !quiet) {
-    message(glue("Removed {rows} rows where columns {chk::cc(cols, ' and ')} sum to 0."))
+    message(glue(
+      "Removed {rows} rows where columns {chk::cc(cols, ' and ')} sum to 0."
+    ))
   }
   x2
 }

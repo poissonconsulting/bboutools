@@ -27,7 +27,9 @@ test_that("bb_predict_survival_trend_samples fails if no year trend fit", {
 })
 
 test_that("bb_predict_survival_trend_samples works with ML", {
-  predict <- bb_predict_survival_trend_samples(bboutools:::fit_survival_ml_trend)
+  predict <- bb_predict_survival_trend_samples(
+    bboutools:::fit_survival_ml_trend
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")
@@ -36,7 +38,9 @@ test_that("bb_predict_survival_trend_samples works with ML", {
 })
 
 test_that("bb_predict_recruitment_trend_samples works", {
-  predict <- bb_predict_recruitment_trend_samples(bboutools:::fit_recruitment_trend)
+  predict <- bb_predict_recruitment_trend_samples(
+    bboutools:::fit_recruitment_trend
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")
@@ -45,11 +49,15 @@ test_that("bb_predict_recruitment_trend_samples works", {
 })
 
 test_that("bb_predict_recruitment_trend_samples fails if no year trend fit", {
-  expect_chk_error(bb_predict_recruitment_trend_samples(bboutools:::fit_recruitment))
+  expect_chk_error(bb_predict_recruitment_trend_samples(
+    bboutools:::fit_recruitment
+  ))
 })
 
 test_that("bb_predict_recruitment_trend_samples works with ML", {
-  predict <- bb_predict_recruitment_trend_samples(bboutools:::fit_recruitment_ml_trend)
+  predict <- bb_predict_recruitment_trend_samples(
+    bboutools:::fit_recruitment_ml_trend
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")
@@ -58,7 +66,9 @@ test_that("bb_predict_recruitment_trend_samples works with ML", {
 })
 
 test_that("bb_predict_calf_cow_ratio_trend_samples works", {
-  predict <- bb_predict_calf_cow_ratio_trend_samples(bboutools:::fit_recruitment_trend)
+  predict <- bb_predict_calf_cow_ratio_trend_samples(
+    bboutools:::fit_recruitment_trend
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")
@@ -67,11 +77,15 @@ test_that("bb_predict_calf_cow_ratio_trend_samples works", {
 })
 
 test_that("bb_predict_calf_cow_ratio_trend_samples fails if no year trend fit", {
-  expect_chk_error(bb_predict_calf_cow_ratio_trend_samples(bboutools:::fit_recruitment))
+  expect_chk_error(bb_predict_calf_cow_ratio_trend_samples(
+    bboutools:::fit_recruitment
+  ))
 })
 
 test_that("bb_predict_calf_cow_ratio_trend_samples works with ML", {
-  predict <- bb_predict_calf_cow_ratio_trend_samples(bboutools:::fit_recruitment_ml_trend)
+  predict <- bb_predict_calf_cow_ratio_trend_samples(
+    bboutools:::fit_recruitment_ml_trend
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")

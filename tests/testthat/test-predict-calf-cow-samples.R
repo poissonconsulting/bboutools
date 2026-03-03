@@ -23,7 +23,10 @@ test_that("bb_predict_calf_cow_ratio_samples works", {
 })
 
 test_that("bb_predict_calf_cow_ratio_samples year FALSE works", {
-  predict <- bb_predict_calf_cow_ratio_samples(bboutools:::fit_recruitment, year = FALSE)
+  predict <- bb_predict_calf_cow_ratio_samples(
+    bboutools:::fit_recruitment,
+    year = FALSE
+  )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))
   expect_s3_class(predict$samples, "mcmcarray")

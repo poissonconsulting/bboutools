@@ -14,11 +14,16 @@
 # limitations under the License.
 
 data_clean_recruitment <- function(data, quiet = FALSE) {
-  data <- remove_missing(data,
+  data <- remove_missing(
+    data,
     quiet = quiet,
     cols = c(
-      "Yearlings", "Cows", "UnknownAdults",
-      "Year", "Month", "Day"
+      "Yearlings",
+      "Cows",
+      "UnknownAdults",
+      "Year",
+      "Month",
+      "Day"
     )
   )
   data
@@ -26,7 +31,11 @@ data_clean_recruitment <- function(data, quiet = FALSE) {
 
 data_prep_recruitment <- function(data, year_start = 4L) {
   data$CowsBulls <- data$Cows + data$Bulls
-  data$CaribouYear <- caribou_year(data$Year, data$Month, year_start = year_start)
+  data$CaribouYear <- caribou_year(
+    data$Year,
+    data$Month,
+    year_start = year_start
+  )
   data <-
     data %>%
     dplyr::group_by(CaribouYear, PopulationName) %>%

@@ -43,7 +43,12 @@ bb_plot_year_recruitment.data.frame <- function(x, ...) {
 #' @describeIn bb_plot_year_recruitment Plot annual recruitment estimates for a bboufit_recruitment object.
 #' @inheritParams params
 #' @export
-bb_plot_year_recruitment.bboufit_recruitment <- function(x, conf_level = 0.95, estimate = median, ...) {
+bb_plot_year_recruitment.bboufit_recruitment <- function(
+  x,
+  conf_level = 0.95,
+  estimate = median,
+  ...
+) {
   chk_unused(...)
   x <- predict(x, conf_level = conf_level, estimate = estimate)
   bb_plot_year_recruitment(x)

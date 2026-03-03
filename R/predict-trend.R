@@ -31,19 +31,18 @@ predict_trend <- function(fit, derived_expr) {
 #' @return A 'mcmcarray' object containing the modified MCMC samples.
 #' @export
 #' @family analysis
-bb_predict_recruitment_trend_samples <- function(recruitment,
-                                         sex_ratio = 0.5) {
+bb_predict_recruitment_trend_samples <- function(recruitment, sex_ratio = 0.5) {
   chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
   chk_s3_class(recruitment, "bboufit_recruitment")
   .chk_year_trend(recruitment)
   chk_number(sex_ratio)
   chk_range(sex_ratio)
-  
+
   predicted <- predict_trend(
     fit = recruitment,
     derived_expr = derived_expr_recruitment_trend()
   )
-  
+
   rec <- predicted$samples
   class(rec) <- "mcmcarray"
   rec <- rec * sex_ratio
@@ -63,17 +62,21 @@ bb_predict_recruitment_trend_samples <- function(recruitment,
 #' @return A tibble of the predicted estimates.
 #' @export
 #' @family analysis
-bb_predict_recruitment_trend <- function(recruitment,
-                                         sex_ratio = 0.5,
-                                         conf_level = 0.95,
-                                         estimate = median,
-                                         sig_fig = 5) {
-
+bb_predict_recruitment_trend <- function(
+  recruitment,
+  sex_ratio = 0.5,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 5
+) {
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
 
-  predicted <- bb_predict_recruitment_trend_samples(recruitment, sex_ratio = sex_ratio)
+  predicted <- bb_predict_recruitment_trend_samples(
+    recruitment,
+    sex_ratio = sex_ratio
+  )
 
   coef <- predict_coef(
     samples = predicted$samples,
@@ -114,10 +117,12 @@ bb_predict_calf_cow_ratio_trend_samples <- function(recruitment) {
 #' @return A tibble of the predicted estimates.
 #' @export
 #' @family analysis
-bb_predict_calf_cow_ratio_trend <- function(recruitment,
-                                         conf_level = 0.95,
-                                         estimate = median,
-                                         sig_fig = 5) {
+bb_predict_calf_cow_ratio_trend <- function(
+  recruitment,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 5
+) {
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
@@ -163,10 +168,12 @@ bb_predict_survival_trend_samples <- function(survival) {
 #' @return A tibble of the predicted estimates.
 #' @export
 #' @family analysis
-bb_predict_survival_trend <- function(survival,
-                                      conf_level = 0.95,
-                                      estimate = median,
-                                      sig_fig = 5) {
+bb_predict_survival_trend <- function(
+  survival,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 5
+) {
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)

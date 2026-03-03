@@ -64,11 +64,15 @@ test_that("bb_predict_calf_cow_ratio_trend fails if no year trend fit", {
 })
 
 test_that("bb_predict_calf_cow_ratio_trend works with ML", {
-  predict <- bb_predict_calf_cow_ratio_trend(bboutools:::fit_recruitment_ml_trend)
+  predict <- bb_predict_calf_cow_ratio_trend(
+    bboutools:::fit_recruitment_ml_trend
+  )
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_calf_cow_ratio_trend_trend_ml")
 })
 
 test_that("bb_predict_calf_cow_ratio_trend fails if no year trend fit", {
-  expect_chk_error(bb_predict_calf_cow_ratio_trend(bboutools:::fit_recruitment_ml))
+  expect_chk_error(bb_predict_calf_cow_ratio_trend(
+    bboutools:::fit_recruitment_ml
+  ))
 })

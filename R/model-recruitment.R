@@ -13,18 +13,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-model_data_recruitment <- function(data, year_start = year_start,
-                                   allow_missing = FALSE, quiet) {
+model_data_recruitment <- function(
+  data,
+  year_start = year_start,
+  allow_missing = FALSE,
+  quiet
+) {
   if (allow_missing) {
     placeholder <- is.na(data$Month)
-    unobserved_years <- caribou_year(data$Year[placeholder], year_start, year_start = year_start)
+    unobserved_years <- caribou_year(
+      data$Year[placeholder],
+      year_start,
+      year_start = year_start
+    )
     data <- data[!placeholder, ]
   }
   data <- data_clean_recruitment(data, quiet = quiet)
   data <- data_prep_recruitment(data, year_start = year_start)
   nAnnualObserved <- length(levels(data$Annual))
   if (allow_missing) {
-    all_years <- sort(union(levels(data$Annual), as.character(unobserved_years)))
+    all_years <- sort(union(
+      levels(data$Annual),
+      as.character(unobserved_years)
+    ))
     data$Annual <- factor(data$Annual, levels = all_years)
   }
   datal <- data_list_recruitment(data)
@@ -40,13 +51,15 @@ model_data_recruitment <- function(data, year_start = year_start,
 #' @export
 #' @keywords Internal
 model_recruitment <-
-  function(data,
-           year_random = TRUE,
-           year_trend = TRUE,
-           adult_female_proportion = 0.65,
-           sex_ratio = 0.5,
-           demographic_stochasticity = TRUE,
-           priors = NULL) {
+  function(
+    data,
+    year_random = TRUE,
+    year_trend = TRUE,
+    adult_female_proportion = 0.65,
+    sex_ratio = 0.5,
+    demographic_stochasticity = TRUE,
+    priors = NULL
+  ) {
     constants <- list(
       b0_mu = priors[["b0_mu"]],
       b0_sd = priors[["b0_sd"]],
@@ -83,21 +96,21 @@ model_recruitment <-
         sAnnual ~ dexp(sAnnual_rate)
         for (i in 1:nAnnual) {
           for (k in 1:nPopulation) {
-            bAnnual[i,k] ~ dnorm(0, sd = sAnnual)
+            bAnnual[i, k] ~ dnorm(0, sd = sAnnual)
           }
         }
       } else if (!year_random & !year_trend) {
         for (k in 1:nPopulation) {
-          bAnnual[1,k] <- 0
+          bAnnual[1, k] <- 0
           for (i in 2:nAnnual) {
-            bAnnual[i,k] ~ dnorm(0, sd = bAnnual_sd)
+            bAnnual[i, k] ~ dnorm(0, sd = bAnnual_sd)
           }
         }
       } else {
         # no annual offsets if using year trend only
         for (i in 1:nAnnual) {
           for (k in 1:nPopulation) {
-            bAnnual[i,k] <- 0
+            bAnnual[i, k] <- 0
           }
         }
       }
@@ -128,7 +141,10 @@ model_recruitment <-
       if (demographic_stochasticity) {
         for (i in 1:nObs) {
           FemaleYearlings[i] ~ dbin(sex_ratio, Yearlings[i])
-          OtherAdultsFemales[i] ~ dbin(adult_female_proportion, UnknownAdults[i])
+          OtherAdultsFemales[i] ~ dbin(
+            adult_female_proportion,
+            UnknownAdults[i]
+          )
         }
       } else {
         for (i in 1:nObs) {
@@ -143,7 +159,9 @@ model_recruitment <-
           # this replaces max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
           # in original model because max cannot be used with ML
           ((FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]) < 1) +
-          FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]
+          FemaleYearlings[i] +
+          Cows[i] +
+          OtherAdultsFemales[i]
         Calves[i] ~ dbin(eRecruitment[i], AdultsFemales[i])
       }
     })
@@ -154,7 +172,8 @@ model_recruitment <-
     nimbleOptions(verbose = FALSE)
     nimbleOptions(enableDerivs = TRUE)
 
-    model <- nimbleModel(code,
+    model <- nimbleModel(
+      code,
       constants = constants,
       # priors too vague - causes warning of logprob = -Inf unless inits constrained
       inits = list(b0 = rnorm(data$nPopulation, -1, 2)),

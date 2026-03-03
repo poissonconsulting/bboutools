@@ -17,9 +17,12 @@ extract_lik <- function(x) {
   x <- as.character(model_code(x))
   x <- x[grepl("log|logit", x)]
   x <- regmatches(x, regexpr("b0([^\\\n]*)", text = x))
-  gsub("bAnnual[Annual[i], PopulationName[i]]",
-       "bAnnual[Annual[i], PopulationName[i]] * Observed[i]",
-       x, fixed = TRUE)
+  gsub(
+    "bAnnual[Annual[i], PopulationName[i]]",
+    "bAnnual[Annual[i], PopulationName[i]] * Observed[i]",
+    x,
+    fixed = TRUE
+  )
 }
 
 extract_lik_year <- function(x) {
@@ -30,13 +33,16 @@ extract_lik_year <- function(x) {
 derived_expr_survival <- function(fit, year, month) {
   lik_year <- extract_lik_year(fit)
   if (year) {
-    
     if (month) {
-      pred <- paste0("logit(ilogit(", lik_year, " + bMonth[Month[i], PopulationName[i]])^12)")
+      pred <- paste0(
+        "logit(ilogit(",
+        lik_year,
+        " + bMonth[Month[i], PopulationName[i]])^12)"
+      )
     } else {
-      if(length(levels(fit$data$Month)) > 1){
+      if (length(levels(fit$data$Month)) > 1) {
         pred <- paste0("logit(ilogit(", lik_year, ")^12)")
-      }else{
+      } else {
         pred <- paste0("logit(ilogit(", lik_year, "))")
       }
     }
@@ -44,15 +50,19 @@ derived_expr_survival <- function(fit, year, month) {
     if (month) {
       pred <- "logit(ilogit(b0[PopulationName[i]] + bMonth[Month[i], PopulationName[i]])^12)"
     } else {
-      if(length(levels(fit$data$Month)) > 1){
+      if (length(levels(fit$data$Month)) > 1) {
         pred <- "logit(ilogit(b0[PopulationName[i]])^12)"
-      }else{
+      } else {
         pred <- "logit(ilogit(b0[PopulationName[i]]))"
       }
     }
   }
-  paste0("for(i in 1:length(Annual)) {
-  logit(prediction[i]) <- ", pred, "\n}")
+  paste0(
+    "for(i in 1:length(Annual)) {
+  logit(prediction[i]) <- ",
+    pred,
+    "\n}"
+  )
 }
 
 derived_expr_recruitment <- function(fit, year) {
@@ -60,8 +70,12 @@ derived_expr_recruitment <- function(fit, year) {
   if (year) {
     lik <- extract_lik(fit)
   }
-  paste0("for(i in 1:length(Annual)) {
-  logit(prediction[i]) <- ", lik, "\n}")
+  paste0(
+    "for(i in 1:length(Annual)) {
+  logit(prediction[i]) <- ",
+    lik,
+    "\n}"
+  )
 }
 
 derived_expr_recruitment_trend <- function() {

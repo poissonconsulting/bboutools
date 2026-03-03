@@ -64,7 +64,11 @@ bb_fit_survival <- function(
 ) {
   chk_data(data)
   chk_flag(allow_missing)
-  bbd_chk_data_survival(data, multi_population = TRUE, allow_missing = allow_missing)
+  bbd_chk_data_survival(
+    data,
+    multi_population = TRUE,
+    allow_missing = allow_missing
+  )
   chk_whole_number(min_random_year)
   chk_gte(min_random_year)
   chk_flag(year_trend)
@@ -91,7 +95,9 @@ bb_fit_survival <- function(
   nAnnual <- if (allow_missing) data$nAnnualObserved else data$datal$nAnnual
   year_random <- nAnnual >= min_random_year
   if (allow_missing && !year_random) {
-    abort_chk("`allow_missing` requires year to be fit as a random effect. Increase the number of observed years or decrease `min_random_year`.")
+    abort_chk(
+      "`allow_missing` requires year to be fit as a random effect. Increase the number of observed years or decrease `min_random_year`."
+    )
   }
   if (!year_random && year_trend) {
     message_trend_fixed()

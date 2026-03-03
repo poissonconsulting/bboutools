@@ -39,7 +39,12 @@ ci_upper <- function(x, se, conf_level) {
   se
 }
 
-transform_cols <- function(x, terms, transform = exp, cols = c("estimate", "lower", "upper")) {
+transform_cols <- function(
+  x,
+  terms,
+  transform = exp,
+  cols = c("estimate", "lower", "upper")
+) {
   for (term in terms) {
     x[x$term == term, cols] <- map(x[x$term == term, cols], transform)
   }
@@ -64,12 +69,14 @@ generics::tidy
 #'   fit <- bb_fit_survival(bboudata::bbousurv_a)
 #'   tidy(fit)
 #' }
-tidy.bboufit <- function(x,
-                         conf_level = 0.95,
-                         estimate = median,
-                         sig_fig = 3,
-                         include_random_effects = TRUE,
-                         ...) {
+tidy.bboufit <- function(
+  x,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 3,
+  include_random_effects = TRUE,
+  ...
+) {
   .chk_fit(x)
   chk_range(conf_level, c(0, 1))
   chk_is(estimate, "function")
@@ -105,11 +112,13 @@ tidy.bboufit <- function(x,
 #'   tidy(fit)
 #' }
 tidy.bboufit_ml <-
-  function(x,
-           conf_level = 0.95,
-           sig_fig = 3,
-           include_random_effects = TRUE,
-           ...) {
+  function(
+    x,
+    conf_level = 0.95,
+    sig_fig = 3,
+    include_random_effects = TRUE,
+    ...
+  ) {
     .chk_fit_ml(x)
     chk_range(conf_level, c(0, 1))
     chk_whole_number(sig_fig)

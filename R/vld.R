@@ -21,7 +21,19 @@
   all(
     vld_s3_class(x, "bboufit"),
     vld_subset(names(x), c("model", "samples", "data", "model_code")),
-    vld_true(all(names(attributes(x)) %in% c("names", "nthin", "model", "nobs", "niters", "year_trend", "year_start", "class"))),
+    vld_true(all(
+      names(attributes(x)) %in%
+        c(
+          "names",
+          "nthin",
+          "model",
+          "nobs",
+          "niters",
+          "year_trend",
+          "year_start",
+          "class"
+        )
+    )),
     vld_s3_class(x$samples, "mcmcr")
   )
 }

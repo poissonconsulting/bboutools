@@ -70,7 +70,7 @@ test_that("year trend works", {
 
   const <- vars_to_df(model$getConstants())
   const$CaribouYear <- round(const$CaribouYear, 3)
-  
+
   expect_snapshot_data(code_to_df(model$getCode()), "trend_code")
   expect_snapshot_data(const, "trend_const")
 })
@@ -91,7 +91,7 @@ test_that("year trend only works", {
 
   const <- vars_to_df(model$getConstants())
   const$CaribouYear <- round(const$CaribouYear, 3)
-  
+
   expect_snapshot_data(code_to_df(model$getCode()), "trend_only_code")
   expect_snapshot_data(const, "trend_only_const")
 })
@@ -101,7 +101,10 @@ test_that("can include_uncertain_morts", {
 
   set.seed(101)
   x <- bboudata::bbousurv_a
-  x$MortalitiesUncertain <- pmin(x$StartTotal - x$MortalitiesCertain, rbinom(nrow(x), prob = 0.1, size = 1))
+  x$MortalitiesUncertain <- pmin(
+    x$StartTotal - x$MortalitiesCertain,
+    rbinom(nrow(x), prob = 0.1, size = 1)
+  )
   x <- data_prep_survival(x)
   x <- data_list_survival(x)
   model <- model_survival(
@@ -114,7 +117,10 @@ test_that("can include_uncertain_morts", {
   const <- vars_to_df(model$getConstants())
   const$CaribouYear <- round(const$CaribouYear, 3)
   expect_snapshot_data(const, "uncertain_morts_const")
-  expect_snapshot_data(data.frame(morts = model$Mortalities), "uncertain_morts_morts")
+  expect_snapshot_data(
+    data.frame(morts = model$Mortalities),
+    "uncertain_morts_morts"
+  )
 })
 
 test_that("survival year start works", {

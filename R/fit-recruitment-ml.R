@@ -37,14 +37,15 @@
 #'   fit <- bb_fit_recruitment_ml(bboudata::bbourecruit_a)
 #' }
 bb_fit_recruitment_ml <- function(
-    data,
-    adult_female_proportion = 0.65,
-    sex_ratio = 0.5,
-    min_random_year = 5,
-    year_trend = FALSE,
-    year_start = 4L,
-    inits = NULL,
-    quiet = FALSE) {
+  data,
+  adult_female_proportion = 0.65,
+  sex_ratio = 0.5,
+  min_random_year = 5,
+  year_trend = FALSE,
+  year_start = 4L,
+  inits = NULL,
+  quiet = FALSE
+) {
   chk_data(data)
   bbd_chk_data_recruitment(data, multi_population = FALSE)
   chk_null_or(adult_female_proportion, vld = vld_range)

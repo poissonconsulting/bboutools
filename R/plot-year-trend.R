@@ -15,12 +15,15 @@
 
 plot_year_trend <- function(x, ...) {
   chk_unused(...)
-  check_data(x, values = list(
-    CaribouYear = 1L,
-    estimate = c(0, Inf),
-    lower = c(0, Inf, NA),
-    upper = c(0, Inf, NA)
-  ))
+  check_data(
+    x,
+    values = list(
+      CaribouYear = 1L,
+      estimate = c(0, Inf),
+      lower = c(0, Inf, NA),
+      upper = c(0, Inf, NA)
+    )
+  )
 
   gp <- ggplot(data = x) +
     aes(
@@ -28,7 +31,9 @@ plot_year_trend <- function(x, ...) {
       y = .data$estimate
     ) +
     geom_line() +
-    scale_x_continuous(breaks = \(x) unique(as.integer(round(scales::breaks_pretty()(x))))) +
+    scale_x_continuous(breaks = \(x) {
+      unique(as.integer(round(scales::breaks_pretty()(x))))
+    }) +
     xlab("Caribou Year")
 
   if (any(is.na(x$lower))) {
@@ -37,10 +42,13 @@ plot_year_trend <- function(x, ...) {
 
   .add_facet_pop(
     gp +
-      geom_ribbon(aes(
-        ymin = .data$lower,
-        ymax = .data$upper
-      ), alpha = 0.2),
+      geom_ribbon(
+        aes(
+          ymin = .data$lower,
+          ymax = .data$upper
+        ),
+        alpha = 0.2
+      ),
     x
   )
 }

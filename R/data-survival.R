@@ -20,20 +20,30 @@ data_clean_survival <- function(data, quiet) {
   data
 }
 
-data_prep_survival <- function(data, include_uncertain_morts = TRUE,
-                               year_start = 4L) {
+data_prep_survival <- function(
+  data,
+  include_uncertain_morts = TRUE,
+  year_start = 4L
+) {
   data$Mortalities <- data$MortalitiesCertain
   if (include_uncertain_morts) {
     data$Mortalities <- data$Mortalities + data$MortalitiesUncertain
   }
-  data$CaribouYear <- caribou_year(data$Year, data$Month, year_start = year_start)
+  data$CaribouYear <- caribou_year(
+    data$Year,
+    data$Month,
+    year_start = year_start
+  )
   data$Annual <- factor(data$CaribouYear)
   data$PopulationName <- factor(data$PopulationName)
 
   # leaves month but sets factor levels to be caribou month for model
   nmonth <- length(unique(data$Month))
-  if(nmonth > 1) {
-    data$Month <- factor(data$Month, levels = month_levels(year_start, n = nmonth))
+  if (nmonth > 1) {
+    data$Month <- factor(
+      data$Month,
+      levels = month_levels(year_start, n = nmonth)
+    )
   } else {
     data$Month <- factor(year_start)
   }
