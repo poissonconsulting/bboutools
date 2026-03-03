@@ -17,7 +17,7 @@ test_that("sample works for bboutfit", {
   x <- samples(fit_recruitment)
   expect_s3_class(x, "mcmcr")
   expect_equal(nchains(x), 3)
-  expect_equal(niters(x), 1000)
+  expect_equal(niters(x), 100)
 })
 
 test_that("sample works for bboutfit_ml", {

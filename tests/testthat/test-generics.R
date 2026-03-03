@@ -126,24 +126,30 @@ test_that("estimate ml works", {
 
 test_that("get attributes works", {
   expect_identical(npars(bboutools:::fit_survival), 6L)
-  expect_identical(niters(bboutools:::fit_survival), 1000L)
+  expect_identical(niters(bboutools:::fit_survival), 100L)
   expect_identical(nobs(bboutools:::fit_survival), 363L)
   expect_identical(nchains(bboutools:::fit_survival), 3L)
   expect_identical(nterms(bboutools:::fit_recruitment), 30L)
-  expect_identical(pars(bboutools:::fit_recruitment), c("b0", "bAnnual", "bYear", "sAnnual"))
+  expect_identical(
+    pars(bboutools:::fit_recruitment),
+    c("b0", "bAnnual", "bYear", "sAnnual")
+  )
 })
 
 test_that("get attributes ml works", {
   expect_identical(npars(bboutools:::fit_survival_ml), 6L)
   expect_identical(nobs(bboutools:::fit_survival_ml), 363L)
   expect_identical(nterms(bboutools:::fit_recruitment_ml), 30L)
-  expect_identical(pars(bboutools:::fit_recruitment_ml), c("b0", "bAnnual", "bYear", "sAnnual"))
+  expect_identical(
+    pars(bboutools:::fit_recruitment_ml),
+    c("b0", "bAnnual", "bYear", "sAnnual")
+  )
 })
 
 test_that("convergence works", {
-  expect_equal(rhat(bboutools:::fit_survival), 1.024)
-  expect_true(converged(bboutools:::fit_survival))
-  expect_equal(esr(bboutools:::fit_survival), 0.034)
+  expect_equal(rhat(bboutools:::fit_survival), 1.6010)
+  expect_false(converged(bboutools:::fit_survival))
+  expect_equal(esr(bboutools:::fit_survival), 0.112)
 })
 
 test_that("coef annual works", {

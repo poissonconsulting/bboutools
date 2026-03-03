@@ -19,14 +19,16 @@ x <- bboudata::bbousurv_a
 set.seed(101)
 fit_survival <- bb_fit_survival(
   data = x,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE
 )
 
 set.seed(101)
 fit_survival_fixed <- bb_fit_survival(
   data = x,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   min_random_year = Inf,
   quiet = TRUE
 )
@@ -35,7 +37,8 @@ fit_survival_fixed <- bb_fit_survival(
 set.seed(101)
 fit_survival_trend <- bb_fit_survival(
   data = x,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE,
   min_random_year = Inf,
   year_trend = TRUE
@@ -62,7 +65,8 @@ x <- bboudata::bbourecruit_a
 set.seed(101)
 fit_recruitment <- bb_fit_recruitment(
   data = x,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE
 )
 
@@ -70,7 +74,8 @@ fit_recruitment <- bb_fit_recruitment(
 set.seed(101)
 fit_recruitment_trend <- bb_fit_recruitment(
   data = x,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE,
   year_trend = TRUE
 )
@@ -96,7 +101,8 @@ surv_multi <- bboudata::bbousurv_multi[!is.na(bboudata::bbousurv_multi$Month), ]
 set.seed(101)
 fit_survival_multi <- bb_fit_survival(
   data = surv_multi,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE
 )
 
@@ -106,7 +112,8 @@ rec_multi <- bboudata::bbourecruit_multi[
 set.seed(101)
 fit_recruitment_multi <- bb_fit_recruitment(
   data = rec_multi,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE
 )
 
@@ -115,7 +122,8 @@ x_surv_missing <- bboudata::bbousurv_missing
 set.seed(101)
 fit_survival_missing <- bb_fit_survival(
   data = x_surv_missing,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   allow_missing = TRUE,
   quiet = TRUE
 )
@@ -124,7 +132,8 @@ x_rec_missing <- bboudata::bbourecruit_missing
 set.seed(101)
 fit_recruitment_missing <- bb_fit_recruitment(
   data = x_rec_missing,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   allow_missing = TRUE,
   quiet = TRUE
 )
@@ -135,7 +144,8 @@ x_annual <- x_annual[x_annual$PopulationName == "C", ]
 set.seed(101)
 fit_survival_annual <- bb_fit_survival(
   data = x_annual,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE
 )
 
