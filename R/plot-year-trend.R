@@ -28,7 +28,8 @@ plot_year_trend <- function(x, ...) {
       y = .data$estimate
     ) +
     geom_line() +
-    xlab(" Caribou Year")
+    scale_x_continuous(breaks = scales::breaks_pretty(), labels = as.integer) +
+    xlab("Caribou Year")
 
   if (any(is.na(x$lower))) {
     return(.add_facet_pop(gp, x))
