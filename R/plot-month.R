@@ -51,10 +51,10 @@ bb_plot_month.data.frame <- function(x, ...) {
   }
 
   if (length(x$Month)) {
-    return(gp + scale_x_discrete(breaks = breaks2, labels = month.abb[breaks2], drop = FALSE))
+    return(.add_facet_pop(gp + scale_x_discrete(breaks = breaks2, labels = month.abb[breaks2], drop = FALSE), x))
   }
 
-  gp
+  .add_facet_pop(gp, x)
 }
 
 #' @describeIn bb_plot_month Plot monthly estimates for a bboufit_survival object.

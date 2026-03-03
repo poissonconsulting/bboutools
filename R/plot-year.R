@@ -13,6 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+.add_facet_pop <- function(gp, x) {
+  if ("PopulationName" %in% names(x) && length(unique(x$PopulationName)) > 1) {
+    n_pops <- length(unique(x$PopulationName))
+    gp <- gp + ggplot2::facet_wrap(~PopulationName, ncol = ceiling(sqrt(n_pops)))
+  }
+  gp
+}
+
 #' Plot Year
 #'
 #' Plots annual estimates with credible limits.
@@ -44,9 +52,9 @@ bb_plot_year.data.frame <- function(x, ...) {
     xlab("Caribou Year")
 
   if (any(is.na(x$lower))) {
-    return(gp + ggplot2::geom_point())
+    return(.add_facet_pop(gp + ggplot2::geom_point(), x))
   }
-  gp + geom_pointrange()
+  .add_facet_pop(gp + geom_pointrange(), x)
 }
 
 #' @describeIn bb_plot_year Plot annual estimates for a bboufit object.

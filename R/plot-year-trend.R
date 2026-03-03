@@ -31,12 +31,15 @@ plot_year_trend <- function(x, ...) {
     xlab(" Caribou Year")
 
   if (any(is.na(x$lower))) {
-    return(gp)
+    return(.add_facet_pop(gp, x))
   }
 
-  gp +
-    geom_ribbon(aes(
-      ymin = .data$lower,
-      ymax = .data$upper
-    ), alpha = 0.2)
+  .add_facet_pop(
+    gp +
+      geom_ribbon(aes(
+        ymin = .data$lower,
+        ymax = .data$upper
+      ), alpha = 0.2),
+    x
+  )
 }

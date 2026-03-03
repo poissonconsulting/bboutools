@@ -40,3 +40,17 @@ test_that("bb_plot_year_population_change ML works", {
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "plot_year_population_change_ml")
 })
+
+test_that("bb_plot_year_growth multi-pop works", {
+  prediction <- bb_predict_growth(bboutools:::fit_survival_multi, bboutools:::fit_recruitment_multi)
+  plot <- bb_plot_year_growth(prediction)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_growth_multi")
+})
+
+test_that("bb_plot_year_population_change multi-pop works", {
+  prediction <- bb_predict_population_change(bboutools:::fit_survival_multi, bboutools:::fit_recruitment_multi)
+  plot <- bb_plot_year_population_change(prediction)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_population_change_multi")
+})

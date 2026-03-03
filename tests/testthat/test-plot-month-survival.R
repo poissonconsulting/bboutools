@@ -45,3 +45,9 @@ test_that("plot_month_survival annual errors", {
     "`month` must be FALSE for annual survival data."
   )
 })
+
+test_that("plot_month_survival multi-pop works", {
+  plot <- bb_plot_month_survival(bboutools:::fit_survival_multi)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_month_survival_multi")
+})

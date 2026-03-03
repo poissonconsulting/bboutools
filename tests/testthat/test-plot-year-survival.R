@@ -44,3 +44,11 @@ test_that("plot_year_survival annual works", {
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "plot_year_survival_annual")
 })
+
+test_that("plot_year_survival multi-pop works", {
+  plot <- bb_plot_year_survival(bboutools:::fit_survival_multi)
+  gp <- bb_plot_year_survival(bboutools:::fit_survival_multi) +
+    ggplot2::facet_wrap(~PopulationName, ncol = 3)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_survival_multi")
+})
