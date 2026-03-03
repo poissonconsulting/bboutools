@@ -43,3 +43,34 @@ test_that("survival ml works", {
   )
   expect_snapshot_data(coef(fit), "default")
 })
+
+test_that("survival ml annual works", {
+  skip_on_covr()
+  skip_on_os("windows")
+
+  inits <- list(
+    b0 = 5,
+    sAnnual = 0.2
+  )
+
+  x <- bboudata::bbousurv_annual
+  x <- x[x$PopulationName == "C", ]
+  fit <- bb_fit_survival_ml(
+    data = x,
+    inits = inits,
+    quiet = TRUE
+  )
+
+  expect_s3_class(fit, "bboufit_ml")
+  expect_identical(
+    names(fit),
+    c("summary", "mle", "model", "data", "model_code")
+  )
+  expect_s4_class(fit$summary, "AGHQuad_summary")
+  expect_s4_class(fit$mle, "OptimResultNimbleList")
+  expect_setequal(
+    pars(fit),
+    c("b0", "bAnnual", "bYear", "sAnnual")
+  )
+  expect_snapshot_data(coef(fit), "annual")
+})

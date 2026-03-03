@@ -83,3 +83,23 @@ test_that("can set niters", {
   expect_identical(length(fit$samples$b0[1, , 1]), niter)
   expect_snapshot_data(coef(fit), "niters")
 })
+
+test_that("survival annual works", {
+  skip_on_covr()
+
+  x <- bboudata::bbousurv_annual
+  x <- x[x$PopulationName == "C", ]
+  set.seed(101)
+  fit <- bb_fit_survival(
+    data = x,
+    nthin = 1,
+    quiet = TRUE
+  )
+
+  expect_s3_class(fit, "bboufit")
+  expect_s3_class(fit, "bboufit_survival")
+  expect_identical(names(fit), c("model", "samples", "data", "model_code"))
+  expect_s3_class(fit$samples, "mcmcr")
+  expect_s3_class(fit$data, "data.frame")
+  expect_snapshot_data(coef(fit), "annual")
+})

@@ -40,3 +40,18 @@ test_that("data annual", {
   expect_identical(x2$datal$nPopulation, 2L)
   expect_identical(x2$datal$nMonth, 1L)
 })
+
+test_that("data annual single pop", {
+  x <- bboudata::bbousurv_annual
+  x <- x[x$PopulationName == "C", ]
+  x2 <- model_data_survival(
+    x,
+    include_uncertain_morts = TRUE,
+    year_start = 4L,
+    quiet = TRUE
+  )
+
+  expect_identical(x2$datal$nAnnual, 9L)
+  expect_identical(x2$datal$nPopulation, 1L)
+  expect_identical(x2$datal$nMonth, 1L)
+})

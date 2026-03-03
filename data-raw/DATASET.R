@@ -109,6 +109,21 @@ fit_recruitment_multi <- bb_fit_recruitment(
   quiet = TRUE
 )
 
+# annual survival -----------------------------------------------------------
+x_annual <- bboudata::bbousurv_annual
+x_annual <- x_annual[x_annual$PopulationName == "C", ]
+set.seed(101)
+fit_survival_annual <- bb_fit_survival(
+  data = x_annual,
+  nthin = 10,
+  quiet = TRUE
+)
+
+fit_survival_ml_annual <- bb_fit_survival_ml(
+  data = x_annual,
+  quiet = TRUE
+)
+
 # model object is too large to store and not required for testing downstream functions
 fit_recruitment$model <- NULL
 fit_recruitment_trend$model <- NULL
@@ -123,6 +138,8 @@ fit_recruitment_ml_trend$model <- NULL
 fit_survival_ml_trend$model <- NULL
 fit_survival_multi$model <- NULL
 fit_recruitment_multi$model <- NULL
+fit_survival_annual$model <- NULL
+fit_survival_ml_annual$model <- NULL
 
 usethis::use_data(
   fit_recruitment,
@@ -138,6 +155,8 @@ usethis::use_data(
   fit_recruitment_ml_trend,
   fit_survival_multi,
   fit_recruitment_multi,
+  fit_survival_annual,
+  fit_survival_ml_annual,
   internal = TRUE,
   overwrite = TRUE
 )

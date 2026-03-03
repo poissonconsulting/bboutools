@@ -38,3 +38,9 @@ test_that("plot_year_survival.data.frame ML works", {
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "plot_year_survival_predict_survival_ml")
 })
+
+test_that("plot_year_survival annual works", {
+  plot <- bb_plot_year_survival(bboutools:::fit_survival_annual)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_survival_annual")
+})
