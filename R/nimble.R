@@ -13,6 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Expand scalar inits to match indexed param names.
+# e.g., list(b0 = 5) with params = c("b0[1]", "sAnnual") becomes c("b0[1]" = 5)
+.expand_inits <- function(inits, params, params_base) {
+  if (is.null(inits) || length(inits) == 0) {
+    return(inits)
+  }
+  expanded <- numeric(0)
+  for (nm in names(inits)) {
+    matching <- params[params_base == nm]
+    if (length(matching) > 0) {
+      vals <- rep(inits[[nm]], length(matching))
+      names(vals) <- matching
+      expanded <- c(expanded, vals)
+    }
+  }
+  expanded
+}
+
 sample_empty <- function(model, monitor, nchains){
   model_mcmc <- buildMCMC(model, monitors = monitor)
   
@@ -98,8 +116,10 @@ run_nimble_ml <- function(model, inits, prior_inits, quiet) {
 
   inits_default <- rep(1, length(params))
   names(inits_default) <- params
-  prior_inits <- prior_inits[names(prior_inits) %in% params]
+  # Expand scalar inits (e.g., b0 = 5) to all matching indexed params (e.g., b0[1] = 5)
+  prior_inits <- .expand_inits(prior_inits, params, params_base)
   inits_default <- unlist(replace_priors(inits_default, prior_inits))
+  inits <- .expand_inits(inits, params, params_base)
   inits <- unlist(replace_priors(inits_default, inits))
 
   mle <- claplace$findMLE(inits)
