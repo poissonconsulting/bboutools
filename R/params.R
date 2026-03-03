@@ -44,7 +44,7 @@
 #' @param survival An object of class 'bboufit_survival' (output of [`bb_fit_survival()`]).
 #' @param recruitment An object of class 'bboufit_recruitment' (output of [`bb_fit_recruitment()`])
 #' @param allow_missing A flag indicating whether to allow unobserved years (placeholder rows with NA measurement columns).
-#' When TRUE, predictions for unobserved years are derived from the year random effect distribution.
+#' When TRUE, predictions for unobserved years use the population-level mean (i.e., excluding the year random effect).
 #' Requires year to be fit as a random effect (i.e., not supported with fixed year effects).
 #' Not supported with Maximum Likelihood models.
 #' @param quiet A flag indicating whether to suppress messages and progress bars.

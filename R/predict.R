@@ -58,6 +58,12 @@ new_data_ym <- function(x, year, month) {
   )
   df$CaribouYear <- factor_to_integer(df$Annual)
   df <- rescale(df, data2 = x, scale = "CaribouYear")
+  if (year) {
+    observed_years <- unique(as.character(x$Annual))
+    df$Observed <- as.integer(as.character(df$Annual) %in% observed_years)
+  } else {
+    df$Observed <- 1L
+  }
   df
 }
 

@@ -16,7 +16,10 @@
 extract_lik <- function(x) {
   x <- as.character(model_code(x))
   x <- x[grepl("log|logit", x)]
-  regmatches(x, regexpr("b0([^\\\n]*)", text = x))
+  x <- regmatches(x, regexpr("b0([^\\\n]*)", text = x))
+  gsub("bAnnual[Annual[i], PopulationName[i]]",
+       "bAnnual[Annual[i], PopulationName[i]] * Observed[i]",
+       x, fixed = TRUE)
 }
 
 extract_lik_year <- function(x) {
