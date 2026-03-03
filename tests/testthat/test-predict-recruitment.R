@@ -68,6 +68,12 @@ test_that("predict sig_fig works", {
   expect_snapshot_data(predict, "predict_recruitment_sig_fig")
 })
 
+test_that("bb_predict_recruitment missing works", {
+  predict <- bb_predict_recruitment(bboutools:::fit_recruitment_missing)
+  expect_s3_class(predict, "tbl")
+  expect_snapshot_data(predict, "bb_predict_recruitment_missing")
+})
+
 test_that("bb_predict_recruitment works on ML", {
   predict <- bb_predict_recruitment(bboutools:::fit_recruitment_ml)
   expect_s3_class(predict, "tbl")

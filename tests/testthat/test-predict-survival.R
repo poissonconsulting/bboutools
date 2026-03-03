@@ -136,6 +136,12 @@ test_that("bb_predict_survival annual ml works", {
   expect_snapshot_data(predict, "bb_predict_survival_annual_ml")
 })
 
+test_that("bb_predict_survival missing works", {
+  predict <- bb_predict_survival(bboutools:::fit_survival_missing)
+  expect_s3_class(predict, "tbl")
+  expect_snapshot_data(predict, "bb_predict_survival_missing")
+})
+
 test_that("bb_predict_survival annual month errors", {
   expect_chk_error(
     bb_predict_survival(bboutools:::fit_survival_annual, month = TRUE),

@@ -39,6 +39,12 @@ test_that("plot_year_recruitment.data.frame ML works", {
   expect_snapshot_plot(plot, "dataframe_ml")
 })
 
+test_that("plot_year_recruitment missing works", {
+  plot <- bb_plot_year_recruitment(bboutools:::fit_recruitment_missing)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_recruitment_missing")
+})
+
 test_that("plot_year_recruitment multi-pop works", {
   plot <- bb_plot_year_recruitment(bboutools:::fit_recruitment_multi)
   expect_s3_class(plot, "ggplot")

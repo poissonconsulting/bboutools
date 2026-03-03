@@ -49,7 +49,7 @@ bb_plot_year.data.frame <- function(x, ...) {
       ymin = .data$lower,
       ymax = .data$upper
     ) +
-    scale_x_continuous(breaks = scales::breaks_pretty(), labels = as.integer) +
+    scale_x_continuous(breaks = \(x) unique(as.integer(round(scales::breaks_pretty()(x))))) +
     xlab("Caribou Year")
 
   if (any(is.na(x$lower))) {
