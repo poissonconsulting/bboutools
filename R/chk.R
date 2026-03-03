@@ -117,6 +117,17 @@ xname <- function(x, col) {
   abort_chk(msg)
 }
 
+.chk_has_samples <- function(x) {
+  if (!inherits(x, "bboufit") || inherits(x, "bboufit_ml")) {
+    return(invisible(x))
+  }
+  niters <- .niters_bboufit(x)
+  if (is.null(niters) || niters > 0) {
+    return(invisible(x))
+  }
+  abort_chk("Model has 0 iterations and no MCMC samples. Refit with `niters > 0`.")
+}
+
 .chk_year_start_equal <- function(survival, recruitment) {
   if (.vld_year_start_equal(survival, recruitment)) {
     return(invisible(survival))

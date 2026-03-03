@@ -31,6 +31,7 @@ generics::glance
 #' }
 glance.bboufit <- function(x, rhat = 1.05, ...) {
   .chk_fit(x)
+  .chk_has_samples(x)
   converge <- converged(x, rhat = rhat)
   tibble::tibble(
     n = nobs(x),

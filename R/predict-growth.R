@@ -18,6 +18,8 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
   chk_s3_class(survival, "bboufit_survival")
   chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
   chk_s3_class(recruitment, "bboufit_recruitment")
+  .chk_has_samples(survival)
+  .chk_has_samples(recruitment)
   .chk_year_start_equal(survival, recruitment)
   .chk_population_multi(survival, recruitment)
 

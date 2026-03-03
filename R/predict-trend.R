@@ -14,6 +14,7 @@
 # limitations under the License.
 
 predict_trend <- function(fit, derived_expr) {
+  .chk_has_samples(fit)
   samples <- samples(fit)
   data <- augment(fit)
   new <- new_data_ym(data, year = TRUE, month = FALSE)

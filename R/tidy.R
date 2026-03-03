@@ -78,6 +78,7 @@ tidy.bboufit <- function(
   ...
 ) {
   .chk_fit(x)
+  .chk_has_samples(x)
   chk_range(conf_level, c(0, 1))
   chk_is(estimate, "function")
   chk_whole_number(sig_fig)

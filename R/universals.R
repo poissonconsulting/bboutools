@@ -128,6 +128,7 @@ universals::estimates
 #'   estimates(fit)
 #' }
 estimates.bboufit <- function(x, term = NULL, ...) {
+  .chk_has_samples(x)
   chkor_vld(vld_null(term), vld_character(term))
   if (!length(term)) {
     return(mcmcr::estimates(samples(x)))
@@ -245,6 +246,7 @@ universals::rhat
 #' @return A number of rhat value.
 #' @export
 rhat.bboufit <- function(x, ...) {
+  .chk_has_samples(x)
   mcmcr::rhat(samples(x), ...)
 }
 
@@ -257,6 +259,7 @@ universals::esr
 #' @return A number of the number of chains.
 #' @export
 esr.bboufit <- function(x, ...) {
+  .chk_has_samples(x)
   mcmcr::esr(samples(x), ...)
 }
 
@@ -269,6 +272,7 @@ universals::converged
 #' @return A flag indicating convergence.
 #' @export
 converged.bboufit <- function(x, rhat = 1.05, ...) {
+  .chk_has_samples(x)
   chk_range(rhat, c(1, 10))
   mcmcr::converged(samples(x), rhat = rhat, esr = 0, ...)
 }

@@ -27,6 +27,7 @@
 }
 
 predict_survival <- function(fit, year, month) {
+  .chk_has_samples(fit)
   if (month && length(levels(augment(fit)$Month)) == 1) {
     chk::abort_chk("`month` must be FALSE for annual survival data.")
   }
@@ -45,6 +46,7 @@ predict_survival <- function(fit, year, month) {
 }
 
 predict_calf_cow <- function(fit, year) {
+  .chk_has_samples(fit)
   samples <- samples(fit)
   data <- augment(fit)
   new <- new_data_ym(data, year = year, month = FALSE)
