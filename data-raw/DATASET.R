@@ -91,16 +91,20 @@ fit_recruitment_ml_trend <- bb_fit_recruitment_ml(
 )
 
 # multi-population -----------------------------------------------------------
+# filter out placeholder rows (NA Month) for unobserved years
+# allow_missing not yet implemented in fit functions
+surv_multi <- bboudata::bbousurv_multi[!is.na(bboudata::bbousurv_multi$Month), ]
 set.seed(101)
 fit_survival_multi <- bb_fit_survival(
-  data = bboudata::bbousurv_multi,
+  data = surv_multi,
   nthin = 10,
   quiet = TRUE
 )
 
+rec_multi <- bboudata::bbourecruit_multi[!is.na(bboudata::bbourecruit_multi$Month), ]
 set.seed(101)
 fit_recruitment_multi <- bb_fit_recruitment(
-  data = bboudata::bbourecruit_multi,
+  data = rec_multi,
   nthin = 10,
   quiet = TRUE
 )
