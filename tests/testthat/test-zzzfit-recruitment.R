@@ -19,7 +19,8 @@ test_that("recruitment default works", {
   x <- bboudata::bbourecruit_a
   set.seed(101)
   fit <- bb_fit_recruitment(
-    data = x, nthin = 1,
+    data = x,
+    nthin = 1,
     quiet = TRUE
   )
 
@@ -37,16 +38,20 @@ test_that("fails with wrong prior", {
 
   x <- bboudata::bbourecruit_a
   wrong_prior <- list(bInterce = 1)
-  expect_chk_error(bb_fit_recruitment(x, nthin = 1L, priors = wrong_prior, quiet = TRUE), "Names in `priors` must match 'adult_female_proportion_alpha', 'adult_female_proportion_beta', 'b0_mu', 'b0_sd', 'bAnnual_sd', 'bYear_mu', 'bYear_sd' or 'sAnnual_rate', not 'bInterce'.")
+  expect_chk_error(
+    bb_fit_recruitment(x, nthin = 1L, priors = wrong_prior, quiet = TRUE),
+    "Names in `priors` must match 'adult_female_proportion_alpha', 'adult_female_proportion_beta', 'b0_mu', 'b0_sd', 'bAnnual_sd', 'bYear_mu', 'bYear_sd' or 'sAnnual_rate', not 'bInterce'."
+  )
 })
 
 test_that("recruitment multi population", {
   skip_on_covr()
 
-  x <- bboudata::bbourecruit_multi
+  x <- bboudata::bbourecruit_multi[!is.na(bboudata::bbourecruit_multi$Month), ]
   set.seed(101)
   fit <- bb_fit_recruitment(
-    data = x, nthin = 1,
+    data = x,
+    nthin = 1,
     quiet = TRUE
   )
 

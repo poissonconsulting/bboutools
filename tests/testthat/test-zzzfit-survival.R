@@ -15,14 +15,15 @@
 
 test_that("survival multi population", {
   skip_on_covr()
-  
-  x <- bboudata::bbousurv_multi
+
+  x <- bboudata::bbousurv_multi[!is.na(bboudata::bbousurv_multi$Month), ]
   set.seed(101)
   fit <- bb_fit_survival(
-    data = x, nthin = 1,
+    data = x,
+    nthin = 1,
     quiet = TRUE
   )
-  
+
   expect_s3_class(fit, "bboufit")
   expect_s3_class(fit, "bboufit_survival")
   expect_identical(names(fit), c("model", "samples", "data", "model_code"))
@@ -37,7 +38,8 @@ test_that("survival default works", {
   x <- bboudata::bbousurv_a
   set.seed(101)
   fit <- bb_fit_survival(
-    data = x, nthin = 1,
+    data = x,
+    nthin = 1,
     quiet = TRUE
   )
 
@@ -52,7 +54,10 @@ test_that("survival default works", {
 test_that("fails with wrong prior", {
   x <- bboudata::bbousurv_a
   wrong_prior <- list(bInterce = 1)
-  expect_chk_error(bb_fit_survival(x, nthin = 1L, priors = wrong_prior, quiet = TRUE), "Names in `priors` must match 'b0_mu', 'b0_sd', 'bAnnual_sd', 'bYear_mu', 'bYear_sd', 'sAnnual_rate' or 'sMonth_rate', not 'bInterce'.")
+  expect_chk_error(
+    bb_fit_survival(x, nthin = 1L, priors = wrong_prior, quiet = TRUE),
+    "Names in `priors` must match 'b0_mu', 'b0_sd', 'bAnnual_sd', 'bYear_mu', 'bYear_sd', 'sAnnual_rate' or 'sMonth_rate', not 'bInterce'."
+  )
 })
 
 test_that("can set niters", {

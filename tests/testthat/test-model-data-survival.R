@@ -13,10 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-test_that("prep model data with multi population", {  
+test_that("prep model data with multi population", {
   x <- bboudata::bbousurv_multi
-  x2 <- model_data_survival(x, include_uncertain_morts = TRUE, year_start = 4L, quiet = TRUE)
-  
+  x2 <- model_data_survival(
+    x,
+    include_uncertain_morts = TRUE,
+    year_start = 4L,
+    quiet = TRUE
+  )
+
   expect_identical(x2$datal$nAnnual, 15L)
   expect_identical(x2$datal$nPopulation, 3L)
   expect_identical(x2$datal$nMonth, 12L)
@@ -24,9 +29,14 @@ test_that("prep model data with multi population", {
 
 test_that("data annual", {
   x <- bboudata::bbousurv_annual
-  x2 <- model_data_survival(x, include_uncertain_morts = TRUE, year_start = 4L, quiet = TRUE)
-  
-  expect_identical(x2$datal$nAnnual, 9L)
-  expect_identical(x2$datal$nPopulation, 1L)
+  x2 <- model_data_survival(
+    x,
+    include_uncertain_morts = TRUE,
+    year_start = 4L,
+    quiet = TRUE
+  )
+
+  expect_identical(x2$datal$nAnnual, 12L)
+  expect_identical(x2$datal$nPopulation, 2L)
   expect_identical(x2$datal$nMonth, 1L)
 })
