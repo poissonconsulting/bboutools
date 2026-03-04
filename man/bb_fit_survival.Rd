@@ -38,7 +38,7 @@ Any missing values are assigned their default values in \code{priors_survival()}
 If NULL, all parameters are assigned their default priors.}
 
 \item{allow_missing}{A flag indicating whether to allow unobserved years (placeholder rows with NA measurement columns).
-When TRUE, predictions for unobserved years are derived from the year random effect distribution.
+When TRUE, predictions for unobserved years use the population-level mean (i.e., excluding the year random effect).
 Requires year to be fit as a random effect (i.e., not supported with fixed year effects).
 Not supported with Maximum Likelihood models.}
 
