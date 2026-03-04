@@ -128,6 +128,17 @@ xname <- function(x, col) {
   abort_chk("Model has 0 iterations and no MCMC samples. Refit with `niters > 0`.")
 }
 
+.chk_disturbance <- function(Anthro, fire_excl_anthro) {
+  chk_number(Anthro)
+  chk_number(fire_excl_anthro)
+  chk_range(Anthro, c(0, 100))
+  chk_range(fire_excl_anthro, c(0, 100))
+  if (!.vld_disturbance(Anthro, fire_excl_anthro)) {
+    abort_chk("`Anthro + fire_excl_anthro` must not be greater than 100.")
+  }
+  invisible()
+}
+
 .chk_year_start_equal <- function(survival, recruitment) {
   if (.vld_year_start_equal(survival, recruitment)) {
     return(invisible(survival))

@@ -62,6 +62,10 @@
   )
 }
 
+.vld_disturbance <- function(Anthro, fire_excl_anthro) {
+  Anthro + fire_excl_anthro <= 100
+}
+
 .vld_year_start_equal <- function(survival, recruitment) {
   .year_start_bboufit(survival) == .year_start_bboufit(recruitment)
 }

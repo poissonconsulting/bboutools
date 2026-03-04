@@ -24,6 +24,7 @@ Depends:
     R (>= 4.0)
 Imports:
     bboudata,
+    bbouNationalPriors,
     chk,
     dplyr,
     generics,
@@ -51,6 +52,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes:
+    LandSciTech/bbouNationalPriors,
     poissonconsulting/bboudata,
     poissonconsulting/newdata,
     poissonconsulting/rescale
