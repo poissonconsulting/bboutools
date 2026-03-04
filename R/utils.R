@@ -31,6 +31,8 @@ utils::globalVariables(c(
   "nMonth",
   "nObs",
   "nAnnual",
+  "nPopulation",
+  "PopulationName",
   "year_random"
 ))
 
