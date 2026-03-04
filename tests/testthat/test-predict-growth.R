@@ -144,3 +144,41 @@ test_that("bb_predict_growth works with ML", {
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_growth_ml")
 })
+
+test_that("bb_predict_growth filters to shared populations with message", {
+  survival <- bboutools:::fit_survival_multi
+  recruitment <- bboutools:::fit_recruitment_multi
+
+  # drop population "A" from recruitment to create mismatch
+  rec_data <- recruitment$data
+  rec_data <- rec_data[rec_data$PopulationName != "A", ]
+  rec_data$PopulationName <- factor(rec_data$PopulationName)
+  recruitment$data <- rec_data
+
+  expect_message(
+    predict <- bb_predict_growth(survival, recruitment),
+    "Filtering to shared population and year combinations"
+  )
+  expect_s3_class(predict, "tbl")
+  expect_true(all(predict$PopulationName %in% c("B", "C")))
+  expect_false("A" %in% predict$PopulationName)
+})
+
+test_that("bb_predict_population_change filters to shared populations with message", {
+  survival <- bboutools:::fit_survival_multi
+  recruitment <- bboutools:::fit_recruitment_multi
+
+  # drop population "A" from recruitment to create mismatch
+  rec_data <- recruitment$data
+  rec_data <- rec_data[rec_data$PopulationName != "A", ]
+  rec_data$PopulationName <- factor(rec_data$PopulationName)
+  recruitment$data <- rec_data
+
+  expect_message(
+    predict <- bb_predict_population_change(survival, recruitment),
+    "Filtering to shared population and year combinations"
+  )
+  expect_s3_class(predict, "tbl")
+  expect_true(all(predict$PopulationName %in% c("B", "C")))
+  expect_false("A" %in% predict$PopulationName)
+})

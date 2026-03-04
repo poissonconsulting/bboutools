@@ -55,13 +55,6 @@
   attr(x, "year_trend")
 }
 
-.vld_population_multi <- function(survival, recruitment) {
-  identical(
-    levels(survival$data$PopulationName),
-    levels(recruitment$data$PopulationName)
-  )
-}
-
 .vld_disturbance <- function(Anthro, fire_excl_anthro) {
   Anthro + fire_excl_anthro <= 100
 }

@@ -88,34 +88,57 @@ xname <- function(x, col) {
   )
 }
 
-.chk_population_multi <- function(survival, recruitment) {
-  if (.vld_population_multi(survival, recruitment)) {
+.warn_filtered_multi <- function(data_sur, data_rec) {
+  by <- c("Annual", "PopulationName")
+
+  sur_pops <- unique(as.character(data_sur$PopulationName))
+  rec_pops <- unique(as.character(data_rec$PopulationName))
+  pops_sur_only <- setdiff(sur_pops, rec_pops)
+  pops_rec_only <- setdiff(rec_pops, sur_pops)
+
+  # for shared populations, find years only in one side
+  shared_sur <- dplyr::filter(data_sur, .data$PopulationName %in% rec_pops)
+  shared_rec <- dplyr::filter(data_rec, .data$PopulationName %in% sur_pops)
+  years_sur_only <- dplyr::anti_join(shared_sur, shared_rec, by = by)$Annual |>
+    unique() |>
+    sort()
+  years_rec_only <- dplyr::anti_join(shared_rec, shared_sur, by = by)$Annual |>
+    unique() |>
+    sort()
+
+  has_pop_diff <- length(pops_sur_only) || length(pops_rec_only)
+  has_year_diff <- length(years_sur_only) || length(years_rec_only)
+  if (!has_pop_diff && !has_year_diff) {
     return(invisible())
   }
-  surv_pops <- levels(survival$data$PopulationName)
-  rec_pops <- levels(recruitment$data$PopulationName)
-  surv_only <- setdiff(surv_pops, rec_pops)
-  rec_only <- setdiff(rec_pops, surv_pops)
+
   details <- character(0)
-  if (length(surv_only)) {
-    details <- c(
-      details,
-      paste0("In survival only: ", paste(surv_only, collapse = ", "))
-    )
+  if (length(pops_sur_only)) {
+    details <- c(details, paste0(
+      "Populations in survival only: ", paste(pops_sur_only, collapse = ", ")
+    ))
   }
-  if (length(rec_only)) {
-    details <- c(
-      details,
-      paste0("In recruitment only: ", paste(rec_only, collapse = ", "))
-    )
+  if (length(pops_rec_only)) {
+    details <- c(details, paste0(
+      "Populations in recruitment only: ", paste(pops_rec_only, collapse = ", ")
+    ))
   }
-  msg <- paste0(
-    "Survival and recruitment models must have the same populations.\n",
-    paste(details, collapse = "\n"),
-    "\nFilter input data to shared populations before fitting."
-  )
-  abort_chk(msg)
+  if (length(years_sur_only)) {
+    details <- c(details, paste0(
+      "CaribouYears in survival only: ", paste(years_sur_only, collapse = ", ")
+    ))
+  }
+  if (length(years_rec_only)) {
+    details <- c(details, paste0(
+      "CaribouYears in recruitment only: ", paste(years_rec_only, collapse = ", ")
+    ))
+  }
+  message(paste(
+    c("Filtering to shared population and year combinations.", details),
+    collapse = "\n"
+  ))
 }
+
 
 .chk_has_samples <- function(x) {
   if (!inherits(x, "bboufit") || inherits(x, "bboufit_ml")) {

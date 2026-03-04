@@ -21,7 +21,6 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
   .chk_has_samples(survival)
   .chk_has_samples(recruitment)
   .chk_year_start_equal(survival, recruitment)
-  .chk_population_multi(survival, recruitment)
 
   pred_sur <- predict_survival(survival, year = TRUE, month = FALSE)
   pred_rec <- predict_calf_cow(recruitment, year = TRUE)
@@ -31,6 +30,8 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
 
   sur <- pred_sur$samples
   rec <- pred_rec$samples
+
+  .warn_filtered_multi(data_sur, data_rec)
 
   # match on both Annual and PopulationName
   key_sur <- interaction(data_sur$Annual, data_sur$PopulationName, drop = TRUE)
@@ -222,14 +223,9 @@ bb_predict_population_change <- function(
     sig_fig = sig_fig
   )
   coef$Month <- NULL
-  populations <- unique(coef$PopulationName)
-  start <- tibble::tibble(
-    PopulationName = populations,
-    CaribouYear = min(coef$CaribouYear) - 1L,
-    estimate = 1,
-    lower = 1,
-    upper = 1
-  )
+  start <- coef |>
+    dplyr::summarise(CaribouYear = min(.data$CaribouYear) - 1L, .by = "PopulationName") |>
+    dplyr::mutate(estimate = 1, lower = 1, upper = 1)
   coef <- rbind(start, coef)
   coef <- dplyr::arrange(coef, .data$PopulationName, .data$CaribouYear)
   coef
