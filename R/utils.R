@@ -61,15 +61,19 @@ signif_cols <- function(
 }
 
 message_trend_fixed <- function() {
-  message(
-    "Year trend and year fixed effect cannot be fit simultaneously. Model will be fit with a year trend. To fit year fixed effect instead, set `year_trend = FALSE`"
-  )
+  cli::cli_inform(c(
+    "Year trend and year fixed effect cannot be fit simultaneously.",
+    "i" = "Model will be fit with a year trend.",
+    "i" = "To fit year fixed effect instead, set {.code year_trend = FALSE}."
+  ))
 }
 
 message_convergence_fail <- function() {
-  message(
-    "Warning: Model is failing to converge. This is likely caused by poor initial values or failure to estimate year effect. Try setting initial values, fit model with a year random effect or fit Bayesian model."
-  )
+  cli::cli_warn(c(
+    "Model is failing to converge.",
+    "i" = "This is likely caused by poor initial values or failure to estimate year effect.",
+    "i" = "Try setting initial values, fitting with a year random effect, or fitting a Bayesian model."
+  ))
 }
 
 exclude_random <- function(x, term_col = "term") {
@@ -108,9 +112,7 @@ year_intercept <- function(x) {
     dplyr::filter(.data$any_morts)
 
   if (nrow(y) == 0) {
-    message(
-      "Warning: All years have 0 mortalities. Estimation of Confidence Intervals may not be reliable."
-    )
+    cli::cli_warn("All years have 0 mortalities. Estimation of confidence intervals may not be reliable.")
     return(min(x$CaribouYear))
   }
 

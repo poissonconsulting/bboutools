@@ -26,6 +26,7 @@ Imports:
     bboudata,
     bbouNationalPriors,
     chk,
+    cli,
     dplyr,
     generics,
     ggplot2,

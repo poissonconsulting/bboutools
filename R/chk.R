@@ -114,28 +114,32 @@ xname <- function(x, col) {
 
   details <- character(0)
   if (length(pops_sur_only)) {
-    details <- c(details, paste0(
-      "Populations in survival only: ", paste(pops_sur_only, collapse = ", ")
-    ))
+    details <- c(
+      details,
+      "i" = "Populations in survival only: {.val {pops_sur_only}}"
+    )
   }
   if (length(pops_rec_only)) {
-    details <- c(details, paste0(
-      "Populations in recruitment only: ", paste(pops_rec_only, collapse = ", ")
-    ))
+    details <- c(
+      details,
+      "i" = "Populations in recruitment only: {.val {pops_rec_only}}"
+    )
   }
   if (length(years_sur_only)) {
-    details <- c(details, paste0(
-      "CaribouYears in survival only: ", paste(years_sur_only, collapse = ", ")
-    ))
+    details <- c(
+      details,
+      "i" = "CaribouYears in survival only: {.val {years_sur_only}}"
+    )
   }
   if (length(years_rec_only)) {
-    details <- c(details, paste0(
-      "CaribouYears in recruitment only: ", paste(years_rec_only, collapse = ", ")
-    ))
+    details <- c(
+      details,
+      "i" = "CaribouYears in recruitment only: {.val {years_rec_only}}"
+    )
   }
-  message(paste(
-    c("Filtering to shared population and year combinations.", details),
-    collapse = "\n"
+  cli::cli_inform(c(
+    "Filtering to shared population and year combinations.",
+    details
   ))
 }
 
@@ -148,7 +152,9 @@ xname <- function(x, col) {
   if (is.null(niters) || niters > 0) {
     return(invisible(x))
   }
-  abort_chk("Model has 0 iterations and no MCMC samples. Refit with `niters > 0`.")
+  abort_chk(
+    "Model has 0 iterations and no MCMC samples. Refit with `niters > 0`."
+  )
 }
 
 .chk_disturbance <- function(Anthro, fire_excl_anthro) {
@@ -166,7 +172,8 @@ xname <- function(x, col) {
   if (.vld_year_start_equal(survival, recruitment)) {
     return(invisible(survival))
   }
-  warning(
-    "Recruitment and survival models were fit with a different month of caribou year start. This can be adjusted with the `year_start` argument in model fitting functions."
-  )
+  cli::cli_warn(c(
+    "Recruitment and survival models were fit with a different month of caribou year start.",
+    "i" = "This can be adjusted with the {.arg year_start} argument in model fitting functions."
+  ))
 }
