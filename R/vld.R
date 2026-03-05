@@ -55,8 +55,8 @@
   attr(x, "year_trend")
 }
 
-.vld_disturbance <- function(Anthro, fire_excl_anthro) {
-  Anthro + fire_excl_anthro <= 100
+.vld_disturbance <- function(anthro, fire_excl_anthro) {
+  anthro + fire_excl_anthro <= 100
 }
 
 .vld_year_start_equal <- function(survival, recruitment) {

@@ -111,13 +111,13 @@ bb_priors_recruitment <- function() {
 #'
 #' Priors are looked up from a pre-computed table in the
 #' [bbouNationalPriors](https://github.com/LandSciTech/bbouNationalPriors)
-#' package. Integer values of `Anthro` and `fire_excl_anthro` are matched
+#' package. Integer values of `anthro` and `fire_excl_anthro` are matched
 #' directly; non-integer values trigger a model run (slower).
 #'
-#' @param Anthro A number between 0 and 100. Percent non-overlapping buffered
+#' @param anthro A number between 0 and 100. Percent non-overlapping buffered
 #'   anthropogenic disturbance.
 #' @param fire_excl_anthro A number between 0 and 100. Percent fire disturbance
-#'   not overlapping with anthropogenic disturbance. `Anthro + fire_excl_anthro`
+#'   not overlapping with anthropogenic disturbance. `anthro + fire_excl_anthro`
 #'   must not exceed 100.
 #' @param annual A flag (logical scalar) indicating whether to return annual
 #'   (`TRUE`) or monthly (`FALSE`, default) survival priors. Use `annual = TRUE`
@@ -136,20 +136,20 @@ bb_priors_recruitment <- function() {
 #' @export
 #' @examples
 #' # Monthly survival priors (default)
-#' nat_s <- bb_priors_survival_national(Anthro = 50, fire_excl_anthro = 5)
+#' nat_s <- bb_priors_survival_national(anthro = 50, fire_excl_anthro = 5)
 #' nat_s
 #'
 #' # Annual survival priors
-#' nat_s_annual <- bb_priors_survival_national(Anthro = 50, fire_excl_anthro = 5, annual = TRUE)
+#' nat_s_annual <- bb_priors_survival_national(anthro = 50, fire_excl_anthro = 5, annual = TRUE)
 #' nat_s_annual
 #'
 #' # Pass to bb_fit_survival via priors argument
 #' # fit <- bb_fit_survival(data, priors = nat_s)
-bb_priors_survival_national <- function(Anthro, fire_excl_anthro, annual = FALSE) {
-  .chk_disturbance(Anthro, fire_excl_anthro)
+bb_priors_survival_national <- function(anthro, fire_excl_anthro, annual = FALSE) {
+  .chk_disturbance(anthro, fire_excl_anthro)
   chk_flag(annual)
   result <- bbouNationalPriors::bbouNationalPriors(
-    Anthro = Anthro,
+    Anthro = anthro,
     fire_excl_anthro = fire_excl_anthro,
     month = !annual
   )
@@ -165,13 +165,13 @@ bb_priors_survival_national <- function(Anthro, fire_excl_anthro, annual = FALSE
 #'
 #' Priors are looked up from a pre-computed table in the
 #' [bbouNationalPriors](https://github.com/LandSciTech/bbouNationalPriors)
-#' package. Integer values of `Anthro` and `fire_excl_anthro` are matched
+#' package. Integer values of `anthro` and `fire_excl_anthro` are matched
 #' directly; non-integer values trigger a model run (slower).
 #'
-#' @param Anthro A number between 0 and 100. Percent non-overlapping buffered
+#' @param anthro A number between 0 and 100. Percent non-overlapping buffered
 #'   anthropogenic disturbance.
 #' @param fire_excl_anthro A number between 0 and 100. Percent fire disturbance
-#'   not overlapping with anthropogenic disturbance. `Anthro + fire_excl_anthro`
+#'   not overlapping with anthropogenic disturbance. `anthro + fire_excl_anthro`
 #'   must not exceed 100.
 #' @return A named vector with elements `b0_mu` and `b0_sd`, suitable for
 #'   passing to the `priors` argument of [bb_fit_recruitment()].
@@ -186,15 +186,15 @@ bb_priors_survival_national <- function(Anthro, fire_excl_anthro, annual = FALSE
 #' @family priors
 #' @export
 #' @examples
-#' nat_r <- bb_priors_recruitment_national(Anthro = 50, fire_excl_anthro = 5)
+#' nat_r <- bb_priors_recruitment_national(anthro = 50, fire_excl_anthro = 5)
 #' nat_r
 #'
 #' # Pass to bb_fit_recruitment via priors argument
 #' # fit <- bb_fit_recruitment(data, priors = nat_r)
-bb_priors_recruitment_national <- function(Anthro, fire_excl_anthro) {
-  .chk_disturbance(Anthro, fire_excl_anthro)
+bb_priors_recruitment_national <- function(anthro, fire_excl_anthro) {
+  .chk_disturbance(anthro, fire_excl_anthro)
   result <- bbouNationalPriors::bbouNationalPriors(
-    Anthro = Anthro,
+    Anthro = anthro,
     fire_excl_anthro = fire_excl_anthro
   )
   result$priors_recruitment

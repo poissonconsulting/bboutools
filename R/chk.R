@@ -157,13 +157,13 @@ xname <- function(x, col) {
   )
 }
 
-.chk_disturbance <- function(Anthro, fire_excl_anthro) {
-  chk_number(Anthro)
+.chk_disturbance <- function(anthro, fire_excl_anthro) {
+  chk_number(anthro)
   chk_number(fire_excl_anthro)
-  chk_range(Anthro, c(0, 100))
+  chk_range(anthro, c(0, 100))
   chk_range(fire_excl_anthro, c(0, 100))
-  if (!.vld_disturbance(Anthro, fire_excl_anthro)) {
-    abort_chk("`Anthro + fire_excl_anthro` must not be greater than 100.")
+  if (!.vld_disturbance(anthro, fire_excl_anthro)) {
+    abort_chk("`anthro + fire_excl_anthro` must not be greater than 100.")
   }
   invisible()
 }

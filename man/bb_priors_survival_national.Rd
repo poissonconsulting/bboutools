@@ -4,14 +4,14 @@
 \alias{bb_priors_survival_national}
 \title{Disturbance-informed national survival priors}
 \usage{
-bb_priors_survival_national(Anthro, fire_excl_anthro, annual = FALSE)
+bb_priors_survival_national(anthro, fire_excl_anthro, annual = FALSE)
 }
 \arguments{
-\item{Anthro}{A number between 0 and 100. Percent non-overlapping buffered
+\item{anthro}{A number between 0 and 100. Percent non-overlapping buffered
 anthropogenic disturbance.}
 
 \item{fire_excl_anthro}{A number between 0 and 100. Percent fire disturbance
-not overlapping with anthropogenic disturbance. \code{Anthro + fire_excl_anthro}
+not overlapping with anthropogenic disturbance. \code{anthro + fire_excl_anthro}
 must not exceed 100.}
 
 \item{annual}{A flag (logical scalar) indicating whether to return annual
@@ -31,16 +31,16 @@ prior parameters retain their defaults.
 \details{
 Priors are looked up from a pre-computed table in the
 \href{https://github.com/LandSciTech/bbouNationalPriors}{bbouNationalPriors}
-package. Integer values of \code{Anthro} and \code{fire_excl_anthro} are matched
+package. Integer values of \code{anthro} and \code{fire_excl_anthro} are matched
 directly; non-integer values trigger a model run (slower).
 }
 \examples{
 # Monthly survival priors (default)
-nat_s <- bb_priors_survival_national(Anthro = 50, fire_excl_anthro = 5)
+nat_s <- bb_priors_survival_national(anthro = 50, fire_excl_anthro = 5)
 nat_s
 
 # Annual survival priors
-nat_s_annual <- bb_priors_survival_national(Anthro = 50, fire_excl_anthro = 5, annual = TRUE)
+nat_s_annual <- bb_priors_survival_national(anthro = 50, fire_excl_anthro = 5, annual = TRUE)
 nat_s_annual
 
 # Pass to bb_fit_survival via priors argument

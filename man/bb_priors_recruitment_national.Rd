@@ -4,14 +4,14 @@
 \alias{bb_priors_recruitment_national}
 \title{Disturbance-informed national recruitment priors}
 \usage{
-bb_priors_recruitment_national(Anthro, fire_excl_anthro)
+bb_priors_recruitment_national(anthro, fire_excl_anthro)
 }
 \arguments{
-\item{Anthro}{A number between 0 and 100. Percent non-overlapping buffered
+\item{anthro}{A number between 0 and 100. Percent non-overlapping buffered
 anthropogenic disturbance.}
 
 \item{fire_excl_anthro}{A number between 0 and 100. Percent fire disturbance
-not overlapping with anthropogenic disturbance. \code{Anthro + fire_excl_anthro}
+not overlapping with anthropogenic disturbance. \code{anthro + fire_excl_anthro}
 must not exceed 100.}
 }
 \value{
@@ -27,11 +27,11 @@ prior parameters retain their defaults.
 \details{
 Priors are looked up from a pre-computed table in the
 \href{https://github.com/LandSciTech/bbouNationalPriors}{bbouNationalPriors}
-package. Integer values of \code{Anthro} and \code{fire_excl_anthro} are matched
+package. Integer values of \code{anthro} and \code{fire_excl_anthro} are matched
 directly; non-integer values trigger a model run (slower).
 }
 \examples{
-nat_r <- bb_priors_recruitment_national(Anthro = 50, fire_excl_anthro = 5)
+nat_r <- bb_priors_recruitment_national(anthro = 50, fire_excl_anthro = 5)
 nat_r
 
 # Pass to bb_fit_recruitment via priors argument

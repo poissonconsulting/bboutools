@@ -2,7 +2,7 @@ test_that("national priors work with bb_fit_survival and change estimates", {
   skip_on_covr()
 
   x <- bboudata::bbousurv_a
-  nat_priors <- bb_priors_survival_national(Anthro = 80, fire_excl_anthro = 5)
+  nat_priors <- bb_priors_survival_national(anthro = 80, fire_excl_anthro = 5)
 
   set.seed(101)
   fit_default <- bb_fit_survival(data = x, nthin = 1, quiet = TRUE)
@@ -27,7 +27,7 @@ test_that("national priors work with bb_fit_recruitment and change estimates", {
 
   x <- bboudata::bbourecruit_a
   nat_priors <- bb_priors_recruitment_national(
-    Anthro = 80,
+    anthro = 80,
     fire_excl_anthro = 5
   )
 

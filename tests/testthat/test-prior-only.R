@@ -85,7 +85,7 @@ test_that("bb_fit_survival works with prior-only data", {
   skip_on_covr()
 
   x <- prior_only_surv()
-  priors <- bb_priors_survival_national(Anthro = 50, fire_excl_anthro = 50)
+  priors <- bb_priors_survival_national(anthro = 50, fire_excl_anthro = 50)
   priors <- c(priors, c(sAnnual_rate = 10, bYear_mu = -1, bYear_sd = 0.1))
   set.seed(101)
   fit <- bb_fit_survival(
@@ -111,7 +111,7 @@ test_that("bb_fit_recruitment works with prior-only data", {
   skip_on_covr()
 
   x <- prior_only_recruit()
-  priors <- bb_priors_recruitment_national(Anthro = 50, fire_excl_anthro = 50)
+  priors <- bb_priors_recruitment_national(anthro = 50, fire_excl_anthro = 50)
   priors <- c(priors, c(sAnnual_rate = 10, bYear_mu = -1, bYear_sd = 0.1))
   set.seed(101)
   fit <- bb_fit_recruitment(
