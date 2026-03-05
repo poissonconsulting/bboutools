@@ -23,9 +23,11 @@ code
         }
     }
 }"
-"for (i in 1:nObs) {
-    logit(eSurvival[i]) <- b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i] + bMonth[Month[i], PopulationName[i]]
-}"
-"for (i in 1:nObs) {
-    Mortalities[i] ~ dbin(1 - eSurvival[i], StartTotal[i])
+"{
+    for (i in 1:nObs) {
+        logit(eSurvival[i]) <- b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i] + bMonth[Month[i], PopulationName[i]]
+    }
+    for (i in 1:nObs) {
+        Mortalities[i] ~ dbin(1 - eSurvival[i], StartTotal[i])
+    }
 }"

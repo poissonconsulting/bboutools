@@ -19,21 +19,23 @@ code
         bYear[k] ~ dnorm(bYear_mu, sd = bYear_sd)
     }
 }"
-"for (i in 1:nObs) {
-    logit(eRecruitment[i]) <- b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]
-}"
 "{
     for (i in 1:nObs) {
-        Cows[i] ~ dbin(adult_female_proportion, CowsBulls[i])
+        logit(eRecruitment[i]) <- b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]
     }
-}"
-"{
+    {
+        for (i in 1:nObs) {
+            Cows[i] ~ dbin(adult_female_proportion, CowsBulls[i])
+        }
+    }
+    {
+        for (i in 1:nObs) {
+            FemaleYearlings[i] ~ dbin(sex_ratio, Yearlings[i])
+            OtherAdultsFemales[i] ~ dbin(adult_female_proportion, UnknownAdults[i])
+        }
+    }
     for (i in 1:nObs) {
-        FemaleYearlings[i] ~ dbin(sex_ratio, Yearlings[i])
-        OtherAdultsFemales[i] ~ dbin(adult_female_proportion, UnknownAdults[i])
+        AdultsFemales[i] <- ((FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]) < 1) + FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]
+        Calves[i] ~ dbin(eRecruitment[i], AdultsFemales[i])
     }
-}"
-"for (i in 1:nObs) {
-    AdultsFemales[i] <- ((FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]) < 1) + FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]
-    Calves[i] ~ dbin(eRecruitment[i], AdultsFemales[i])
 }"
