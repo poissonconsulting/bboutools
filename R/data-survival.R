@@ -61,12 +61,14 @@ data_adjust_intercept <- function(data) {
 }
 
 data_list_survival <- function(data) {
-  data <- rescale(data, scale = "CaribouYear")
+  if (nrow(data) > 0) {
+    data <- rescale(data, scale = "CaribouYear")
+  }
   x <- list(
     nObs = nrow(data),
     StartTotal = data$StartTotal,
     Mortalities = data$Mortalities,
-    nMonth = length(unique(data$Month)),
+    nMonth = length(levels(data$Month)),
     Month = as.integer(data$Month),
     nAnnual = length(levels(data$Annual)),
     CaribouYear = data$CaribouYear,

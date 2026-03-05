@@ -21,6 +21,7 @@ model_data_recruitment <- function(
 ) {
   if (allow_missing) {
     placeholder <- is.na(data$Month)
+    population_names <- unique(data$PopulationName)
     unobserved_years <- caribou_year(
       data$Year[placeholder],
       year_start,
@@ -28,15 +29,30 @@ model_data_recruitment <- function(
     )
     data <- data[!placeholder, ]
   }
-  data <- data_clean_recruitment(data, quiet = quiet)
-  data <- data_prep_recruitment(data, year_start = year_start)
-  nAnnualObserved <- length(levels(data$Annual))
-  if (allow_missing) {
-    all_years <- sort(union(
-      levels(data$Annual),
-      as.character(unobserved_years)
-    ))
-    data$Annual <- factor(data$Annual, levels = all_years)
+  if (allow_missing && nrow(data) == 0L) {
+    all_years <- sort(unique(as.character(unobserved_years)))
+    data <- data.frame(
+      PopulationName = factor(character(), levels = as.character(population_names)),
+      Annual = factor(character(), levels = all_years),
+      CaribouYear = integer(),
+      Cows = integer(),
+      CowsBulls = integer(),
+      UnknownAdults = integer(),
+      Yearlings = integer(),
+      Calves = integer()
+    )
+    nAnnualObserved <- 0L
+  } else {
+    data <- data_clean_recruitment(data, quiet = quiet)
+    data <- data_prep_recruitment(data, year_start = year_start)
+    nAnnualObserved <- length(levels(data$Annual))
+    if (allow_missing) {
+      all_years <- sort(union(
+        levels(data$Annual),
+        as.character(unobserved_years)
+      ))
+      data$Annual <- factor(data$Annual, levels = all_years)
+    }
   }
   datal <- data_list_recruitment(data)
   list(datal = datal, data = data, nAnnualObserved = nAnnualObserved)
@@ -125,44 +141,46 @@ model_recruitment <-
         }
       }
 
-      for (i in 1:nObs) {
-        logit(eRecruitment[i]) <-
-          b0[PopulationName[i]] +
-          bAnnual[Annual[i], PopulationName[i]] +
-          bYear[PopulationName[i]] * CaribouYear[i]
-      }
-
-      if (!fixed_proportion | demographic_stochasticity) {
+      if (nObs > 0) {
         for (i in 1:nObs) {
-          Cows[i] ~ dbin(adult_female_proportion, CowsBulls[i])
+          logit(eRecruitment[i]) <-
+            b0[PopulationName[i]] +
+            bAnnual[Annual[i], PopulationName[i]] +
+            bYear[PopulationName[i]] * CaribouYear[i]
         }
-      }
 
-      if (demographic_stochasticity) {
-        for (i in 1:nObs) {
-          FemaleYearlings[i] ~ dbin(sex_ratio, Yearlings[i])
-          OtherAdultsFemales[i] ~ dbin(
-            adult_female_proportion,
-            UnknownAdults[i]
-          )
+        if (!fixed_proportion | demographic_stochasticity) {
+          for (i in 1:nObs) {
+            Cows[i] ~ dbin(adult_female_proportion, CowsBulls[i])
+          }
         }
-      } else {
-        for (i in 1:nObs) {
-          FemaleYearlings[i] <- round(sex_ratio * Yearlings[i])
-          OtherAdultsFemales[i] <-
-            round(adult_female_proportion * UnknownAdults[i])
-        }
-      }
 
-      for (i in 1:nObs) {
-        AdultsFemales[i] <-
-          # this replaces max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
-          # in original model because max cannot be used with ML
-          ((FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]) < 1) +
-          FemaleYearlings[i] +
-          Cows[i] +
-          OtherAdultsFemales[i]
-        Calves[i] ~ dbin(eRecruitment[i], AdultsFemales[i])
+        if (demographic_stochasticity) {
+          for (i in 1:nObs) {
+            FemaleYearlings[i] ~ dbin(sex_ratio, Yearlings[i])
+            OtherAdultsFemales[i] ~ dbin(
+              adult_female_proportion,
+              UnknownAdults[i]
+            )
+          }
+        } else {
+          for (i in 1:nObs) {
+            FemaleYearlings[i] <- round(sex_ratio * Yearlings[i])
+            OtherAdultsFemales[i] <-
+              round(adult_female_proportion * UnknownAdults[i])
+          }
+        }
+
+        for (i in 1:nObs) {
+          AdultsFemales[i] <-
+            # this replaces max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
+            # in original model because max cannot be used with ML
+            ((FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i]) < 1) +
+            FemaleYearlings[i] +
+            Cows[i] +
+            OtherAdultsFemales[i]
+          Calves[i] ~ dbin(eRecruitment[i], AdultsFemales[i])
+        }
       }
     })
 

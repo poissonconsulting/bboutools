@@ -14,20 +14,21 @@
 # limitations under the License.
 
 extract_lik <- function(x) {
-  x <- as.character(model_code(x))
-  x <- x[grepl("log|logit", x)]
-  x <- regmatches(x, regexpr("b0([^\\\n]*)", text = x))
+  if (inherits(x, "bboufit_survival")) {
+    lik <- "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i] + bMonth[Month[i], PopulationName[i]]"
+  } else {
+    lik <- "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]"
+  }
   gsub(
     "bAnnual[Annual[i], PopulationName[i]]",
     "bAnnual[Annual[i], PopulationName[i]] * Observed[i]",
-    x,
+    lik,
     fixed = TRUE
   )
 }
 
 extract_lik_year <- function(x) {
-  x <- extract_lik(x)
-  gsub(" + bMonth[Month[i], PopulationName[i]]", "", x, fixed = TRUE)
+  "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] * Observed[i] + bYear[PopulationName[i]] * CaribouYear[i]"
 }
 
 derived_expr_survival <- function(fit, year, month) {

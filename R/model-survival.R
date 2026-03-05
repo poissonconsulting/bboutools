@@ -22,6 +22,7 @@ model_data_survival <- function(
 ) {
   if (allow_missing) {
     placeholder <- is.na(data$Month)
+    population_names <- unique(data$PopulationName)
     unobserved_years <- caribou_year(
       data$Year[placeholder],
       year_start,
@@ -29,19 +30,32 @@ model_data_survival <- function(
     )
     data <- data[!placeholder, ]
   }
-  data <- data_clean_survival(data, quiet = quiet)
-  data <- data_prep_survival(
-    data,
-    include_uncertain_morts = include_uncertain_morts,
-    year_start = year_start
-  )
-  nAnnualObserved <- length(levels(data$Annual))
-  if (allow_missing) {
-    all_years <- sort(union(
-      levels(data$Annual),
-      as.character(unobserved_years)
-    ))
-    data$Annual <- factor(data$Annual, levels = all_years)
+  if (allow_missing && nrow(data) == 0L) {
+    all_years <- sort(unique(as.character(unobserved_years)))
+    data <- data.frame(
+      PopulationName = factor(character(), levels = as.character(population_names)),
+      Annual = factor(character(), levels = all_years),
+      Month = factor(integer(), levels = month_levels(year_start, 12L)),
+      CaribouYear = integer(),
+      StartTotal = integer(),
+      Mortalities = integer()
+    )
+    nAnnualObserved <- 0L
+  } else {
+    data <- data_clean_survival(data, quiet = quiet)
+    data <- data_prep_survival(
+      data,
+      include_uncertain_morts = include_uncertain_morts,
+      year_start = year_start
+    )
+    nAnnualObserved <- length(levels(data$Annual))
+    if (allow_missing) {
+      all_years <- sort(union(
+        levels(data$Annual),
+        as.character(unobserved_years)
+      ))
+      data$Annual <- factor(data$Annual, levels = all_years)
+    }
   }
   datal <- data_list_survival(data)
   list(datal = datal, data = data, nAnnualObserved = nAnnualObserved)
@@ -131,16 +145,18 @@ model_survival <- function(
       }
     }
 
-    for (i in 1:nObs) {
-      logit(eSurvival[i]) <-
-        b0[PopulationName[i]] +
-        bAnnual[Annual[i], PopulationName[i]] +
-        bYear[PopulationName[i]] * CaribouYear[i] +
-        bMonth[Month[i], PopulationName[i]]
-    }
+    if (nObs > 0) {
+      for (i in 1:nObs) {
+        logit(eSurvival[i]) <-
+          b0[PopulationName[i]] +
+          bAnnual[Annual[i], PopulationName[i]] +
+          bYear[PopulationName[i]] * CaribouYear[i] +
+          bMonth[Month[i], PopulationName[i]]
+      }
 
-    for (i in 1:nObs) {
-      Mortalities[i] ~ dbin(1 - eSurvival[i], StartTotal[i])
+      for (i in 1:nObs) {
+        Mortalities[i] ~ dbin(1 - eSurvival[i], StartTotal[i])
+      }
     }
   })
 

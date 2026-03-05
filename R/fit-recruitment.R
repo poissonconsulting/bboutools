@@ -79,7 +79,7 @@ bb_fit_recruitment <- function(
     quiet = quiet
   )
   nAnnual <- if (allow_missing) data$nAnnualObserved else data$datal$nAnnual
-  year_random <- nAnnual >= min_random_year
+  year_random <- nAnnual >= min_random_year || (allow_missing && nAnnual == 0)
   if (allow_missing && !year_random) {
     abort_chk(
       "`allow_missing` requires year to be fit as a random effect. Increase the number of observed years or decrease `min_random_year`."

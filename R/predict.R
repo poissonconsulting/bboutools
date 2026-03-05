@@ -66,10 +66,19 @@ new_data_ym <- function(x, year, month) {
     seq = seq
   )
   df$CaribouYear <- factor_to_integer(df$Annual)
-  df <- rescale(df, data2 = x, scale = "CaribouYear")
+  if (nrow(x) > 0) {
+    df <- rescale(df, data2 = x, scale = "CaribouYear")
+  } else {
+    df <- rescale(df, scale = "CaribouYear")
+  }
   if (year) {
-    observed_years <- unique(as.character(x$Annual))
-    df$Observed <- as.integer(as.character(df$Annual) %in% observed_years)
+    if (nrow(x) > 0) {
+      observed_years <- unique(as.character(x$Annual))
+      df$Observed <- as.integer(as.character(df$Annual) %in% observed_years)
+    } else {
+      # prior-only: include bAnnual from priors in predictions
+      df$Observed <- 1L
+    }
   } else {
     df$Observed <- 1L
   }

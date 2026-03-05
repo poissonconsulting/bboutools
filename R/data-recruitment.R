@@ -54,7 +54,9 @@ data_prep_recruitment <- function(data, year_start = 4L) {
 }
 
 data_list_recruitment <- function(data, model) {
-  data <- rescale(data, scale = "CaribouYear")
+  if (nrow(data) > 0) {
+    data <- rescale(data, scale = "CaribouYear")
+  }
   x <- list(
     nObs = nrow(data),
     Cows = data$Cows,
