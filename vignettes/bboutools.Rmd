@@ -92,7 +92,12 @@ bboudata::bbd_chk_data_survival(bboudata::bbousurv_a)
 bboudata::bbousurv_a
 ```
 
-All columns should be included and column names should not be changed. 
+All columns should be included and column names should not be changed.
+
+Both survival and recruitment data can include multiple populations (different `PopulationName` values).
+Survival data can also be provided as one row per population per year (aggregate annual data).
+Placeholder rows with `NA` measurement columns can be added for unobserved years with `allow_missing = TRUE`.
+See the [extensions article](https://poissonconsulting.github.io/bboutools/articles/extensions.html) for details.
 
 The `.csv` file can then be read into R using the following
 ```{r, eval=FALSE}
@@ -178,7 +183,7 @@ Keep in mind that any reference to 'Year' or 'Annual' in these summary outputs r
 ### Priors
 In general, weakly informative priors are used by default [@gelman_prior_2017; @mcelreath_statistical_2016]. 
 The default prior distribution parameter values can be accessed from `bb_priors_recruitment()` and `bb_priors_survival()`. 
-See the priors vignette for more information.
+See the [priors article](https://poissonconsulting.github.io/bboutools/articles/priors.html) for more information.
 
 ```{r}
 bb_priors_recruitment()
@@ -191,7 +196,17 @@ For example, less informative priors for `adult_female_proportion` (e.g., `Beta(
 recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a, priors = c(adult_female_proportion_alpha = 1, adult_female_proportion_beta = 1, b0_mu = 0, b0_sd = 5))
 ```
 
-If the user is interested in fitting models without any prior information, see `bb_fit_recruitment_ml()` and `bb_fit_survival_ml()`, which use a Maximum Likelihood approach (see more details below). 
+The user can also specify priors informed by national demographic-disturbance relationships [@johnson_science_2020] using `bb_priors_survival_national()` and `bb_priors_recruitment_national()`.
+These functions return intercept priors based on the level of anthropogenic and fire disturbance.
+
+```{r, eval=FALSE}
+nat_priors <- bb_priors_recruitment_national(anthro = 50, fire_excl_anthro = 5)
+recruitment_nat <- bb_fit_recruitment(bboudata::bbourecruit_a, priors = nat_priors, quiet = TRUE)
+```
+
+See the [priors article](https://poissonconsulting.github.io/bboutools/articles/priors.html) for more information.
+
+If the user is interested in fitting models without any prior information, see `bb_fit_recruitment_ml()` and `bb_fit_survival_ml()`, which use a Maximum Likelihood approach (see [Maximum Likelihood](#maximum-likelihood) below).
 
 ## Survival
 The annual survival in boreal caribou population is typically estimated from the monthly fates of collared adult females. 
@@ -221,11 +236,11 @@ tidy(survival, include_random_effects = FALSE)
 A user can generate and plot predictions of recruitment, survival and population growth.
 
 Recruitment is the adjusted recruitment using  methods from [@decesare_estimating_2012]. 
-See the 'analytical methods' article for details. 
+See the [analytical methods article](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
 
 Predictions of calf-cow ratio can also be made using `bb_predict_calf_cow_ratio()`. 
 
-The sex ratio can be adjusted with `sex_ratio`.
+The sex ratio is set at fit time via the `sex_ratio` argument in `bb_fit_recruitment()` and is automatically extracted by predict functions.
 
 #### Recruitment by year
 ```{r}
@@ -265,7 +280,7 @@ bb_plot_month_survival(predict_survival_month)
 A user can predict population growth (lambda) with `bb_predict_growth()`. 
 The survival and recruitment models fit in the previous steps are used as input.
 It is important to ensure that survival and recruitment outputs share the same biological year (i.e., 'caribou year'), which is set with the `year_start` argument in `bb_fit_survival()` and `bb_fit_recruitment()`.
-Details on how lambda is calculated can be found in the analytical methods vignette. 
+Details on how lambda is calculated can be found in the [analytical methods article](https://poissonconsulting.github.io/bboutools/articles/methods.html).
 
 ```{r}
 predict_lambda <- bb_predict_growth(survival = survival, recruitment = recruitment)
@@ -280,6 +295,30 @@ Population change (%) is calculated with uncertainty as the cumulative product o
 predict_change <- bb_predict_population_change(survival = survival, recruitment = recruitment)
 bb_plot_year_population_change(predict_change)
 ```
+
+## Multi-Population Analysis
+
+`bboutools` can fit models to data from multiple populations simultaneously.
+The function `bb_fit_survival()` auto-detects multiple populations from the `PopulationName` column.
+
+```{r,eval=FALSE}
+survival_multi <- bb_fit_survival(bboudata::bbousurv_multi, allow_missing = TRUE, quiet = TRUE)
+```
+
+```{r,echo=FALSE}
+survival_multi <- bboutools:::fit_survival_multi
+```
+
+Prediction plots are automatically faceted by population.
+
+```{r}
+pred_multi <- bb_predict_survival(survival_multi)
+bb_plot_year_survival(pred_multi)
+```
+
+The default faceting can be overridden since all plot functions return `ggplot2` objects.
+
+See the [extensions article](https://poissonconsulting.github.io/bboutools/articles/extensions.html) for more information on multi-population analysis, aggregate annual survival data, predicting unobserved years and other extensions.
 
 ## Maximum Likelihood
 
@@ -331,8 +370,11 @@ growth <- bb_predict_growth(survival_ml, recruitment_ml)
 bb_plot_year_growth(growth)
 ```
 
-Note that ML models can struggle to converge when there are sparse data, especially with a fixed year effect. 
-If these issues arise, the user can try estimating year as a random effect, continuous effect (`year_trend`), or fitting a Bayesian model. 
+ML models do not currently support multi-population analysis, unobserved year predictions (`allow_missing`) or prior-only sampling.
+These features are available only with the Bayesian fitting functions.
+
+Note that ML models can struggle to converge when there are sparse data, especially with a fixed year effect.
+If these issues arise, the user can try estimating year as a random effect, continuous effect (`year_trend`), or fitting a Bayesian model.
 
 Another possible source of convergence issues is initial values. 
 By default, `bboutools` sets initial values based on the default priors used for parameters in the Bayesian models. 

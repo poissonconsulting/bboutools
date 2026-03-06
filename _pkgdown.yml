@@ -2,6 +2,14 @@ url: https://poissonconsulting.github.io/bboutools/
 template:
   package: poissontemplate
 
+articles:
+- title: Articles
+  contents:
+    - bboutools
+    - methods
+    - priors
+    - extensions
+
 reference:
 - title: "Fitting Models"
   desc: "Fit Bayesian and Maximum Likelihood survival and recruitment models."

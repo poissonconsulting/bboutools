@@ -39,7 +39,7 @@ remotes::install_github("poissonconsulting/bboutools")
 
 ### Survival
 
-`bboutools` accepts survival data for a single population in a specific format.
+`bboutools` accepts survival data in a specific format.
 
 ```{r}
 library(tibble) # for printing data frames
@@ -115,7 +115,8 @@ bb_plot_year_population_change(change)
 Additional information is available from the [bboutools website](https://poissonconsulting.github.io/bboutools/), which includes the following articles:  
 - [Get Started](https://poissonconsulting.github.io/bboutools/articles/bboutools.html).  
 - [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/bbmethods.html).  
-- [Prior Selection and Influence](https://poissonconsulting.github.io/bboutools/articles/priors.html).  
+- [Prior Selection and Influence](https://poissonconsulting.github.io/bboutools/articles/priors.html).
+- [Multi-Population Analysis and Other Extensions](https://poissonconsulting.github.io/bboutools/articles/extensions.html).
 
 There is also a [user-friendly graphical interface](https://poissonconsulting.shinyapps.io/bboushiny/), called [`bboushiny`](https://github.com/poissonconsulting/bboushiny), for non-R users.
 

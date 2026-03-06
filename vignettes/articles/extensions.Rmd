@@ -1,0 +1,271 @@
+---
+title: "Multi-Population Analysis and Other Extensions"
+bibliography: bibliography.bib
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+```{r setup}
+library(bboutools)
+library(dplyr)
+library(ggplot2)
+```
+
+`bboutools` supports several extensions to the standard single-population monthly survival workflow.
+These include multi-population analysis, aggregate annual survival data, predictions for unobserved years, prior-only sampling and other features described below.
+
+## Multi-Population Analysis
+
+`bboutools` can fit models to data from multiple populations simultaneously.
+The fitting functions auto-detect multiple populations from the `PopulationName` column.
+
+### Data format
+
+Multi-population data has the same columns as single-population data, with different values in `PopulationName`.
+
+```{r}
+surv_multi <- bboudata::bbousurv_multi[!is.na(bboudata::bbousurv_multi$Month), ]
+head(surv_multi)
+```
+
+Populations can have different year ranges.
+
+```{r}
+surv_multi %>%
+  group_by(PopulationName) %>%
+  summarise(min_year = min(Year), max_year = max(Year))
+```
+
+### Fitting
+
+No special argument is needed.
+The function `bb_fit_survival()` detects multiple populations and fits a single model with population-indexed parameters.
+
+```{r,eval=FALSE}
+set.seed(101)
+survival_multi <- bb_fit_survival(surv_multi, quiet = TRUE)
+```
+
+```{r,echo=FALSE}
+survival_multi <- bboutools:::fit_survival_multi
+```
+
+The `tidy()` output shows population-indexed parameters.
+The intercept `b0`, year trend `bYear`, annual effects `bAnnual` and month effects `bMonth` are estimated for each population.
+The standard deviations `sAnnual` and `sMonth` are shared across populations.
+
+```{r}
+tidy(survival_multi, include_random_effects = FALSE)
+```
+
+### Predictions and plots
+
+Prediction and plot functions work as with single-population models.
+Plots are automatically faceted by `PopulationName`.
+
+```{r, fig.width=8, fig.height=4}
+pred_multi <- bb_predict_survival(survival_multi)
+bb_plot_year_survival(pred_multi)
+```
+
+The default faceting can be overridden since all plot functions return `ggplot2` objects.
+
+```{r, eval=FALSE}
+bb_plot_year_survival(pred_multi) + facet_wrap(~PopulationName, ncol = 3)
+```
+
+The recruitment model supports the same multi-population structure.
+
+```{r,eval=FALSE}
+rec_multi <- bboudata::bbourecruit_multi[
+  !is.na(bboudata::bbourecruit_multi$Month),
+]
+set.seed(101)
+recruitment_multi <- bb_fit_recruitment(rec_multi, quiet = TRUE)
+```
+
+```{r,echo=FALSE}
+recruitment_multi <- bboutools:::fit_recruitment_multi
+```
+
+```{r, fig.width=8, fig.height=4}
+pred_rec_multi <- bb_predict_recruitment(recruitment_multi)
+bb_plot_year_recruitment(pred_rec_multi)
+```
+
+See the [analytical methods article](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details on the multi-population model specification.
+
+Multi-population Maximum Likelihood models are not currently supported.
+
+## Aggregate Annual Survival Data
+
+Survival data can be provided as one row per population per year, instead of monthly records.
+This is useful when monthly collar data is not available and only annual summaries exist.
+
+### Data format
+
+Annual survival data uses the same columns as monthly data.
+Set `Month` to the `year_start` value (default `4L` for April).
+
+```{r}
+surv_annual <- bboudata::bbousurv_annual
+surv_annual_c <- surv_annual[surv_annual$PopulationName == "C", ]
+head(surv_annual_c)
+```
+
+### Fitting
+
+Annual data is auto-detected from the input.
+No special argument is needed.
+
+```{r,eval=FALSE}
+set.seed(101)
+survival_annual <- bb_fit_survival(surv_annual_c, quiet = TRUE)
+```
+
+```{r,echo=FALSE}
+survival_annual <- bboutools:::fit_survival_annual
+```
+
+When annual data is provided, the model has no month random effect (`bMonth` is fixed to zero) and the `^12` annualization used to convert monthly to annual survival is skipped.
+
+### Predictions
+
+The function `bb_predict_survival()` works as normal for annual fits.
+
+```{r}
+bb_predict_survival(survival_annual)
+```
+
+Calling `bb_predict_survival(survival_annual, month = TRUE)` will error, since monthly predictions are not meaningful for annual fits.
+Predictions from annual and monthly models are both on the annual survival scale and are directly comparable.
+
+## Predicting Unobserved Years
+
+Predictions can be generated for years with no observed data.
+This is done by adding placeholder rows to the input data and setting `allow_missing = TRUE`.
+
+### Data format
+
+A placeholder row has `PopulationName` and `Year` filled in, with all measurement columns set to `NA_integer_`.
+
+```{r}
+surv_missing <- bboudata::bbousurv_missing
+head(surv_missing)
+```
+
+```{r}
+# Placeholder rows have NA in the Month column
+surv_missing[is.na(surv_missing$Month), ]
+```
+
+### Fitting
+
+```{r,eval=FALSE}
+set.seed(101)
+survival_missing <- bb_fit_survival(
+  surv_missing,
+  allow_missing = TRUE,
+  quiet = TRUE
+)
+```
+
+```{r,echo=FALSE}
+survival_missing <- bboutools:::fit_survival_missing
+```
+
+### Predictions
+
+Predictions for unobserved years use the population-level mean (the year random effect is excluded).
+
+```{r, fig.width=6, fig.height=4}
+pred_missing <- bb_predict_survival(survival_missing)
+bb_plot_year_survival(pred_missing)
+```
+
+This approach works for years within or beyond the range of observed data.
+It requires random year effects (not fixed effects), since the model must include the hierarchical year structure.
+Unobserved year predictions are only supported for Bayesian models.
+
+## Prior-Only Sampling
+
+Sampling from prior distributions without observed data enables prior predictive checks.
+This is useful for verifying that priors produce ecologically plausible predictions before fitting to data, particularly when using disturbance-informed national priors.
+
+### Workflow
+
+Provide a data frame where `PopulationName` and `Year` are filled in but all measurement columns are `NA`.
+Set `allow_missing = TRUE`.
+
+```{r, eval=FALSE}
+# Build placeholder data
+recruit_prior <- data.frame(
+  PopulationName = "A",
+  Year = 2020:2030,
+  Month = NA_integer_,
+  Day = NA_integer_,
+  Cows = NA_integer_,
+  Bulls = NA_integer_,
+  UnknownAdults = NA_integer_,
+  Yearlings = NA_integer_,
+  Calves = NA_integer_
+)
+
+# Low disturbance scenario
+priors_low <- bb_priors_recruitment_national(anthro = 10, fire_excl_anthro = 5)
+
+set.seed(1)
+fit_low <- bb_fit_recruitment(
+  data = recruit_prior,
+  niters = 1000,
+  allow_missing = TRUE,
+  year_trend = TRUE,
+  priors = priors_low,
+  quiet = TRUE
+)
+
+pred_low <- bb_predict_recruitment(fit_low)
+bb_plot_year_recruitment(pred_low)
+```
+
+With `year_trend = FALSE` (default), all years are exchangeable and marginal predictions are identical across years.
+The `year_trend = TRUE` option allows temporal patterns from the `bYear` prior to appear in predictions.
+
+Prior-only sampling is only supported for Bayesian models.
+See the [priors article](https://poissonconsulting.github.io/bboutools/articles/priors.html) for more information on national priors and data rescaling.
+
+## Growth Predictions with Mismatched Fits
+
+The functions `bb_predict_growth()` and `bb_predict_population_change()` auto-filter to the intersection of populations and years when survival and recruitment fits cover different ranges.
+An informative message reports what was excluded.
+
+```{r, message=TRUE}
+growth <- bb_predict_growth(survival_multi, recruitment_multi)
+```
+
+```{r, fig.width=8, fig.height=4}
+bb_plot_year_growth(growth)
+```
+
+If there are no shared population-year combinations, an empty tibble is returned.
+
+## Raw MCMC Samples
+
+All `bb_predict_*()` functions have `bb_predict_*_samples()` counterparts that return raw MCMC samples instead of summarized estimates.
+These are useful for custom uncertainty analyses.
+
+```{r}
+samples <- bb_predict_survival_samples(survival_annual)
+head(samples)
+```
+
+The `bb_predict_*_trend_samples()` functions are also available for models fit with `year_trend = TRUE`.
+
+## References
