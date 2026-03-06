@@ -4,14 +4,18 @@
 \alias{bb_predict_population_change_samples}
 \title{Predict Population Change Samples}
 \usage{
-bb_predict_population_change_samples(survival, recruitment, sex_ratio = 0.5)
+bb_predict_population_change_samples(
+  survival,
+  recruitment,
+  sex_ratio = deprecated()
+)
 }
 \arguments{
 \item{survival}{An object of class 'bboufit_survival' (output of \code{\link[=bb_fit_survival]{bb_fit_survival()}}).}
 
 \item{recruitment}{An object of class 'bboufit_recruitment' (output of \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}})}
 
-\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.}
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth. Deprecated for \code{bb_fit_recruitment(sex_ratio)}. \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \value{
 A 'mcmcarray' object with the modified MCMC samples.

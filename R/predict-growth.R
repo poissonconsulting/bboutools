@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-predict_lambda <- function(survival, recruitment, sex_ratio) {
+predict_lambda <- function(survival, recruitment) {
   chkor_vld(.vld_fit(survival), .vld_fit_ml(survival))
   chk_s3_class(survival, "bboufit_survival")
   chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
@@ -21,6 +21,8 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
   .chk_has_samples(survival)
   .chk_has_samples(recruitment)
   .chk_year_start_equal(survival, recruitment)
+
+  sex_ratio <- .sex_ratio_bboufit(recruitment)
 
   pred_sur <- predict_survival(survival, year = TRUE, month = FALSE)
   pred_rec <- predict_calf_cow(recruitment, year = TRUE)
@@ -70,11 +72,20 @@ predict_lambda <- function(survival, recruitment, sex_ratio) {
 #' @references Hatter, Ian, and Wendy Bergerud. 1991. "Moose Recruitment, Adult
 #'   Mortality and Rate of Change" 27: 65–73.
 #' @family analysis
-bb_predict_growth_samples <- function(survival, recruitment, sex_ratio = 0.5) {
-  chk_number(sex_ratio)
-  chk_range(sex_ratio)
+bb_predict_growth_samples <- function(survival, recruitment, sex_ratio = deprecated()) {
+  if (lifecycle::is_present(sex_ratio)) {
+    lifecycle::deprecate_soft(
+      "1.0.0",
+      "bb_predict_growth_samples(sex_ratio)",
+      details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
+      id = "sex_ratio"
+    )
+    chk_number(sex_ratio)
+    chk_range(sex_ratio)
+    .sex_ratio_bboufit(recruitment) <- sex_ratio
+  }
 
-  predict_lambda(survival, recruitment = recruitment, sex_ratio = sex_ratio)
+  predict_lambda(survival, recruitment = recruitment)
 }
 
 #' Predict Population Growth Lambda
@@ -97,19 +108,29 @@ bb_predict_growth_samples <- function(survival, recruitment, sex_ratio = 0.5) {
 bb_predict_growth <- function(
   survival,
   recruitment,
-  sex_ratio = 0.5,
+  sex_ratio = deprecated(),
   conf_level = 0.95,
   estimate = median,
   sig_fig = 3
 ) {
+  if (lifecycle::is_present(sex_ratio)) {
+    lifecycle::deprecate_soft(
+      "1.0.0",
+      "bb_predict_growth(sex_ratio)",
+      details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
+      id = "sex_ratio"
+    )
+    chk_number(sex_ratio)
+    chk_range(sex_ratio)
+    .sex_ratio_bboufit(recruitment) <- sex_ratio
+  }
   chk_range(conf_level, c(0, 1))
   chk_is(estimate, "function")
   chk_whole_number(sig_fig)
 
   lambda <- bb_predict_growth_samples(
     survival,
-    recruitment = recruitment,
-    sex_ratio = sex_ratio
+    recruitment = recruitment
   )
   data <- lambda$data
   # no years in common
@@ -141,15 +162,23 @@ bb_predict_growth <- function(
 bb_predict_population_change_samples <- function(
   survival,
   recruitment,
-  sex_ratio = 0.5
+  sex_ratio = deprecated()
 ) {
-  chk_number(sex_ratio)
-  chk_range(sex_ratio)
+  if (lifecycle::is_present(sex_ratio)) {
+    lifecycle::deprecate_soft(
+      "1.0.0",
+      "bb_predict_population_change_samples(sex_ratio)",
+      details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
+      id = "sex_ratio"
+    )
+    chk_number(sex_ratio)
+    chk_range(sex_ratio)
+    .sex_ratio_bboufit(recruitment) <- sex_ratio
+  }
 
   lambda <- predict_lambda(
     survival,
-    recruitment = recruitment,
-    sex_ratio = sex_ratio
+    recruitment = recruitment
   )
   data <- lambda$data
   # no years in common
@@ -193,19 +222,29 @@ bb_predict_population_change_samples <- function(
 bb_predict_population_change <- function(
   survival,
   recruitment,
-  sex_ratio = 0.5,
+  sex_ratio = deprecated(),
   conf_level = 0.95,
   estimate = median,
   sig_fig = 3
 ) {
+  if (lifecycle::is_present(sex_ratio)) {
+    lifecycle::deprecate_soft(
+      "1.0.0",
+      "bb_predict_population_change(sex_ratio)",
+      details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
+      id = "sex_ratio"
+    )
+    chk_number(sex_ratio)
+    chk_range(sex_ratio)
+    .sex_ratio_bboufit(recruitment) <- sex_ratio
+  }
   chk_range(conf_level, c(0, 1))
   chk_is(estimate, "function")
   chk_whole_number(sig_fig)
 
   lambda <- bb_predict_population_change_samples(
     survival,
-    recruitment = recruitment,
-    sex_ratio = sex_ratio
+    recruitment = recruitment
   )
   data <- lambda$data
   # no years in common

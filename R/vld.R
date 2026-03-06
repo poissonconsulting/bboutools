@@ -31,6 +31,7 @@
           "niters",
           "year_trend",
           "year_start",
+          "sex_ratio",
           "class"
         )
     )),

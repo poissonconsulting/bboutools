@@ -121,7 +121,8 @@ bb_fit_recruitment <- function(
     niters = niters,
     nobs = nrow(data$data),
     year_trend = year_trend,
-    year_start = year_start
+    year_start = year_start,
+    sex_ratio = sex_ratio
   )
 
   .attrs_bboufit(fit) <- attrs

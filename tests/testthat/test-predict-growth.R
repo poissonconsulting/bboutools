@@ -29,11 +29,13 @@ test_that("bb_predict_growth warning when different year start", {
   expect_warning(bb_predict_growth(survival, recruitment))
 })
 
-test_that("bb_predict_growth works with sex ratio", {
-  predict <- bb_predict_growth(
-    bboutools:::fit_survival,
-    bboutools:::fit_recruitment,
-    sex_ratio = 0.7
+test_that("bb_predict_growth sex_ratio deprecated", {
+  lifecycle::expect_deprecated(
+    predict <- bb_predict_growth(
+      bboutools:::fit_survival,
+      bboutools:::fit_recruitment,
+      sex_ratio = 0.7
+    )
   )
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_growth_sex_ratio")

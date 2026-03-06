@@ -128,21 +128,31 @@ stats::predict
 predict.bboufit_recruitment <- function(
   object,
   year = TRUE,
-  sex_ratio = 0.5,
+  sex_ratio = deprecated(),
   conf_level = 0.95,
   estimate = median,
   sig_fig = 3,
   ...
 ) {
   chk_unused(...)
-  bb_predict_recruitment(
-    object,
-    year = year,
-    sex_ratio = sex_ratio,
-    conf_level = conf_level,
-    estimate = estimate,
-    sig_fig = sig_fig
-  )
+  if (lifecycle::is_present(sex_ratio)) {
+    bb_predict_recruitment(
+      object,
+      year = year,
+      sex_ratio = sex_ratio,
+      conf_level = conf_level,
+      estimate = estimate,
+      sig_fig = sig_fig
+    )
+  } else {
+    bb_predict_recruitment(
+      object,
+      year = year,
+      conf_level = conf_level,
+      estimate = estimate,
+      sig_fig = sig_fig
+    )
+  }
 }
 
 #' Predict Survival
@@ -231,13 +241,23 @@ bb_predict_calf_cow_ratio <- function(
 bb_predict_recruitment_samples <- function(
   recruitment,
   year = TRUE,
-  sex_ratio = 0.5
+  sex_ratio = deprecated()
 ) {
   chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
   chk_s3_class(recruitment, "bboufit_recruitment")
   chk_flag(year)
-  chk_number(sex_ratio)
-  chk_range(sex_ratio)
+  if (lifecycle::is_present(sex_ratio)) {
+    lifecycle::deprecate_soft(
+      "1.0.0",
+      "bb_predict_recruitment_samples(sex_ratio)",
+      details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
+      id = "sex_ratio"
+    )
+    chk_number(sex_ratio)
+    chk_range(sex_ratio)
+  } else {
+    sex_ratio <- .sex_ratio_bboufit(recruitment)
+  }
 
   predicted <- predict_calf_cow(fit = recruitment, year = year)
   rec <- predicted$samples
@@ -266,7 +286,7 @@ bb_predict_recruitment_samples <- function(
 bb_predict_recruitment <- function(
   recruitment,
   year = TRUE,
-  sex_ratio = 0.5,
+  sex_ratio = deprecated(),
   conf_level = 0.95,
   estimate = median,
   sig_fig = 3
@@ -274,8 +294,18 @@ bb_predict_recruitment <- function(
   chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
   chk_s3_class(recruitment, "bboufit_recruitment")
   chk_flag(year)
-  chk_number(sex_ratio)
-  chk_range(sex_ratio)
+  if (lifecycle::is_present(sex_ratio)) {
+    lifecycle::deprecate_soft(
+      "1.0.0",
+      "bb_predict_recruitment(sex_ratio)",
+      details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
+      id = "sex_ratio"
+    )
+    chk_number(sex_ratio)
+    chk_range(sex_ratio)
+  } else {
+    sex_ratio <- .sex_ratio_bboufit(recruitment)
+  }
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)

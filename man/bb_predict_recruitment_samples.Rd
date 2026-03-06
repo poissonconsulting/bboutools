@@ -4,14 +4,18 @@
 \alias{bb_predict_recruitment_samples}
 \title{Predict Recruitment Samples}
 \usage{
-bb_predict_recruitment_samples(recruitment, year = TRUE, sex_ratio = 0.5)
+bb_predict_recruitment_samples(
+  recruitment,
+  year = TRUE,
+  sex_ratio = deprecated()
+)
 }
 \arguments{
 \item{recruitment}{An object of class 'bboufit_recruitment' (output of \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}})}
 
 \item{year}{A flag indicating whether to predict by year.}
 
-\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.}
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth. Deprecated for \code{bb_fit_recruitment(sex_ratio)}. \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \value{
 A 'mcmcarray' object with the modified MCMC samples.

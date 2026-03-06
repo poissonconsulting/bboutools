@@ -25,11 +25,13 @@ test_that("bb_predict_growth_samples works", {
   expect_true(all(predict$lambda >= 0))
 })
 
-test_that("bb_predict_growth_samples works with sex ratio", {
-  predict <- bb_predict_growth_samples(
-    bboutools:::fit_survival,
-    bboutools:::fit_recruitment,
-    sex_ratio = 0.7
+test_that("bb_predict_growth_samples sex_ratio deprecated", {
+  lifecycle::expect_deprecated(
+    predict <- bb_predict_growth_samples(
+      bboutools:::fit_survival,
+      bboutools:::fit_recruitment,
+      sex_ratio = 0.7
+    )
   )
   expect_type(predict, "list")
   expect_named(predict, c("lambda", "data"))

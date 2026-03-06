@@ -34,10 +34,12 @@ test_that("bb_predict_recruitment_samples one works", {
   expect_true(all(predict$samples >= 0 & predict$samples <= 1))
 })
 
-test_that("bb_predict_recruitment_samples sex_ratio works", {
-  predict <- bb_predict_recruitment_samples(
-    bboutools:::fit_recruitment,
-    sex_ratio = 0.7
+test_that("bb_predict_recruitment_samples sex_ratio deprecated", {
+  lifecycle::expect_deprecated(
+    predict <- bb_predict_recruitment_samples(
+      bboutools:::fit_recruitment,
+      sex_ratio = 0.7
+    )
   )
   expect_type(predict, "list")
   expect_named(predict, c("samples", "data"))

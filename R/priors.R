@@ -149,7 +149,7 @@ bb_priors_survival_national <- function(anthro, fire_excl_anthro, annual = FALSE
   .chk_disturbance(anthro, fire_excl_anthro)
   chk_flag(annual)
   result <- bbouNationalPriors::bbouNationalPriors(
-    Anthro = anthro,
+    anthro = anthro,
     fire_excl_anthro = fire_excl_anthro,
     month = !annual
   )
@@ -194,7 +194,7 @@ bb_priors_survival_national <- function(anthro, fire_excl_anthro, annual = FALSE
 bb_priors_recruitment_national <- function(anthro, fire_excl_anthro) {
   .chk_disturbance(anthro, fire_excl_anthro)
   result <- bbouNationalPriors::bbouNationalPriors(
-    Anthro = anthro,
+    anthro = anthro,
     fire_excl_anthro = fire_excl_anthro
   )
   result$priors_recruitment
