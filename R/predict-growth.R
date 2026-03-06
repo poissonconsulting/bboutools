@@ -74,7 +74,7 @@ predict_lambda <- function(survival, recruitment) {
 #' @family analysis
 bb_predict_growth_samples <- function(survival, recruitment, sex_ratio = deprecated()) {
   if (lifecycle::is_present(sex_ratio)) {
-    lifecycle::deprecate_soft(
+    lifecycle::deprecate_warn(
       "1.0.0",
       "bb_predict_growth_samples(sex_ratio)",
       details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
@@ -114,7 +114,7 @@ bb_predict_growth <- function(
   sig_fig = 3
 ) {
   if (lifecycle::is_present(sex_ratio)) {
-    lifecycle::deprecate_soft(
+    lifecycle::deprecate_warn(
       "1.0.0",
       "bb_predict_growth(sex_ratio)",
       details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
@@ -165,7 +165,7 @@ bb_predict_population_change_samples <- function(
   sex_ratio = deprecated()
 ) {
   if (lifecycle::is_present(sex_ratio)) {
-    lifecycle::deprecate_soft(
+    lifecycle::deprecate_warn(
       "1.0.0",
       "bb_predict_population_change_samples(sex_ratio)",
       details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
@@ -228,7 +228,7 @@ bb_predict_population_change <- function(
   sig_fig = 3
 ) {
   if (lifecycle::is_present(sex_ratio)) {
-    lifecycle::deprecate_soft(
+    lifecycle::deprecate_warn(
       "1.0.0",
       "bb_predict_population_change(sex_ratio)",
       details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
@@ -279,7 +279,7 @@ bb_predict_lambda <- function(
   estimate = median,
   sig_fig = 3
 ) {
-  lifecycle::deprecate_soft(
+  lifecycle::deprecate_warn(
     "v0.0.1",
     "bb_predict_lambda()",
     "bb_predict_growth()"

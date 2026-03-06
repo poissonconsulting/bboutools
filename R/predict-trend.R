@@ -37,7 +37,7 @@ bb_predict_recruitment_trend_samples <- function(recruitment, sex_ratio = deprec
   chk_s3_class(recruitment, "bboufit_recruitment")
   .chk_year_trend(recruitment)
   if (lifecycle::is_present(sex_ratio)) {
-    lifecycle::deprecate_soft(
+    lifecycle::deprecate_warn(
       "1.0.0",
       "bb_predict_recruitment_trend_samples(sex_ratio)",
       details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
@@ -81,7 +81,7 @@ bb_predict_recruitment_trend <- function(
   sig_fig = 5
 ) {
   if (lifecycle::is_present(sex_ratio)) {
-    lifecycle::deprecate_soft(
+    lifecycle::deprecate_warn(
       "1.0.0",
       "bb_predict_recruitment_trend(sex_ratio)",
       details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
