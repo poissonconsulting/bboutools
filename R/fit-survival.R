@@ -136,7 +136,7 @@ bb_fit_survival <- function(
 
   .attrs_bboufit(fit) <- attrs
   fit$data <- data$data
-  fit$model_code <- model$getCode()
+  fit$model_code <- substitute_prior_values(model$getCode(), priors)
   class(fit) <- c("bboufit_survival", "bboufit")
   fit
 }

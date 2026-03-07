@@ -13,6 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+substitute_prior_values <- function(code, constants) {
+  do.call(substitute, list(code, as.list(constants)))
+}
+
 #' Get Model Code
 #'
 #' Get code from Nimble model.

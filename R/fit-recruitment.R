@@ -128,7 +128,11 @@ bb_fit_recruitment <- function(
 
   .attrs_bboufit(fit) <- attrs
   fit$data <- data$data
-  fit$model_code <- model$getCode()
+  code_constants <- c(priors, sex_ratio = sex_ratio)
+  if (!is.null(adult_female_proportion)) {
+    code_constants <- c(code_constants, adult_female_prop = adult_female_proportion)
+  }
+  fit$model_code <- substitute_prior_values(model$getCode(), code_constants)
   class(fit) <- c("bboufit_recruitment", "bboufit")
   fit
 }
