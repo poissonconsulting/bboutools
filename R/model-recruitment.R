@@ -20,13 +20,21 @@ model_data_recruitment <- function(
   quiet
 ) {
   if (allow_missing) {
-    placeholder <- is.na(data$Month)
+    measurement_cols <- c("Cows", "Bulls", "UnknownAdults", "Yearlings", "Calves")
+    placeholder <- rowSums(is.na(data[measurement_cols])) == length(measurement_cols)
     population_names <- unique(data$PopulationName)
-    unobserved_years <- caribou_year(
-      data$Year[placeholder],
-      year_start,
-      year_start = year_start
-    )
+    if (any(placeholder)) {
+      unobserved_years <- caribou_year(
+        data$Year[placeholder],
+        year_start,
+        year_start = year_start
+      )
+      if (!quiet) {
+        .inform_unobserved_years(data[placeholder, ], unobserved_years)
+      }
+    } else {
+      unobserved_years <- integer(0)
+    }
     data <- data[!placeholder, ]
   }
   if (allow_missing && nrow(data) == 0L) {

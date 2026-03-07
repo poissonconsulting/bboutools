@@ -56,6 +56,35 @@ test_that("data annual single pop", {
   expect_identical(x2$datal$nMonth, 1L)
 })
 
+test_that("allow_missing with no placeholders single pop", {
+  x <- bboudata::bbousurv_a
+  x2 <- model_data_survival(
+    x,
+    include_uncertain_morts = TRUE,
+    year_start = 4L,
+    allow_missing = TRUE,
+    quiet = TRUE
+  )
+
+  # no unobserved years so nAnnual equals nAnnualObserved
+  expect_identical(x2$datal$nAnnual, x2$nAnnualObserved)
+  expect_identical(x2$datal$nPopulation, 1L)
+})
+
+test_that("allow_missing with no placeholders multi pop", {
+  x <- bboudata::bbousurv_multi[!is.na(bboudata::bbousurv_multi$Month), ]
+  x2 <- model_data_survival(
+    x,
+    include_uncertain_morts = TRUE,
+    year_start = 4L,
+    allow_missing = TRUE,
+    quiet = TRUE
+  )
+
+  expect_identical(x2$datal$nAnnual, x2$nAnnualObserved)
+  expect_identical(x2$datal$nPopulation, 3L)
+})
+
 test_that("allow_missing single pop", {
   x <- bboudata::bbousurv_missing
   x2 <- model_data_survival(
@@ -90,4 +119,57 @@ test_that("allow_missing multi pop", {
   expect_identical(x2$datal$nObs, nrow(x2$data))
   expect_true(all(!is.na(x2$data$Month)))
   expect_identical(x2$datal$nPopulation, 3L)
+})
+
+test_that("placeholder detected by measurement columns not Month", {
+  x <- bboudata::bbousurv_a
+  # add a row with valid Month but all-NA measurements
+
+  placeholder <- x[1, ]
+  placeholder$Year <- 2099L
+  placeholder$Month <- 4L
+  placeholder$StartTotal <- NA_integer_
+  placeholder$MortalitiesCertain <- NA_integer_
+  placeholder$MortalitiesUncertain <- NA_integer_
+  x2 <- rbind(x, placeholder)
+
+  result <- model_data_survival(
+    x2,
+    include_uncertain_morts = TRUE,
+    year_start = 4L,
+    allow_missing = TRUE,
+    quiet = TRUE
+  )
+
+  # placeholder row should be detected and excluded from data
+  expect_false(2099L %in% result$data$Year)
+  # but the unobserved year should be in the Annual factor levels
+  expect_gt(result$datal$nAnnual, result$nAnnualObserved)
+})
+
+test_that("message emitted for unobserved years when quiet = FALSE", {
+  x <- bboudata::bbousurv_missing
+  expect_message(
+    model_data_survival(
+      x,
+      include_uncertain_morts = TRUE,
+      year_start = 4L,
+      allow_missing = TRUE,
+      quiet = FALSE
+    ),
+    "Detected unobserved CaribouYear"
+  )
+})
+
+test_that("no message for unobserved years when quiet = TRUE", {
+  x <- bboudata::bbousurv_missing
+  expect_silent(
+    model_data_survival(
+      x,
+      include_uncertain_morts = TRUE,
+      year_start = 4L,
+      allow_missing = TRUE,
+      quiet = TRUE
+    )
+  )
 })
