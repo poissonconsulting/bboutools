@@ -56,6 +56,7 @@ bb_fit_survival_ml <- function(
   chk_null_or(inits, vld = vld_vector)
   chk_null_or(inits, vld = vld_named)
   chk_flag(quiet)
+  .check_attached()
 
   # special treatment of intercept for ML fixed
   data <- data_clean_survival(data, quiet = quiet)

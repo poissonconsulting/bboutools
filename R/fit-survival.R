@@ -82,6 +82,7 @@ bb_fit_survival <- function(
   default_priors <- priors_survival()
   .chk_priors(priors, names(default_priors))
   chk_flag(quiet)
+  .check_attached()
 
   priors <- replace_priors(default_priors, priors)
   data <-

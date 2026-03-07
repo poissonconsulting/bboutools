@@ -70,6 +70,7 @@ bb_fit_recruitment <- function(
   default_priors <- priors_recruitment()
   .chk_priors(priors, names(default_priors))
   chk_flag(quiet)
+  .check_attached()
 
   priors <- replace_priors(default_priors, priors)
   data <- model_data_recruitment(

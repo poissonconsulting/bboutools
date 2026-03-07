@@ -58,6 +58,7 @@ bb_fit_recruitment_ml <- function(
   chk_null_or(inits, vld = vld_vector)
   chk_null_or(inits, vld = vld_named)
   chk_flag(quiet)
+  .check_attached()
 
   data <- model_data_recruitment(data, year_start = year_start, quiet = quiet)
   year_random <- data$datal$nAnnual >= min_random_year
