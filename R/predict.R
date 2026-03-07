@@ -73,8 +73,9 @@ new_data_ym <- function(x, year, month) {
   }
   if (year) {
     if (nrow(x) > 0) {
-      observed_years <- unique(as.character(x$Annual))
-      df$Observed <- as.integer(as.character(df$Annual) %in% observed_years)
+      observed_keys <- unique(paste(x$PopulationName, x$Annual))
+      df_keys <- paste(df$PopulationName, df$Annual)
+      df$Observed <- as.integer(df_keys %in% observed_keys)
     } else {
       # prior-only: include bAnnual from priors in predictions
       df$Observed <- 1L
