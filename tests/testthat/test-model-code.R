@@ -22,3 +22,54 @@ test_that("substitute_prior_values ignores names not in code", {
   result_text <- deparse(result)
   expect_false(any(grepl("99", result_text)))
 })
+
+test_that("clean_model_code unwraps redundant braces", {
+  # Simulates NIMBLE's if/else resolution wrapping branches in { }
+  code <- quote({
+    for (k in 1:nPopulation) {
+      b0[k] ~ dnorm(3, sd = 10)
+    }
+    {
+      adult_female_proportion <- 0.65
+    }
+    {
+      sAnnual ~ dexp(1)
+      for (i in 1:nAnnual) {
+        bAnnual[i] ~ dnorm(0, sd = sAnnual)
+      }
+    }
+  })
+  result <- clean_model_code(code)
+  result_text <- deparse(result)
+  # The for loop, assignment, and sAnnual block should all be at the same level
+  # No line should be just "{"  or "}" wrapped around a single block
+  # Count top-level expressions (children of outer { })
+  n_children <- length(result) - 1L # subtract the `{` symbol
+  # Originally: for, { assignment }, { sAnnual + for }
+  # After cleaning: for, assignment, sAnnual, for = 4 children
+  expect_equal(n_children, 4L)
+})
+
+test_that("clean_model_code handles deeply nested braces", {
+  code <- quote({
+    {
+      {
+        x <- 1
+      }
+    }
+    y <- 2
+  })
+  result <- clean_model_code(code)
+  n_children <- length(result) - 1L
+  expect_equal(n_children, 2L)
+})
+
+test_that("clean_model_code preserves non-brace expressions", {
+  code <- quote({
+    for (i in 1:n) {
+      x[i] ~ dnorm(0, 1)
+    }
+  })
+  result <- clean_model_code(code)
+  expect_identical(result, code)
+})
