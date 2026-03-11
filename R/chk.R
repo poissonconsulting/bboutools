@@ -89,20 +89,22 @@ xname <- function(x, col) {
 }
 
 .inform_unobserved_years <- function(placeholder_data, unobserved_years) {
-  by_pop <- split(
-    as.character(unobserved_years),
-    placeholder_data$PopulationName
-  )
-  details <- character(0)
-  for (pop in names(by_pop)) {
-    years <- sort(unique(by_pop[[pop]]))
-    details <- c(details, "i" = "Population {.val {pop}}: {.val {years}}")
-  }
+  parts <- dplyr::tibble(
+    PopulationName = placeholder_data$PopulationName,
+    CaribouYear = as.character(unobserved_years)
+  ) |>
+    dplyr::distinct() |>
+    dplyr::arrange(.data$PopulationName, .data$CaribouYear) |>
+    dplyr::summarise(
+      years = paste(.data$CaribouYear, collapse = ", "),
+      .by = "PopulationName"
+    ) |>
+    dplyr::mutate(part = paste0(.data$PopulationName, " (", .data$years, ")")) |>
+    dplyr::pull("part")
 
-  cli::cli_inform(c(
-    "Detected unobserved CaribouYear(s) from placeholder rows.",
-    details
-  ))
+  cli::cli_inform(
+    "Detected unobserved CaribouYear(s) from placeholder rows: {paste(parts, collapse = '; ')}."
+  )
 }
 
 .warn_filtered_multi <- function(data_sur, data_rec) {
