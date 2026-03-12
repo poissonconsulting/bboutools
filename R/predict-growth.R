@@ -67,7 +67,11 @@ predict_lambda <- function(survival, recruitment) {
 #' (Hatter and Bergerud, 1991).
 #'
 #' @inheritParams params
-#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
 #' @export
 #' @references Hatter, Ian, and Wendy Bergerud. 1991. "Moose Recruitment, Adult
 #'   Mortality and Rate of Change" 27: 65–73.
@@ -156,7 +160,11 @@ bb_predict_growth <- function(
 #' Population change is the cumulative product of population growth rate (i.e., output of [`bb_predict_growth()`])
 #'
 #' @inheritParams params
-#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
 #' @export
 #' @family analysis
 bb_predict_population_change_samples <- function(

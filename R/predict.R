@@ -170,7 +170,11 @@ predict.bboufit_survival <- function(
 #' If year is FALSE, predictions are made for a 'typical' year.
 #'
 #' @inheritParams params
-#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
 #' @export
 #' @family analysis
 bb_predict_calf_cow_ratio_samples <- function(recruitment, year = TRUE) {
@@ -219,7 +223,11 @@ bb_predict_calf_cow_ratio <- function(
 #' See [bb_predict_calf_cow_ratio()] for unadjusted recruitment.
 #'
 #' @inheritParams params
-#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
 #' @export
 #' @references
 #'   DeCesare, Nicholas J., Mark Hebblewhite, Mark Bradley, Kirby G. Smith,
@@ -321,7 +329,11 @@ bb_predict_recruitment <- function(
 #' If year and month are FALSE, predictions are made for a 'typical' year and month.
 #'
 #' @inheritParams params
-#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
 #' @export
 #' @family analysis
 bb_predict_survival_samples <- function(survival, year = TRUE, month = FALSE) {

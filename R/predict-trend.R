@@ -29,7 +29,11 @@ predict_trend <- function(fit, derived_expr) {
 #' Recruitment fit object provided must be created with `year_trend = TRUE`.
 #'
 #' @inheritParams params
-#' @return A 'mcmcarray' object containing the modified MCMC samples.
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
 #' @export
 #' @family analysis
 bb_predict_recruitment_trend_samples <- function(recruitment, sex_ratio = deprecated()) {
@@ -115,7 +119,11 @@ bb_predict_recruitment_trend <- function(
 #' Recruitment fit object provided must be created with `year_trend = TRUE`.
 #'
 #' @inheritParams params
-#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
 #' @export
 #' @family analysis
 bb_predict_calf_cow_ratio_trend_samples <- function(recruitment) {
@@ -166,7 +174,11 @@ bb_predict_calf_cow_ratio_trend <- function(
 #' Survival fit object provided must be created with `year_trend = TRUE`.
 #'
 #' @inheritParams params
-#' @return A 'mcmcarray' object with the modified MCMC samples.
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
 #' @export
 #' @family analysis
 bb_predict_survival_trend_samples <- function(survival) {
