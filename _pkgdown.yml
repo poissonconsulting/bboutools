@@ -6,9 +6,9 @@ articles:
 - title: Articles
   contents:
     - bboutools
-    - methods
-    - priors
-    - extensions
+    - articles/methods
+    - articles/priors
+    - articles/extensions
 
 reference:
 - title: "Fitting Models"
