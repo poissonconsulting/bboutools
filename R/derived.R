@@ -15,20 +15,14 @@
 
 extract_lik <- function(x) {
   if (inherits(x, "bboufit_survival")) {
-    lik <- "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i] + bMonth[Month[i], PopulationName[i]]"
+    "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i] + bMonth[Month[i], PopulationName[i]]"
   } else {
-    lik <- "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]"
+    "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]"
   }
-  gsub(
-    "bAnnual[Annual[i], PopulationName[i]]",
-    "bAnnual[Annual[i], PopulationName[i]] * Observed[i]",
-    lik,
-    fixed = TRUE
-  )
 }
 
 extract_lik_year <- function(x) {
-  "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] * Observed[i] + bYear[PopulationName[i]] * CaribouYear[i]"
+  "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]"
 }
 
 derived_expr_survival <- function(fit, year, month) {

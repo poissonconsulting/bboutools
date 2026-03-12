@@ -71,18 +71,6 @@ new_data_ym <- function(x, year, month) {
   } else {
     df <- rescale(df, scale = "CaribouYear")
   }
-  if (year) {
-    if (nrow(x) > 0) {
-      observed_keys <- unique(paste(x$PopulationName, x$Annual))
-      df_keys <- paste(df$PopulationName, df$Annual)
-      df$Observed <- as.integer(df_keys %in% observed_keys)
-    } else {
-      # prior-only: include bAnnual from priors in predictions
-      df$Observed <- 1L
-    }
-  } else {
-    df$Observed <- 1L
-  }
   df
 }
 
