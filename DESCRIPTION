@@ -54,7 +54,7 @@ VignetteBuilder:
     knitr
 Remotes:
     LandSciTech/bbouNationalPriors,
-    poissonconsulting/bboudata,
+    poissonconsulting/bboudata@extensions,
     poissonconsulting/newdata,
     poissonconsulting/rescale
 Config/testthat/edition: 3
