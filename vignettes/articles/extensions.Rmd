@@ -183,7 +183,8 @@ survival_missing <- bboutools:::fit_survival_missing
 
 ### Predictions
 
-Predictions for unobserved years use the population-level mean (the year random effect is excluded).
+For unobserved years, the year random effects (`bAnnual`) are sampled from their prior distribution (`Normal(0, sAnnual)`) rather than being informed by data.
+This means predictions reflect the population-level mean with additional uncertainty from the year effect prior, giving wider credible intervals than observed years where the data constrains the year effect.
 
 ```{r, fig.width=6, fig.height=4}
 pred_missing <- bb_predict_survival(survival_missing)
@@ -262,8 +263,9 @@ All `bb_predict_*()` functions have `bb_predict_*_samples()` counterparts that r
 These are useful for custom uncertainty analyses.
 
 ```{r}
-samples <- bb_predict_survival_samples(survival_annual)
-head(samples)
+x <- bb_predict_survival_samples(survival_annual)
+names(x)
+head(x$samples)
 ```
 
 The `bb_predict_*_trend_samples()` functions are also available for models fit with `year_trend = TRUE`.

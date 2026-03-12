@@ -54,7 +54,7 @@ If NULL, all parameters are assigned a default value of 0.}
 \item{recruitment}{An object of class 'bboufit_recruitment' (output of \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}})}
 
 \item{allow_missing}{A flag indicating whether to allow unobserved years (placeholder rows with NA measurement columns).
-When TRUE, predictions for unobserved years use the population-level mean (i.e., excluding the year random effect).
+When TRUE, the year random effects for unobserved years are sampled from the prior distribution rather than being informed by data, giving predictions that reflect the population-level mean with appropriate uncertainty.
 Requires year to be fit as a random effect (i.e., not supported with fixed year effects).
 Not supported with Maximum Likelihood models.}
 

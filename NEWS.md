@@ -11,7 +11,7 @@
 
 * `bb_fit_survival()` and `bb_fit_recruitment()` now support multiple populations in a single model fit (#77). Population-level intercepts (`b0[k]`) and year random effects (`bAnnual[i,k]`) are estimated per population, while month effects and variance components are shared.
 * `bb_fit_survival()` now accepts aggregate annual survival data (one row per population per year) when monthly collar data is unavailable (#78). Annual data is auto-detected. The model skips the month random effect and does not apply monthly-to-annual exponentiation.
-* `bb_fit_survival()` and `bb_fit_recruitment()` now support prediction of unobserved years via `allow_missing = TRUE` (#79). Users add placeholder rows with `PopulationName` and `Year` filled and all measurement columns `NA_integer_`. Predictions for unobserved years use the population-level mean.
+* `bb_fit_survival()` and `bb_fit_recruitment()` now support prediction of unobserved years via `allow_missing = TRUE` (#79). Users add placeholder rows with `PopulationName` and `Year` filled and all measurement columns `NA_integer_`. Predictions for unobserved years sample the year random effect from its prior, giving appropriate uncertainty.
 * Added `bb_priors_survival_national()` and `bb_priors_recruitment_national()` to generate disturbance-informed intercept priors using the bbouNationalPriors package (#80).
 * Added `bb_predict_*_samples()` variants for all `bb_predict_*()` functions to return raw MCMC samples instead of summary tables (#83).
 * `bb_fit_survival()` and `bb_fit_recruitment()` now accept `niters = 0` to build the model without MCMC sampling, useful for inspecting model structure (#85).
