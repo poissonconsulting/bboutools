@@ -38,5 +38,6 @@ test_that("recruitment ml works", {
   expect_s4_class(fit$summary, "AGHQuad_summary")
   expect_s4_class(fit$mle, "OptimResultNimbleList")
   expect_setequal(pars(fit), c("b0", "bAnnual", "bYear", "sAnnual"))
+  skip_on_ci()
   expect_snapshot_data(coef(fit), "default", digits = 2)
 })

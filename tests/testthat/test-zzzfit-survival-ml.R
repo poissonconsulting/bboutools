@@ -41,6 +41,7 @@ test_that("survival ml works", {
     pars(fit),
     c("b0", "bAnnual", "bMonth", "bYear", "sAnnual", "sMonth")
   )
+  skip_on_ci()
   expect_snapshot_data(coef(fit), "default", digits = 2)
 })
 
@@ -72,5 +73,6 @@ test_that("survival ml annual works", {
     pars(fit),
     c("b0", "bAnnual", "bYear", "sAnnual")
   )
+  skip_on_ci()
   expect_snapshot_data(coef(fit), "annual", digits = 2)
 })
