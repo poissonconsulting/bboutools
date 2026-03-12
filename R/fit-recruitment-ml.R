@@ -107,7 +107,9 @@ bb_fit_recruitment_ml <- function(
   if (!is.null(adult_female_proportion)) {
     code_constants <- c(code_constants, adult_female_prop = adult_female_proportion)
   }
-  fit$model_code <- substitute_prior_values(model$getCode(), code_constants)
+  fit$model_code <- clean_model_code(
+    substitute_prior_values(model$getCode(), code_constants)
+  )
   class(fit) <- c("bboufit_recruitment", "bboufit_ml")
   fit
 }
