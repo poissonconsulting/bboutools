@@ -30,7 +30,7 @@ bb_plot_year_calf_cow_ratio.data.frame <- function(x, ...) {
   chk_unused(...)
 
   bb_plot_year(x) +
-    scale_y_continuous('Calves per Adult Female') +
+    scale_y_continuous("Calves per Adult Female") +
     expand_limits(y = 0)
 }
 

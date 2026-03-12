@@ -53,8 +53,8 @@ test_that("plot_year.data.frame ML works", {
 
 test_that("plot_year.data.frame one row", {
   prediction <- tibble::tribble(
-    ~CaribouYear , ~estimate , ~lower , ~upper ,
-    1L           , 0.5       , 0.4    , 0.6
+    ~CaribouYear, ~estimate, ~lower, ~upper,
+    1L, 0.5, 0.4, 0.6
   )
 
   plot <- bb_plot_year(prediction)
@@ -64,8 +64,8 @@ test_that("plot_year.data.frame one row", {
 
 test_that("plot_year.data.frame no rows", {
   prediction <- tibble::tribble(
-    ~CaribouYear , ~estimate , ~lower , ~upper ,
-    1L           , 0.5       , 0.4    , 0.6
+    ~CaribouYear, ~estimate, ~lower, ~upper,
+    1L, 0.5, 0.4, 0.6
   )
 
   prediction <- prediction[-1, ]

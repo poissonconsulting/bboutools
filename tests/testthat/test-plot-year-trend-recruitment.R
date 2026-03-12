@@ -43,8 +43,8 @@ test_that("bb_plot_year_trend_recruitment.data.frame ML works", {
 
 test_that("bb_plot_year_trend_recruitment.data.frame no rows", {
   prediction <- tibble::tribble(
-    ~CaribouYear , ~estimate , ~lower , ~upper ,
-    1L           , 0.5       , 0.4    , 0.6
+    ~CaribouYear, ~estimate, ~lower, ~upper,
+    1L, 0.5, 0.4, 0.6
   )
 
   prediction <- prediction[-1, ]

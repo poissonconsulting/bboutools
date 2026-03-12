@@ -41,8 +41,8 @@ test_that("plot_month.data.frame ML works", {
 
 test_that("plot_month.data.frame one row", {
   prediction <- tibble::tribble(
-    ~Month , ~estimate , ~lower , ~upper ,
-    1L     , 0.5       , 0.4    , 0.6
+    ~Month, ~estimate, ~lower, ~upper,
+    1L, 0.5, 0.4, 0.6
   )
 
   plot <- bb_plot_month(prediction)
@@ -52,8 +52,8 @@ test_that("plot_month.data.frame one row", {
 
 test_that("plot_month.data.frame no rows", {
   prediction <- tibble::tribble(
-    ~Month , ~estimate , ~lower , ~upper ,
-    1L     , 0.5       , 0.4    , 0.6
+    ~Month, ~estimate, ~lower, ~upper,
+    1L, 0.5, 0.4, 0.6
   )
 
   prediction <- prediction[-1, ]

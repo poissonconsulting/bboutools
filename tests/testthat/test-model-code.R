@@ -52,11 +52,7 @@ test_that("clean_model_code unwraps redundant braces", {
 
 test_that("clean_model_code handles deeply nested braces", {
   code <- quote({
-    {
-      {
-        x <- 1
-      }
-    }
+    {{ x <- 1 }}
     y <- 2
   })
   result <- clean_model_code(code)

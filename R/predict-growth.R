@@ -50,8 +50,8 @@ predict_lambda <- function(survival, recruitment) {
     return(list(lambda = list(), data = data))
   }
 
-  sur <- sur[,, key_sur %in% key_rec, drop = FALSE]
-  rec <- rec[,, key_rec %in% key_sur, drop = FALSE]
+  sur <- sur[, , key_sur %in% key_rec, drop = FALSE]
+  rec <- rec[, , key_rec %in% key_sur, drop = FALSE]
   class(sur) <- "mcmcarray"
   class(rec) <- "mcmcarray"
 
