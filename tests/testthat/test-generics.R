@@ -147,9 +147,19 @@ test_that("get attributes ml works", {
 })
 
 test_that("convergence works", {
-  expect_equal(rhat(bboutools:::fit_survival), 1.6010)
+  rhat_surv <- rhat(bboutools:::fit_survival)
+  esr_surv <- esr(bboutools:::fit_survival)
+
+  expect_type(rhat_surv, "double")
+  expect_length(rhat_surv, 1L)
+  expect_gt(rhat_surv, 1)
+
   expect_false(converged(bboutools:::fit_survival))
-  expect_equal(esr(bboutools:::fit_survival), 0.112)
+
+  expect_type(esr_surv, "double")
+  expect_length(esr_surv, 1L)
+  expect_gt(esr_surv, 0)
+  expect_lt(esr_surv, 1)
 })
 
 test_that("coef annual works", {

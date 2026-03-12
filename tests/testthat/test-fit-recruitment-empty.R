@@ -1,3 +1,3 @@
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
-})
+# Placeholder file for empty recruitment fit tests.
+# Add focused regression/unit tests here when implementing or extending
+# empty/prior-only recruitment fit behavior.
