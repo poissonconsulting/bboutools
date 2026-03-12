@@ -109,3 +109,7 @@ reference:
 - title: "Utilities"
   contents:
     - licensing_md
+
+- title: "S3 Methods"
+  contents:
+    - matches("\\.")
