@@ -10,7 +10,11 @@ bb_predict_calf_cow_ratio_trend_samples(recruitment)
 \item{recruitment}{An object of class 'bboufit_recruitment' (output of \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}})}
 }
 \value{
-A 'mcmcarray' object with the modified MCMC samples.
+A list with elements:
+\itemize{
+\item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+\item \code{data}: A \code{data.frame} containing the associated prediction data.
+}
 }
 \description{
 Predict calves per adult female by year as trend line.

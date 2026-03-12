@@ -10,7 +10,11 @@ bb_predict_survival_trend_samples(survival)
 \item{survival}{An object of class 'bboufit_survival' (output of \code{\link[=bb_fit_survival]{bb_fit_survival()}}).}
 }
 \value{
-A 'mcmcarray' object with the modified MCMC samples.
+A list with elements:
+\itemize{
+\item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+\item \code{data}: A \code{data.frame} containing the associated prediction data.
+}
 }
 \description{
 Predict survival by year as trend line.

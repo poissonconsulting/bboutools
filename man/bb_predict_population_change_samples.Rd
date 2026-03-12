@@ -18,7 +18,11 @@ bb_predict_population_change_samples(
 \item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth. Deprecated for \code{bb_fit_recruitment(sex_ratio)}. \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \value{
-A 'mcmcarray' object with the modified MCMC samples.
+A list with elements:
+\itemize{
+\item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+\item \code{data}: A \code{data.frame} containing the associated prediction data.
+}
 }
 \description{
 Predicts population change (\%) from survival and recruitment fit objects.

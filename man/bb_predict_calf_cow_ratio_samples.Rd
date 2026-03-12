@@ -12,7 +12,11 @@ bb_predict_calf_cow_ratio_samples(recruitment, year = TRUE)
 \item{year}{A flag indicating whether to predict by year.}
 }
 \value{
-A 'mcmcarray' object with the modified MCMC samples.
+A list with elements:
+\itemize{
+\item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+\item \code{data}: A \code{data.frame} containing the associated prediction data.
+}
 }
 \description{
 Predict calves per adult female by year.

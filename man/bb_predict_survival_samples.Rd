@@ -14,7 +14,11 @@ bb_predict_survival_samples(survival, year = TRUE, month = FALSE)
 \item{month}{A flag indicating whether to predict by month.}
 }
 \value{
-A 'mcmcarray' object with the modified MCMC samples.
+A list with elements:
+\itemize{
+\item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+\item \code{data}: A \code{data.frame} containing the associated prediction data.
+}
 }
 \description{
 Predict survival by year and/or month.
