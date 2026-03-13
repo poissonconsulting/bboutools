@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' @import chk glue nimble magrittr
+#' @import chk glue nimble
 #' @importFrom stats rnorm
 #' @importFrom scales percent
 #' @importFrom rescale rescale

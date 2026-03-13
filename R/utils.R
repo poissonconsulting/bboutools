@@ -71,13 +71,13 @@ month_levels <- function(first, n) {
 
 year_intercept <- function(x) {
   y <-
-    x %>%
-    dplyr::group_by(Year) %>%
+    x |>
+    dplyr::group_by(Year) |>
     dplyr::summarize(
       mean_start = mean(.data$StartTotal),
       any_morts = sum(.data$Mortalities) >= 1
-    ) %>%
-    dplyr::ungroup() %>%
+    ) |>
+    dplyr::ungroup() |>
     dplyr::filter(.data$any_morts)
 
   if (nrow(y) == 0) {
@@ -86,8 +86,8 @@ year_intercept <- function(x) {
   }
 
   y <-
-    y %>%
-    arrange(.data$mean_start) %>%
+    y |>
+    dplyr::arrange(.data$mean_start) |>
     dplyr::slice(dplyr::n())
 
   y$Year
