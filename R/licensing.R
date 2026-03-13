@@ -1,5 +1,6 @@
 # Copyright 2022-2023 Integrated Ecological Research and Poisson Consulting Ltd.
 # Copyright 2024 Province of Alberta
+# Copyright 2025 Environment and Climate Change Canada
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ licensing_md <- function() {
   "## Licensing
   Copyright 2022-2023 Integrated Ecological Research and Poisson Consulting Ltd.\\
   Copyright 2024 Province of Alberta\\
+  Copyright 2025 Environment and Climate Change Canada\\
 
   The documentation is released under the
   [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/)
