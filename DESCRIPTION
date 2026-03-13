@@ -21,7 +21,7 @@ BugReports: https://github.com/poissonconsulting/bboutools/issues
 Depends:
     nimble,
     nimbleQuad,
-    R (>= 4.0)
+    R (>= 4.1)
 Imports:
     bboudata,
     bbouNationalPriors,
@@ -32,7 +32,6 @@ Imports:
     ggplot2,
     glue,
     lifecycle,
-    magrittr,
     mcmcderive,
     mcmcr,
     newdata,

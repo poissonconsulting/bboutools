@@ -38,8 +38,8 @@ head(surv_multi)
 Populations can have different year ranges.
 
 ```{r}
-surv_multi %>%
-  group_by(PopulationName) %>%
+surv_multi |>
+  group_by(PopulationName) |>
   summarise(min_year = min(Year), max_year = max(Year))
 ```
 
