@@ -40,8 +40,8 @@ data_prep_recruitment <- function(data, year_start = 4L) {
     year_start = year_start
   )
   data <-
-    data %>%
-    dplyr::group_by(CaribouYear, PopulationName) %>%
+    data |>
+    dplyr::group_by(CaribouYear, PopulationName) |>
     dplyr::summarize(
       Cows = sum(.data$Cows),
       CowsBulls = sum(.data$CowsBulls),

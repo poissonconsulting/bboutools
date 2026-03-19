@@ -86,14 +86,14 @@ data <- bboutools:::model_data_survival(
   quiet = FALSE
 )$data
 obs <-
-  data %>%
-  group_by(CaribouYear, Month) %>%
+  data |>
+  group_by(CaribouYear, Month) |>
   summarise(
     survival = 1 - (MortalitiesCertain) / StartTotal,
     weight = StartTotal^(1 / 2)
-  ) %>%
-  ungroup() %>%
-  group_by(CaribouYear) %>%
+  ) |>
+  ungroup() |>
+  group_by(CaribouYear) |>
   summarise(
     mean_survival = weighted.mean(survival, weight)^12,
     mean_weight = mean(weight)
@@ -117,7 +117,7 @@ df <- dplyr::bind_rows(
     "Bayes Random" = pred4
   ),
   .id = "model"
-) %>%
+) |>
   mutate(
     method = if_else(grepl("ML", model), "Frequentist", "Bayesian"),
     year = if_else(grepl("Fixed", model), "Fixed", "Random")

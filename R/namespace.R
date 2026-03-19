@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' @import chk glue magrittr
+#' @import chk glue
 #' @importFrom nimble nimbleCode nimbleModel nimbleOptions buildMCMC runMCMC compileNimble setupMargNodes
 #' @importFrom stats rnorm
 #' @importFrom scales percent

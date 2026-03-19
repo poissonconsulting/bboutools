@@ -107,8 +107,8 @@ We then compare recruitment estimates from priors centered on high (80%) and low
 
 ```{r}
 set.seed(1)
-data <- bboudata::bbourecruit_a %>%
-  filter(Year >= 2005, Year <= 2010) %>%
+data <- bboudata::bbourecruit_a |>
+  filter(Year >= 2005, Year <= 2010) |>
   mutate(
     UnknownAdults = UnknownAdults + round(Cows / 2) + round(Bulls / 2),
     Cows = Cows - round(Cows / 2),
