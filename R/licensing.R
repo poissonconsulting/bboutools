@@ -1,5 +1,10 @@
 # Copyright 2022-2023 Integrated Ecological Research and Poisson Consulting Ltd.
 # Copyright 2024 Province of Alberta
+# Copyright © His Majesty the King in Right of Canada as represented by the
+# Minister of the Environment 2025/© Sa Majesté le Roi du chef du Canada
+# représentée par le ministre de l'Environnement 2025.
+# (Applies to multi-population and other extensions derived from
+# LandSciTech/bboutoolsMultiPop.)
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -24,6 +29,7 @@ licensing_md <- function() {
   "## Licensing
   Copyright 2022-2023 Integrated Ecological Research and Poisson Consulting Ltd.\\
   Copyright 2024 Province of Alberta\\
+  Copyright © His Majesty the King in Right of Canada as represented by the Minister of the Environment 2025 (applies to multi-population and other extensions derived from LandSciTech/bboutoolsMultiPop)\\
 
   The documentation is released under the
   [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/)
