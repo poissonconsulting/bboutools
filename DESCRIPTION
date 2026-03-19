@@ -9,6 +9,8 @@ Authors@R: c(
     person("John", "Boulanger", role = "aut",
            comment = c(ORCID = "0000-0001-8222-1445")),
     person("Ayla", "Pearson", , "ayla@poissonconsulting.ca", role = "aut"),
+    person("Josie", "Hughes", , "Josie.Hughes@ec.gc.ca", role = "ctb",
+           comment = "Multi-population extensions based on LandSciTech/bboutoolsMultiPop"),
     person("Province of Alberta", role = "cph")
   )
 Description: Estimates annual survival, recruitment and population growth
