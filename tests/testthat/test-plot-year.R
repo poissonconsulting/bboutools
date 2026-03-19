@@ -74,3 +74,10 @@ test_that("plot_year.data.frame no rows", {
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "plot_year_predict_0")
 })
+
+test_that("plot_year multi-pop works", {
+  prediction <- predict(bboutools:::fit_survival_multi)
+  plot <- bb_plot_year(prediction)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_multi")
+})

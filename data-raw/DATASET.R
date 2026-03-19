@@ -19,14 +19,16 @@ x <- bboudata::bbousurv_a
 set.seed(101)
 fit_survival <- bb_fit_survival(
   data = x,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE
 )
 
 set.seed(101)
 fit_survival_fixed <- bb_fit_survival(
   data = x,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   min_random_year = Inf,
   quiet = TRUE
 )
@@ -35,13 +37,14 @@ fit_survival_fixed <- bb_fit_survival(
 set.seed(101)
 fit_survival_trend <- bb_fit_survival(
   data = x,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE,
   min_random_year = Inf,
   year_trend = TRUE
 )
 
-fit_survival_ml <- bb_fit_survival_ml(data = x, quiet = TRUE, )
+fit_survival_ml <- bb_fit_survival_ml(data = x, quiet = TRUE)
 
 fit_survival_ml_fixed <- bb_fit_survival_ml(
   data = x,
@@ -62,7 +65,8 @@ x <- bboudata::bbourecruit_a
 set.seed(101)
 fit_recruitment <- bb_fit_recruitment(
   data = x,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE
 )
 
@@ -70,12 +74,13 @@ fit_recruitment <- bb_fit_recruitment(
 set.seed(101)
 fit_recruitment_trend <- bb_fit_recruitment(
   data = x,
-  nthin = 10,
+  nthin = 20,
+  niters = 100,
   quiet = TRUE,
   year_trend = TRUE
 )
 
-fit_recruitment_ml <- bb_fit_recruitment_ml(data = x, quiet = TRUE, )
+fit_recruitment_ml <- bb_fit_recruitment_ml(data = x, quiet = TRUE)
 
 fit_recruitment_ml_fixed <- bb_fit_recruitment_ml(
   data = x,
@@ -90,6 +95,65 @@ fit_recruitment_ml_trend <- bb_fit_recruitment_ml(
   min_random_year = Inf
 )
 
+# multi-population -----------------------------------------------------------
+# filter out placeholder rows (NA Month) for unobserved years
+surv_multi <- bboudata::bbousurv_multi[!is.na(bboudata::bbousurv_multi$Month), ]
+set.seed(101)
+fit_survival_multi <- bb_fit_survival(
+  data = surv_multi,
+  nthin = 20,
+  niters = 100,
+  quiet = TRUE
+)
+
+rec_multi <- bboudata::bbourecruit_multi[
+  !is.na(bboudata::bbourecruit_multi$Month),
+]
+set.seed(101)
+fit_recruitment_multi <- bb_fit_recruitment(
+  data = rec_multi,
+  nthin = 20,
+  niters = 100,
+  quiet = TRUE
+)
+
+# missing (unobserved years) ------------------------------------------------
+x_surv_missing <- bboudata::bbousurv_missing
+set.seed(101)
+fit_survival_missing <- bb_fit_survival(
+  data = x_surv_missing,
+  nthin = 20,
+  niters = 100,
+  allow_missing = TRUE,
+  quiet = TRUE
+)
+
+x_rec_missing <- bboudata::bbourecruit_missing
+set.seed(101)
+fit_recruitment_missing <- bb_fit_recruitment(
+  data = x_rec_missing,
+  nthin = 20,
+  niters = 100,
+  allow_missing = TRUE,
+  quiet = TRUE
+)
+
+# annual survival -----------------------------------------------------------
+x_annual <- bboudata::bbousurv_annual
+x_annual <- x_annual[x_annual$PopulationName == "C", ]
+set.seed(101)
+fit_survival_annual <- bb_fit_survival(
+  data = x_annual,
+  nthin = 20,
+  niters = 100,
+  quiet = TRUE
+)
+
+fit_survival_ml_annual <- bb_fit_survival_ml(
+  data = x_annual,
+  quiet = TRUE
+)
+
 # model object is too large to store and not required for testing downstream functions
 fit_recruitment$model <- NULL
 fit_recruitment_trend$model <- NULL
@@ -102,6 +166,12 @@ fit_survival_ml$model <- NULL
 fit_survival_ml_fixed$model <- NULL
 fit_recruitment_ml_trend$model <- NULL
 fit_survival_ml_trend$model <- NULL
+fit_survival_multi$model <- NULL
+fit_recruitment_multi$model <- NULL
+fit_survival_missing$model <- NULL
+fit_recruitment_missing$model <- NULL
+fit_survival_annual$model <- NULL
+fit_survival_ml_annual$model <- NULL
 
 usethis::use_data(
   fit_recruitment,
@@ -115,6 +185,12 @@ usethis::use_data(
   fit_recruitment_ml_fixed,
   fit_survival_ml_trend,
   fit_recruitment_ml_trend,
+  fit_survival_multi,
+  fit_recruitment_multi,
+  fit_survival_missing,
+  fit_recruitment_missing,
+  fit_survival_annual,
+  fit_survival_ml_annual,
   internal = TRUE,
   overwrite = TRUE
 )

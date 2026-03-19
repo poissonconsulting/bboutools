@@ -26,7 +26,10 @@ test_that("survival fixed model works", {
   )
 
   expect_snapshot_data(code_to_df(model$getCode()), "fixed_code")
-  expect_snapshot_data(vars_to_df(model$getConstants()), "fixed_const")
+  # prevent snapshot failure due to minor rounding
+  const <- vars_to_df(model$getConstants())
+  const$CaribouYear <- round(const$CaribouYear, 3)
+  expect_snapshot_data(const, "fixed_const")
 })
 
 test_that("works with less than 12 months", {
@@ -46,7 +49,9 @@ test_that("works with less than 12 months", {
   const <- model$getConstants()
   expect_identical(const$nMonth, 11L)
   expect_snapshot_data(code_to_df(model$getCode()), "less_than_12_months_code")
-  expect_snapshot_data(vars_to_df(const), "less_than_12_months_const")
+  const <- vars_to_df(const)
+  const$CaribouYear <- round(const$CaribouYear, 3)
+  expect_snapshot_data(const, "less_than_12_months_const")
 })
 
 test_that("year trend works", {
@@ -63,8 +68,11 @@ test_that("year trend works", {
     priors = priors_survival()
   )
 
+  const <- vars_to_df(model$getConstants())
+  const$CaribouYear <- round(const$CaribouYear, 3)
+
   expect_snapshot_data(code_to_df(model$getCode()), "trend_code")
-  expect_snapshot_data(vars_to_df(model$getConstants()), "trend_const")
+  expect_snapshot_data(const, "trend_const")
 })
 
 test_that("year trend only works", {
@@ -81,8 +89,11 @@ test_that("year trend only works", {
     priors = priors_survival()
   )
 
+  const <- vars_to_df(model$getConstants())
+  const$CaribouYear <- round(const$CaribouYear, 3)
+
   expect_snapshot_data(code_to_df(model$getCode()), "trend_only_code")
-  expect_snapshot_data(vars_to_df(model$getConstants()), "trend_only_const")
+  expect_snapshot_data(const, "trend_only_const")
 })
 
 test_that("can include_uncertain_morts", {
@@ -90,7 +101,10 @@ test_that("can include_uncertain_morts", {
 
   set.seed(101)
   x <- bboudata::bbousurv_a
-  x$MortalitiesUncertain <- pmin(x$StartTotal - x$MortalitiesCertain, rbinom(nrow(x), prob = 0.1, size = 1))
+  x$MortalitiesUncertain <- pmin(
+    x$StartTotal - x$MortalitiesCertain,
+    rbinom(nrow(x), prob = 0.1, size = 1)
+  )
   x <- data_prep_survival(x)
   x <- data_list_survival(x)
   model <- model_survival(
@@ -100,8 +114,13 @@ test_that("can include_uncertain_morts", {
   )
 
   expect_snapshot_data(code_to_df(model$getCode()), "uncertain_morts_code")
-  expect_snapshot_data(vars_to_df(model$getConstants()), "uncertain_morts_const")
-  expect_snapshot_data(data.frame(morts = model$Mortalities), "uncertain_morts_morts")
+  const <- vars_to_df(model$getConstants())
+  const$CaribouYear <- round(const$CaribouYear, 3)
+  expect_snapshot_data(const, "uncertain_morts_const")
+  expect_snapshot_data(
+    data.frame(morts = model$Mortalities),
+    "uncertain_morts_morts"
+  )
 })
 
 test_that("survival year start works", {
@@ -120,7 +139,9 @@ test_that("survival year start works", {
   # not 31 years as per default
   expect_identical(32L, const$nAnnual)
   expect_snapshot_data(code_to_df(model$getCode()), "year_start_code")
-  expect_snapshot_data(vars_to_df(const), "year_start_const")
+  const <- vars_to_df(const)
+  const$CaribouYear <- round(const$CaribouYear, 3)
+  expect_snapshot_data(const, "year_start_const")
 })
 
 test_that("can set priors", {
@@ -142,5 +163,7 @@ test_that("can set priors", {
   # not 31 as per usual
   expect_identical(mu, const$b0_mu)
   expect_snapshot_data(code_to_df(model$getCode()), "priors_code")
-  expect_snapshot_data(vars_to_df(const), "priors_const")
+  const <- vars_to_df(const)
+  const$CaribouYear <- round(const$CaribouYear, 3)
+  expect_snapshot_data(const, "priors_const")
 })

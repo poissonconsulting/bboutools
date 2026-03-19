@@ -38,3 +38,23 @@ test_that("plot_year_survival.data.frame ML works", {
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "plot_year_survival_predict_survival_ml")
 })
+
+test_that("plot_year_survival annual works", {
+  plot <- bb_plot_year_survival(bboutools:::fit_survival_annual)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_survival_annual")
+})
+
+test_that("plot_year_survival missing works", {
+  plot <- bb_plot_year_survival(bboutools:::fit_survival_missing)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_survival_missing")
+})
+
+test_that("plot_year_survival multi-pop works", {
+  plot <- bb_plot_year_survival(bboutools:::fit_survival_multi)
+  gp <- bb_plot_year_survival(bboutools:::fit_survival_multi) +
+    ggplot2::facet_wrap(~PopulationName, ncol = 3)
+  expect_s3_class(plot, "ggplot")
+  expect_snapshot_plot(plot, "plot_year_survival_multi")
+})

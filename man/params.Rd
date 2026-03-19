@@ -31,7 +31,7 @@ Year trend cannot be fit if there is also a fixed year effect (as opposed to ran
 If NULL, the proportion is estimated from the data (i.e., \code{Cows ~ Binomial(adult_female_proportion, Cows + Bulls)}) and a prior of dbeta(65, 35) is used.
 This prior can be changed via the \code{priors} argument.}
 
-\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.}
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth. Deprecated for \code{bb_fit_recruitment(sex_ratio)}. \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{year}{A flag indicating whether to predict by year.}
 
@@ -52,6 +52,11 @@ If NULL, all parameters are assigned a default value of 0.}
 \item{survival}{An object of class 'bboufit_survival' (output of \code{\link[=bb_fit_survival]{bb_fit_survival()}}).}
 
 \item{recruitment}{An object of class 'bboufit_recruitment' (output of \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}})}
+
+\item{allow_missing}{A flag indicating whether to allow unobserved years (placeholder rows with NA measurement columns).
+When TRUE, the year random effects for unobserved years are sampled from the prior distribution rather than being informed by data, giving predictions that reflect the population-level mean with appropriate uncertainty.
+Requires year to be fit as a random effect (i.e., not supported with fixed year effects).
+Not supported with Maximum Likelihood models.}
 
 \item{quiet}{A flag indicating whether to suppress messages and progress bars.}
 

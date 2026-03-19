@@ -30,7 +30,7 @@
 #' @param adult_female_proportion A number between 0 and 1 of the expected proportion of adults that are female.
 #' If NULL, the proportion is estimated from the data (i.e., `Cows ~ Binomial(adult_female_proportion, Cows + Bulls)`) and a prior of dbeta(65, 35) is used.
 #' This prior can be changed via the `priors` argument.
-#' @param sex_ratio A number between 0 and 1 of the proportion of females at birth.
+#' @param sex_ratio A number between 0 and 1 of the proportion of females at birth. Deprecated for `bb_fit_recruitment(sex_ratio)`. `r lifecycle::badge('deprecated')`
 #' @param year A flag indicating whether to predict by year.
 #' @param month A flag indicating whether to predict by month.
 #' @param nthin A whole number of the thinning rate.
@@ -43,6 +43,10 @@
 #' If NULL, all parameters are assigned a default value of 0.
 #' @param survival An object of class 'bboufit_survival' (output of [`bb_fit_survival()`]).
 #' @param recruitment An object of class 'bboufit_recruitment' (output of [`bb_fit_recruitment()`])
+#' @param allow_missing A flag indicating whether to allow unobserved years (placeholder rows with NA measurement columns).
+#' When TRUE, the year random effects for unobserved years are sampled from the prior distribution rather than being informed by data, giving predictions that reflect the population-level mean with appropriate uncertainty.
+#' Requires year to be fit as a random effect (i.e., not supported with fixed year effects).
+#' Not supported with Maximum Likelihood models.
 #' @param quiet A flag indicating whether to suppress messages and progress bars.
 #' @param term A string of the term name.
 #' @param sig_fig A whole number of the significant figures to round estimates by.

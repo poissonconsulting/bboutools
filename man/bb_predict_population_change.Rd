@@ -7,7 +7,7 @@
 bb_predict_population_change(
   survival,
   recruitment,
-  sex_ratio = 0.5,
+  sex_ratio = deprecated(),
   conf_level = 0.95,
   estimate = median,
   sig_fig = 3
@@ -18,7 +18,7 @@ bb_predict_population_change(
 
 \item{recruitment}{An object of class 'bboufit_recruitment' (output of \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}})}
 
-\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.}
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth. Deprecated for \code{bb_fit_recruitment(sex_ratio)}. \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{conf_level}{A number between 0 and 1 of the confidence level.}
 
@@ -43,11 +43,19 @@ if (interactive()) {
 \seealso{
 Other analysis: 
 \code{\link{bb_predict_calf_cow_ratio}()},
+\code{\link{bb_predict_calf_cow_ratio_samples}()},
 \code{\link{bb_predict_calf_cow_ratio_trend}()},
+\code{\link{bb_predict_calf_cow_ratio_trend_samples}()},
 \code{\link{bb_predict_growth}()},
+\code{\link{bb_predict_growth_samples}()},
+\code{\link{bb_predict_population_change_samples}()},
 \code{\link{bb_predict_recruitment}()},
+\code{\link{bb_predict_recruitment_samples}()},
 \code{\link{bb_predict_recruitment_trend}()},
+\code{\link{bb_predict_recruitment_trend_samples}()},
 \code{\link{bb_predict_survival}()},
-\code{\link{bb_predict_survival_trend}()}
+\code{\link{bb_predict_survival_samples}()},
+\code{\link{bb_predict_survival_trend}()},
+\code{\link{bb_predict_survival_trend_samples}()}
 }
 \concept{analysis}

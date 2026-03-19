@@ -101,3 +101,101 @@ bb_priors_survival <- function() {
 bb_priors_recruitment <- function() {
   priors_recruitment()
 }
+
+#' Disturbance-informed national survival priors
+#'
+#' Returns intercept priors for the survival model informed by national
+#' demographic-disturbance relationships (Johnson et al. 2020). The returned
+#' priors override `b0_mu` and `b0_sd` in `bb_priors_survival()`; all other
+#' prior parameters retain their defaults.
+#'
+#' Priors are looked up from a pre-computed table in the
+#' [bbouNationalPriors](https://github.com/LandSciTech/bbouNationalPriors)
+#' package. Integer values of `anthro` and `fire_excl_anthro` are matched
+#' directly; non-integer values trigger a model run (slower).
+#'
+#' @param anthro A number between 0 and 100. Percent non-overlapping buffered
+#'   anthropogenic disturbance.
+#' @param fire_excl_anthro A number between 0 and 100. Percent fire disturbance
+#'   not overlapping with anthropogenic disturbance. `anthro + fire_excl_anthro`
+#'   must not exceed 100.
+#' @param annual A flag (logical scalar) indicating whether to return annual
+#'   (`TRUE`) or monthly (`FALSE`, default) survival priors. Use `annual = TRUE`
+#'   when fitting models to aggregate annual survival data.
+#' @return A named vector with elements `b0_mu` and `b0_sd`, suitable for
+#'   passing to the `priors` argument of [bb_fit_survival()].
+#' @seealso [bb_priors_survival()] for default priors.
+#' @seealso [bb_priors_recruitment_national()] for recruitment priors.
+#' @references
+#' Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
+#' Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking
+#' population dynamics to habitat for a threatened species in Canada. Journal
+#' of Applied Ecology, 57(7), pp.1314-1327.
+#' \doi{10.1111/1365-2664.13637}
+#' @family priors
+#' @export
+#' @examples
+#' # Monthly survival priors (default)
+#' nat_s <- bb_priors_survival_national(anthro = 50, fire_excl_anthro = 5)
+#' nat_s
+#'
+#' # Annual survival priors
+#' nat_s_annual <- bb_priors_survival_national(anthro = 50, fire_excl_anthro = 5, annual = TRUE)
+#' nat_s_annual
+#'
+#' # Pass to bb_fit_survival via priors argument
+#' # fit <- bb_fit_survival(data, priors = nat_s)
+bb_priors_survival_national <- function(anthro, fire_excl_anthro, annual = FALSE) {
+  .chk_disturbance(anthro, fire_excl_anthro)
+  chk_flag(annual)
+  result <- bbouNationalPriors::bbouNationalPriors(
+    anthro = anthro,
+    fire_excl_anthro = fire_excl_anthro,
+    month = !annual
+  )
+  result$priors_survival
+}
+
+#' Disturbance-informed national recruitment priors
+#'
+#' Returns intercept priors for the recruitment model informed by national
+#' demographic-disturbance relationships (Johnson et al. 2020). The returned
+#' priors override `b0_mu` and `b0_sd` in `bb_priors_recruitment()`; all other
+#' prior parameters retain their defaults.
+#'
+#' Priors are looked up from a pre-computed table in the
+#' [bbouNationalPriors](https://github.com/LandSciTech/bbouNationalPriors)
+#' package. Integer values of `anthro` and `fire_excl_anthro` are matched
+#' directly; non-integer values trigger a model run (slower).
+#'
+#' @param anthro A number between 0 and 100. Percent non-overlapping buffered
+#'   anthropogenic disturbance.
+#' @param fire_excl_anthro A number between 0 and 100. Percent fire disturbance
+#'   not overlapping with anthropogenic disturbance. `anthro + fire_excl_anthro`
+#'   must not exceed 100.
+#' @return A named vector with elements `b0_mu` and `b0_sd`, suitable for
+#'   passing to the `priors` argument of [bb_fit_recruitment()].
+#' @seealso [bb_priors_recruitment()] for default priors.
+#' @seealso [bb_priors_survival_national()] for survival priors.
+#' @references
+#' Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
+#' Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking
+#' population dynamics to habitat for a threatened species in Canada. Journal
+#' of Applied Ecology, 57(7), pp.1314-1327.
+#' \doi{10.1111/1365-2664.13637}
+#' @family priors
+#' @export
+#' @examples
+#' nat_r <- bb_priors_recruitment_national(anthro = 50, fire_excl_anthro = 5)
+#' nat_r
+#'
+#' # Pass to bb_fit_recruitment via priors argument
+#' # fit <- bb_fit_recruitment(data, priors = nat_r)
+bb_priors_recruitment_national <- function(anthro, fire_excl_anthro) {
+  .chk_disturbance(anthro, fire_excl_anthro)
+  result <- bbouNationalPriors::bbouNationalPriors(
+    anthro = anthro,
+    fire_excl_anthro = fire_excl_anthro
+  )
+  result$priors_recruitment
+}

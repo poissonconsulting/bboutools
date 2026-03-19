@@ -1,5 +1,8 @@
 # Copyright 2022-2023 Integrated Ecological Research and Poisson Consulting Ltd.
 # Copyright 2024 Province of Alberta
+# Copyright (c) His Majesty the King in Right of Canada as represented by the
+# Minister of the Environment 2025/(c) Sa Majeste le Roi du chef du Canada
+# representee par le ministre de l'Environnement 2025.
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -14,50 +17,76 @@
 # limitations under the License.
 
 extract_lik <- function(x) {
-  x <- as.character(model_code(x))
-  x <- x[grepl("log|logit", x)]
-  regmatches(x, regexpr("b0([^\\\n]*)", text = x))
+  if (inherits(x, "bboufit_survival")) {
+    "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i] + bMonth[Month[i], PopulationName[i]]"
+  } else {
+    "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]"
+  }
 }
 
 extract_lik_year <- function(x) {
-  x <- extract_lik(x)
-  gsub(" + bMonth[Month[i]]", "", x, fixed = TRUE)
+  "b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]"
 }
 
 derived_expr_survival <- function(fit, year, month) {
   lik_year <- extract_lik_year(fit)
   if (year) {
     if (month) {
-      pred <- paste0("logit(ilogit(", lik_year, " + bMonth[Month[i]])^12)")
+      pred <- paste0(
+        "logit(ilogit(",
+        lik_year,
+        " + bMonth[Month[i], PopulationName[i]])^12)"
+      )
     } else {
-      pred <- paste0("logit(ilogit(", lik_year, ")^12)")
+      if (length(levels(fit$data$Month)) > 1) {
+        pred <- paste0("logit(ilogit(", lik_year, ")^12)")
+      } else {
+        pred <- paste0("logit(ilogit(", lik_year, "))")
+      }
     }
   } else {
     if (month) {
-      pred <- "logit(ilogit(b0 + bMonth[Month[i]])^12)"
+      pred <- "logit(ilogit(b0[PopulationName[i]] + bMonth[Month[i], PopulationName[i]])^12)"
     } else {
-      pred <- "logit(ilogit(b0)^12)"
+      if (length(levels(fit$data$Month)) > 1) {
+        pred <- "logit(ilogit(b0[PopulationName[i]])^12)"
+      } else {
+        pred <- "logit(ilogit(b0[PopulationName[i]]))"
+      }
     }
   }
-  paste0("for(i in 1:length(Annual)) {
-  logit(prediction[i]) <- ", pred, "\n}")
+  paste0(
+    "for(i in 1:length(Annual)) {
+  logit(prediction[i]) <- ",
+    pred,
+    "\n}"
+  )
 }
 
 derived_expr_recruitment <- function(fit, year) {
-  lik <- "b0"
+  lik <- "b0[PopulationName[i]]"
   if (year) {
     lik <- extract_lik(fit)
   }
-  paste0("for(i in 1:length(Annual)) {
-  logit(prediction[i]) <- ", lik, "\n}")
+  paste0(
+    "for(i in 1:length(Annual)) {
+  logit(prediction[i]) <- ",
+    lik,
+    "\n}"
+  )
 }
 
 derived_expr_recruitment_trend <- function() {
   "for(i in 1:length(Annual)) {
-  logit(prediction[i]) <- b0 + bYear * Year[i]\n}"
+  logit(prediction[i]) <- b0[PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]\n}"
 }
 
-derived_expr_survival_trend <- function() {
-  "for(i in 1:length(Annual)) {
-  logit(prediction[i]) <- logit(ilogit(b0 + bYear * Year[i])^12)\n}"
+derived_expr_survival_trend <- function(fit) {
+  if (length(levels(fit$data$Month)) > 1) {
+    "for(i in 1:length(Annual)) {
+  logit(prediction[i]) <- logit(ilogit(b0[PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i])^12)\n}"
+  } else {
+    "for(i in 1:length(Annual)) {
+  logit(prediction[i]) <- b0[PopulationName[i]] + bYear[PopulationName[i]] * CaribouYear[i]\n}"
+  }
 }

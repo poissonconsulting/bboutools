@@ -12,7 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 ml_converge_fail <- function(x) {
   grepl(
     "Warning: optim does not converge for the inner optimization of AGHQuad or Laplace approximation",
@@ -21,6 +20,11 @@ ml_converge_fail <- function(x) {
 }
 ml_se_fail <- function(x) {
   any(is.nan(x$result$summary$params$stdError))
+}
+
+stochastic_var_names <- function(model) {
+  nodes <- model$getNodeNames(stochOnly = TRUE, includeData = FALSE)
+  unique(sub("\\[.*\\]", "", nodes))
 }
 
 #' Fit Survival Model
@@ -46,17 +50,25 @@ ml_se_fail <- function(x) {
 #' if (interactive()) {
 #'   fit <- bb_fit_survival(bboudata::bbousurv_a)
 #' }
-bb_fit_survival <- function(data,
-                            min_random_year = 5,
-                            year_trend = FALSE,
-                            include_uncertain_morts = TRUE,
-                            year_start = 4L,
-                            nthin = 10,
-                            niters = 1000,
-                            priors = NULL,
-                            quiet = FALSE) {
+bb_fit_survival <- function(
+  data,
+  min_random_year = 5,
+  year_trend = FALSE,
+  include_uncertain_morts = TRUE,
+  year_start = 4L,
+  nthin = 10,
+  niters = 1000,
+  priors = NULL,
+  allow_missing = FALSE,
+  quiet = FALSE
+) {
   chk_data(data)
-  bbd_chk_data_survival(data)
+  chk_flag(allow_missing)
+  bbd_chk_data_survival(
+    data,
+    multi_population = TRUE,
+    allow_missing = allow_missing
+  )
   chk_whole_number(min_random_year)
   chk_gte(min_random_year)
   chk_flag(year_trend)
@@ -66,18 +78,28 @@ bb_fit_survival <- function(data,
   chk_whole_number(nthin)
   chk_gt(nthin)
   chk_whole_number(niters)
-  chk_gt(niters)
+  chk_gte(niters)
   default_priors <- priors_survival()
   .chk_priors(priors, names(default_priors))
   chk_flag(quiet)
+  .check_attached()
 
   priors <- replace_priors(default_priors, priors)
   data <-
-    model_data_survival(data,
+    model_data_survival(
+      data,
       include_uncertain_morts = include_uncertain_morts,
-      year_start = year_start, quiet = quiet
+      year_start = year_start,
+      allow_missing = allow_missing,
+      quiet = quiet
     )
-  year_random <- data$datal$nAnnual >= min_random_year
+  nAnnual <- if (allow_missing) data$nAnnualObserved else data$datal$nAnnual
+  year_random <- nAnnual >= min_random_year || (allow_missing && nAnnual == 0)
+  if (allow_missing && !year_random) {
+    abort_chk(
+      "`allow_missing` requires year to be fit as a random effect. Increase the number of observed years or decrease `min_random_year`."
+    )
+  }
   if (!year_random && year_trend) {
     message_trend_fixed()
   }
@@ -114,8 +136,7 @@ bb_fit_survival <- function(data,
 
   .attrs_bboufit(fit) <- attrs
   fit$data <- data$data
-  x <- model$getCode()
-  fit$model_code <- model$getCode()
+  fit$model_code <- clean_model_code(substitute_prior_values(model$getCode(), priors))
   class(fit) <- c("bboufit_survival", "bboufit")
   fit
 }

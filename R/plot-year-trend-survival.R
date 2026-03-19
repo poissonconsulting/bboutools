@@ -27,7 +27,7 @@ bb_plot_year_trend_survival <- function(x, ...) {
 #' @export
 bb_plot_year_trend_survival.data.frame <- function(x, ...) {
   chk_unused(...)
-  
+
   plot_year_trend(x) +
     scale_y_continuous("Annual Survival (%)", labels = percent)
 }
@@ -35,8 +35,17 @@ bb_plot_year_trend_survival.data.frame <- function(x, ...) {
 #' @describeIn bb_plot_year_trend_survival Plot annual estimates as trend line for a bboufit_survival object.
 #' @inheritParams params
 #' @export
-bb_plot_year_trend_survival.bboufit_survival <- function(x, conf_level = 0.95, estimate = median, ...) {
+bb_plot_year_trend_survival.bboufit_survival <- function(
+  x,
+  conf_level = 0.95,
+  estimate = median,
+  ...
+) {
   chk_unused(...)
-  x <- bb_predict_survival_trend(x, conf_level = conf_level, estimate = estimate)
+  x <- bb_predict_survival_trend(
+    x,
+    conf_level = conf_level,
+    estimate = estimate
+  )
   bb_plot_year_trend_survival(x)
 }

@@ -14,6 +14,7 @@
 # limitations under the License.
 
 predict_trend <- function(fit, derived_expr) {
+  .chk_has_samples(fit)
   samples <- samples(fit)
   data <- augment(fit)
   new <- new_data_ym(data, year = TRUE, month = FALSE)
@@ -22,28 +23,35 @@ predict_trend <- function(fit, derived_expr) {
   x
 }
 
-#' Predict Recruitment Trend
+#' Predict Recruitment Trend Samples
 #'
 #' Predict recruitment by year as trend line.
 #' Recruitment fit object provided must be created with `year_trend = TRUE`.
 #'
 #' @inheritParams params
-#' @return A tibble of the predicted estimates.
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
 #' @export
 #' @family analysis
-bb_predict_recruitment_trend <- function(recruitment,
-                                         sex_ratio = 0.5,
-                                         conf_level = 0.95,
-                                         estimate = median,
-                                         sig_fig = 5) {
+bb_predict_recruitment_trend_samples <- function(recruitment, sex_ratio = deprecated()) {
   chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
   chk_s3_class(recruitment, "bboufit_recruitment")
   .chk_year_trend(recruitment)
-  chk_number(sex_ratio)
-  chk_range(sex_ratio)
-  chk_range(conf_level)
-  chk_function(estimate)
-  chk_whole_number(sig_fig)
+  if (lifecycle::is_present(sex_ratio)) {
+    lifecycle::deprecate_warn(
+      "1.0.0",
+      "bb_predict_recruitment_trend_samples(sex_ratio)",
+      details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
+      id = "sex_ratio"
+    )
+    chk_number(sex_ratio)
+    chk_range(sex_ratio)
+  } else {
+    sex_ratio <- .sex_ratio_bboufit(recruitment)
+  }
 
   predicted <- predict_trend(
     fit = recruitment,
@@ -55,39 +63,44 @@ bb_predict_recruitment_trend <- function(recruitment,
   rec <- rec * sex_ratio
   rec <- rec / (1 + rec)
 
-  coef <- predict_coef(
-    samples = rec,
-    new_data = predicted$data,
-    conf_level = conf_level,
-    estimate = estimate,
-    sig_fig = sig_fig
-  )
-  coef
+  predicted$samples <- rec
+  predicted
 }
 
-#' Predict Calf-Cow Ratio Trend
+
+#' Predict Recruitment Trend
 #'
-#' Predict calves per adult female by year as trend line.
+#' Predict recruitment by year as trend line.
 #' Recruitment fit object provided must be created with `year_trend = TRUE`.
 #'
 #' @inheritParams params
 #' @return A tibble of the predicted estimates.
 #' @export
 #' @family analysis
-bb_predict_calf_cow_ratio_trend <- function(recruitment,
-                                         conf_level = 0.95,
-                                         estimate = median,
-                                         sig_fig = 5) {
-  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
-  chk_s3_class(recruitment, "bboufit_recruitment")
-  .chk_year_trend(recruitment)
+bb_predict_recruitment_trend <- function(
+  recruitment,
+  sex_ratio = deprecated(),
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 5
+) {
+  if (lifecycle::is_present(sex_ratio)) {
+    lifecycle::deprecate_warn(
+      "1.0.0",
+      "bb_predict_recruitment_trend(sex_ratio)",
+      details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
+      id = "sex_ratio"
+    )
+    chk_number(sex_ratio)
+    chk_range(sex_ratio)
+    .sex_ratio_bboufit(recruitment) <- sex_ratio
+  }
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
-  
-  predicted <- predict_trend(
-    fit = recruitment,
-    derived_expr = derived_expr_recruitment_trend()
+
+  predicted <- bb_predict_recruitment_trend_samples(
+    recruitment
   )
 
   coef <- predict_coef(
@@ -100,6 +113,85 @@ bb_predict_calf_cow_ratio_trend <- function(recruitment,
   coef
 }
 
+#' Predict Calf-Cow Ratio Trend Samples
+#'
+#' Predict calves per adult female by year as trend line.
+#' Recruitment fit object provided must be created with `year_trend = TRUE`.
+#'
+#' @inheritParams params
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
+#' @export
+#' @family analysis
+bb_predict_calf_cow_ratio_trend_samples <- function(recruitment) {
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
+  chk_s3_class(recruitment, "bboufit_recruitment")
+  .chk_year_trend(recruitment)
+
+  predict_trend(
+    fit = recruitment,
+    derived_expr = derived_expr_recruitment_trend()
+  )
+}
+
+#' Predict Calf-Cow Ratio Trend
+#'
+#' Predict calves per adult female by year as trend line.
+#' Recruitment fit object provided must be created with `year_trend = TRUE`.
+#'
+#' @inheritParams params
+#' @return A tibble of the predicted estimates.
+#' @export
+#' @family analysis
+bb_predict_calf_cow_ratio_trend <- function(
+  recruitment,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 5
+) {
+  chk_range(conf_level)
+  chk_function(estimate)
+  chk_whole_number(sig_fig)
+
+  predicted <- bb_predict_calf_cow_ratio_trend_samples(recruitment)
+
+  coef <- predict_coef(
+    samples = predicted$samples,
+    new_data = predicted$data,
+    conf_level = conf_level,
+    estimate = estimate,
+    sig_fig = sig_fig
+  )
+  coef
+}
+
+#' Predict Survival Trend Samples
+#'
+#' Predict survival by year as trend line.
+#' Survival fit object provided must be created with `year_trend = TRUE`.
+#'
+#' @inheritParams params
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
+#' @export
+#' @family analysis
+bb_predict_survival_trend_samples <- function(survival) {
+  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival))
+  chk_s3_class(survival, "bboufit_survival")
+  .chk_year_trend(survival)
+
+  predict_trend(
+    fit = survival,
+    derived_expr = derived_expr_survival_trend(survival)
+  )
+}
+
 #' Predict Survival Trend
 #'
 #' Predict survival by year as trend line.
@@ -109,21 +201,17 @@ bb_predict_calf_cow_ratio_trend <- function(recruitment,
 #' @return A tibble of the predicted estimates.
 #' @export
 #' @family analysis
-bb_predict_survival_trend <- function(survival,
-                                      conf_level = 0.95,
-                                      estimate = median,
-                                      sig_fig = 5) {
-  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival))
-  chk_s3_class(survival, "bboufit_survival")
-  .chk_year_trend(survival)
+bb_predict_survival_trend <- function(
+  survival,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 5
+) {
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
 
-  predicted <- predict_trend(
-    fit = survival,
-    derived_expr = derived_expr_survival_trend()
-  )
+  predicted <- bb_predict_survival_trend_samples(survival)
   coef <- predict_coef(
     samples = predicted$samples,
     new_data = predicted$data,

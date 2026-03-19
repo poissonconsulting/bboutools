@@ -13,6 +13,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+substitute_prior_values <- function(code, constants) {
+  do.call(substitute, list(code, as.list(constants)))
+}
+
+# Recursively unwrap redundant { } blocks left by NIMBLE's if/else resolution.
+# When NIMBLE evaluates an if branch, it wraps the result in { }, producing
+# nested braces like { { for (...) { } } }. This splices each nested { }
+# block's contents into its parent { } block.
+clean_model_code <- function(code) {
+  if (!is.call(code) || !identical(code[[1]], as.symbol("{"))) {
+    return(code)
+  }
+
+  children <- list()
+  for (i in seq_along(code)[-1]) {
+    child <- clean_model_code(code[[i]])
+    if (is.call(child) && identical(child[[1]], as.symbol("{"))) {
+      for (j in seq_along(child)[-1]) {
+        children <- c(children, list(child[[j]]))
+      }
+    } else {
+      children <- c(children, list(child))
+    }
+  }
+  as.call(c(list(as.symbol("{")), children))
+}
+
 #' Get Model Code
 #'
 #' Get code from Nimble model.

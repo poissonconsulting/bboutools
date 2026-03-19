@@ -36,15 +36,17 @@
 #' if (interactive()) {
 #'   fit <- bb_fit_survival_ml(bboudata::bbousurv_a)
 #' }
-bb_fit_survival_ml <- function(data,
-                               min_random_year = 5,
-                               year_trend = FALSE,
-                               include_uncertain_morts = FALSE,
-                               year_start = 4L,
-                               inits = NULL,
-                               quiet = FALSE) {
+bb_fit_survival_ml <- function(
+  data,
+  min_random_year = 5,
+  year_trend = FALSE,
+  include_uncertain_morts = FALSE,
+  year_start = 4L,
+  inits = NULL,
+  quiet = FALSE
+) {
   chk_data(data)
-  bbd_chk_data_survival(data)
+  bbd_chk_data_survival(data, multi_population = FALSE)
   chk_whole_number(min_random_year)
   chk_gte(min_random_year)
   chk_flag(year_trend)
@@ -54,14 +56,16 @@ bb_fit_survival_ml <- function(data,
   chk_null_or(inits, vld = vld_vector)
   chk_null_or(inits, vld = vld_named)
   chk_flag(quiet)
+  .check_attached()
 
   # special treatment of intercept for ML fixed
   data <- data_clean_survival(data, quiet = quiet)
-  data <- data_prep_survival(data,
+  data <- data_prep_survival(
+    data,
     include_uncertain_morts = include_uncertain_morts,
     year_start = year_start
   )
-  year_random <- length(unique(data$Year)) >= min_random_year
+  year_random <- length(unique(data$CaribouYear)) >= min_random_year
   if (!year_random) {
     data <- data_adjust_intercept(data)
   }
@@ -105,7 +109,7 @@ bb_fit_survival_ml <- function(data,
   .attrs_bboufit_ml(fit) <- attrs
 
   fit$data <- data$data
-  fit$model_code <- model$getCode()
+  fit$model_code <- clean_model_code(substitute_prior_values(model$getCode(), priors_survival()))
   class(fit) <- c("bboufit_survival", "bboufit_ml")
   fit
 }

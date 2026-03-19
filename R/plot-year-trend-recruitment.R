@@ -27,7 +27,7 @@ bb_plot_year_trend_recruitment <- function(x, ...) {
 #' @export
 bb_plot_year_trend_recruitment.data.frame <- function(x, ...) {
   chk_unused(...)
-  
+
   plot_year_trend(x) +
     scale_y_continuous("Recruitment") +
     expand_limits(y = 0)
@@ -36,8 +36,17 @@ bb_plot_year_trend_recruitment.data.frame <- function(x, ...) {
 #' @describeIn bb_plot_year_trend_recruitment Plot annual estimates as trend line for a bboufit_recruitment object.
 #' @inheritParams params
 #' @export
-bb_plot_year_trend_recruitment.bboufit_recruitment <- function(x, conf_level = 0.95, estimate = median, ...) {
+bb_plot_year_trend_recruitment.bboufit_recruitment <- function(
+  x,
+  conf_level = 0.95,
+  estimate = median,
+  ...
+) {
   chk_unused(...)
-  x <- bb_predict_recruitment_trend(x, conf_level = conf_level, estimate = estimate)
+  x <- bb_predict_recruitment_trend(
+    x,
+    conf_level = conf_level,
+    estimate = estimate
+  )
   bb_plot_year_trend_recruitment(x)
 }

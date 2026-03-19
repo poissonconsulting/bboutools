@@ -13,6 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+.add_facet_pop <- function(gp, x) {
+  if ("PopulationName" %in% names(x) && length(unique(x$PopulationName)) > 1) {
+    n_pops <- length(unique(x$PopulationName))
+    gp <- gp +
+      ggplot2::facet_wrap(~PopulationName, ncol = ceiling(sqrt(n_pops)))
+  }
+  gp
+}
+
 #' Plot Year
 #'
 #' Plots annual estimates with credible limits.
@@ -27,12 +36,15 @@ bb_plot_year <- function(x, ...) {
 #' @export
 bb_plot_year.data.frame <- function(x, ...) {
   chk_unused(...)
-  check_data(x, values = list(
-    CaribouYear = 1L,
-    estimate = c(0, Inf),
-    lower = c(0, Inf, NA),
-    upper = c(0, Inf, NA)
-  ))
+  check_data(
+    x,
+    values = list(
+      CaribouYear = 1L,
+      estimate = c(0, Inf),
+      lower = c(0, Inf, NA),
+      upper = c(0, Inf, NA)
+    )
+  )
 
   gp <- ggplot(data = x) +
     aes(
@@ -41,12 +53,15 @@ bb_plot_year.data.frame <- function(x, ...) {
       ymin = .data$lower,
       ymax = .data$upper
     ) +
+    scale_x_continuous(breaks = \(x) {
+      unique(as.integer(round(scales::breaks_pretty()(x))))
+    }) +
     xlab("Caribou Year")
 
   if (any(is.na(x$lower))) {
-    return(gp + ggplot2::geom_point())
+    return(.add_facet_pop(gp + ggplot2::geom_point(), x))
   }
-  gp + geom_pointrange()
+  .add_facet_pop(gp + geom_pointrange(), x)
 }
 
 #' @describeIn bb_plot_year Plot annual estimates for a bboufit object.
@@ -61,7 +76,12 @@ bb_plot_year.bboufit <- function(x, conf_level = 0.95, estimate = median, ...) {
 #' @describeIn bb_plot_year Plot annual estimates for a bboufit_ml object.
 #' @inheritParams params
 #' @export
-bb_plot_year.bboufit_ml <- function(x, conf_level = 0.95, estimate = median, ...) {
+bb_plot_year.bboufit_ml <- function(
+  x,
+  conf_level = 0.95,
+  estimate = median,
+  ...
+) {
   chk_unused(...)
   x <- predict(x, conf_level = conf_level, estimate = estimate)
   bb_plot_year(x)

@@ -21,7 +21,10 @@ save_png <- function(x, width = 400, height = 400) {
   path
 }
 
-save_csv <- function(x) {
+save_csv <- function(x, digits = NULL) {
+  if (!is.null(digits)) {
+    x <- dplyr::mutate(x, dplyr::across(dplyr::where(is.numeric), \(col) signif(col, digits)))
+  }
   path <- tempfile(fileext = ".csv")
   readr::write_csv(x, path)
   path
@@ -33,9 +36,9 @@ expect_snapshot_plot <- function(x, name) {
   testthat::expect_snapshot_file(path, paste0(name, ".png"))
 }
 
-expect_snapshot_data <- function(x, name) {
+expect_snapshot_data <- function(x, name, digits = NULL) {
   testthat::skip_on_os("windows")
-  path <- save_csv(x)
+  path <- save_csv(x, digits = digits)
   testthat::expect_snapshot_file(path, paste0(name, ".csv"))
 }
 

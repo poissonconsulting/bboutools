@@ -14,24 +14,38 @@
 # limitations under the License.
 
 test_that("bb_predict_population_change works", {
-  predict <- bb_predict_population_change(bboutools:::fit_survival, bboutools:::fit_recruitment)
+  predict <- bb_predict_population_change(
+    bboutools:::fit_survival,
+    bboutools:::fit_recruitment
+  )
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_popchange")
 })
 
-test_that("bb_predict_population_change works with sex ratio", {
-  predict <- bb_predict_population_change(bboutools:::fit_survival, bboutools:::fit_recruitment, sex_ratio = 0.7)
+test_that("bb_predict_population_change sex_ratio deprecated", {
+  lifecycle::expect_deprecated(
+    predict <- bb_predict_population_change(
+      bboutools:::fit_survival,
+      bboutools:::fit_recruitment,
+      sex_ratio = 0.7
+    )
+  )
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_popchange_sex_ratio")
 })
 test_that("bb_predict_population_change works with trend", {
-  predict <- bb_predict_population_change(bboutools:::fit_survival_trend, bboutools:::fit_recruitment_trend)
+  predict <- bb_predict_population_change(
+    bboutools:::fit_survival_trend,
+    bboutools:::fit_recruitment_trend
+  )
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_popchange_trend")
 })
 
 test_that("bb_predict_population_change conf_level works", {
-  predict <- bb_predict_population_change(bboutools:::fit_survival, bboutools:::fit_recruitment,
+  predict <- bb_predict_population_change(
+    bboutools:::fit_survival,
+    bboutools:::fit_recruitment,
     conf_level = 0.5
   )
   expect_s3_class(predict, "tbl")
@@ -39,7 +53,9 @@ test_that("bb_predict_population_change conf_level works", {
 })
 
 test_that("bb_predict_population_change estimate works", {
-  predict <- bb_predict_population_change(bboutools:::fit_survival, bboutools:::fit_recruitment,
+  predict <- bb_predict_population_change(
+    bboutools:::fit_survival,
+    bboutools:::fit_recruitment,
     estimate = max
   )
   expect_s3_class(predict, "tbl")
@@ -47,13 +63,20 @@ test_that("bb_predict_population_change estimate works", {
 })
 
 test_that("predict sig_fig works", {
-  predict <- bb_predict_population_change(bboutools:::fit_survival, bboutools:::fit_recruitment, sig_fig = 1)
+  predict <- bb_predict_population_change(
+    bboutools:::fit_survival,
+    bboutools:::fit_recruitment,
+    sig_fig = 1
+  )
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_popchange_sig_fig")
 })
 
 test_that("bb_predict_population_change works with ML", {
-  predict <- bb_predict_population_change(bboutools:::fit_survival_ml, bboutools:::fit_recruitment_ml)
+  predict <- bb_predict_population_change(
+    bboutools:::fit_survival_ml,
+    bboutools:::fit_recruitment_ml
+  )
   expect_s3_class(predict, "tbl")
   expect_snapshot_data(predict, "bb_predict_popchange_ml")
 })

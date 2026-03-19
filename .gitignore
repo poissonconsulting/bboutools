@@ -13,3 +13,14 @@ annual_recruitment.csv
 annual_survival.csv
 data_survival.csv
 data_recruitment.csv
+
+# Test artifacts
+test-data/
+tests/testthat/_problems/
+tests/testthat/testthat-problems.rds
+
+# Claude Code files
+CLAUDE.md
+.claude/
+/.quarto/
+**/*.quarto_ipynb

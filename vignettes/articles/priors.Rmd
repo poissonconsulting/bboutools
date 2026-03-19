@@ -27,12 +27,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-A prior distribution represents the existing uncertainty in the value of an unknown parameter. 
-The influence of a prior on the posterior distribution will decrease as the number of observations increases. 
-`bboutools` uses weakly informative priors by default [@gelman_prior_2017; @mcelreath_statistical_2016].  
+In Bayesian analysis, a prior distribution encodes what is known or assumed about a parameter before observing the data.
+The prior is combined with the likelihood of the data to produce the posterior distribution, which represents the updated knowledge about the parameter after observing the data.
+When the data are abundant, the posterior is dominated by the likelihood and the choice of prior has little practical effect.
+When the data are sparse, the prior has more influence on the posterior, which can be beneficial if the prior reflects genuine biological knowledge, or problematic if the prior is poorly chosen.
 
-If the user is interested in fitting models without priors, see `bb_fit_recruitment_ml()` and `bb_fit_survival_ml()`, which have identical models but use a frequentist approach (Maximum Likelihood) to parameter estimation. 
-Models fit with Maximum Likelihood are equivalent to Bayesian models with completely uninformative priors [@mcelreath_statistical_2016].  
+Priors range from uninformative (assigning equal probability to all values) to strongly informative (concentrating probability near a specific value).
+`bboutools` uses weakly informative priors by default, which rule out biologically implausible values but remain diffuse enough to let the data drive the estimates [@gelman_prior_2017; @mcelreath_statistical_2016].
+
+If the user is interested in fitting models without priors, see `bb_fit_recruitment_ml()` and `bb_fit_survival_ml()`, which have identical models but use a frequentist approach (Maximum Likelihood) to parameter estimation.
+Models fit with Maximum Likelihood are equivalent to Bayesian models with completely uninformative priors [@mcelreath_statistical_2016].
 
 ### Survival
 
@@ -47,13 +51,12 @@ $$b0 \sim Normal(3, sd = 10)$$
 - Year fixed effect
 $$bAnnual[i] \sim Normal(0, sd = 10)$$
 - Year random effect
-
-$$sAnnual \sim Exponential(1) \\
-bAnnual \sim Normal(0, sd = sAnnual)$$
+$$sAnnual \sim Exponential(1)$$
+$$bAnnual \sim Normal(0, sd = sAnnual)$$
 
 - Month random effect
-$$sMonth \sim Exponential(1)\\
-bMonth \sim Normal(0, sd = sMonth)$$
+$$sMonth \sim Exponential(1)$$
+$$bMonth \sim Normal(0, sd = sMonth)$$
 
 - Year continuous effect
 $$bYear \sim Normal(0, sd = 2)$$
@@ -73,8 +76,8 @@ $$b0 \sim Normal(-1, sd = 5)$$
 $$bAnnual[i] \sim Normal(0, sd = 5)$$
 
 - Categorical year random effect
-$$sAnnual \sim Exponential(1)\\
-bAnnual \sim Normal(0, sd = sAnnual)$$
+$$sAnnual \sim Exponential(1)$$
+$$bAnnual \sim Normal(0, sd = sAnnual)$$
 
 - Continuous year effect
 $$bYear \sim Normal(0, sd = 2)$$ 
@@ -87,8 +90,9 @@ $$adult\_female\_proportion \sim Beta(65, 35)$$
 
 ### Prior selection and influence
 
-As an example of the influence of priors on parameter estimates, we tighten the standard deviation for the fixed effect of categorical year on the intercept of monthly survival probability.
-The equivalent maximum likelihood model is also fit for comparison.
+The default weakly informative priors are appropriate for most analyses.
+A user may wish to adjust priors in several situations: when strong biological knowledge exists for a parameter (e.g., adult female proportion from published studies), when the dataset is small and the user wants to constrain estimates to a plausible range, or when comparing the sensitivity of results to different prior assumptions.
+The examples below illustrate how tightening or relaxing priors affects parameter estimates relative to the Maximum Likelihood baseline.
 
 ```{r setup}
 library(bboutools)
@@ -96,126 +100,245 @@ library(dplyr)
 library(ggplot2)
 ```
 
+#### Adult female proportion
+
+To illustrate the effect, we construct a dataset where a large proportion of adults are unclassified by moving half of observed Cows and Bulls into `UnknownAdults`.
+We then compare recruitment estimates from priors centered on high (80%) and low (35%) adult female proportions, along with the default and maximum likelihood estimates.
+
 ```{r}
 set.seed(1)
-data <- bboudata::bbousurv_c
+data <- bboudata::bbourecruit_a |>
+  filter(Year >= 2005, Year <= 2010) |>
+  mutate(
+    UnknownAdults = UnknownAdults + round(Cows / 2) + round(Bulls / 2),
+    Cows = Cows - round(Cows / 2),
+    Bulls = Bulls - round(Bulls / 2)
+  )
 
-# force model to fit fixed year effect, use default priors
-fit <- bb_fit_survival(data,
-  min_random_year = Inf,
-  quiet = TRUE
+# default prior: Beta(65, 35), mode at 65%
+fit <- bb_fit_recruitment(data, adult_female_proportion = NULL, quiet = TRUE)
+
+# high prior: Beta(80, 20), mode at ~81%
+fit_high <- bb_fit_recruitment(
+  data,
+  adult_female_proportion = NULL,
+  quiet = TRUE,
+  priors = c(
+    "adult_female_proportion_alpha" = 80,
+    "adult_female_proportion_beta" = 20
+  )
 )
 
-# tighten prior on bAnnual by changing SD from default 10 to 1
-fit_prior <- bb_fit_survival(data,
-  min_random_year = Inf, quiet = TRUE,
-  priors = c("bAnnual_sd" = 1)
+# low prior: Beta(35, 65), mode at ~35%
+fit_low <- bb_fit_recruitment(
+  data,
+  adult_female_proportion = NULL,
+  quiet = TRUE,
+  priors = c(
+    "adult_female_proportion_alpha" = 35,
+    "adult_female_proportion_beta" = 65
+  )
 )
 
-# fit maximum likelihood model for comparison
-fit_ml <- bb_fit_survival_ml(data,
-  min_random_year = Inf,
+# maximum likelihood for comparison
+fit_ml <- bb_fit_recruitment_ml(
+  data,
+  adult_female_proportion = NULL,
   quiet = TRUE
 )
 ```
 
-```{r, echo=FALSE,fig.width=6,fig.height=4}
-pred <- bb_predict_survival(fit)
-pred_prior <- bb_predict_survival(fit_prior)
-pred_ml <- bb_predict_survival(fit_ml)
+The choice of prior on $adult\_female\_proportion$ affects the predicted recruitment.
 
-df <- bind_rows(list(
-  "Bayesian Vague (Default)" = pred,
-  "Bayesian Informative" = pred_prior,
-  "Maximum Likelihood" = pred_ml
-), .id = "model")
+```{r, echo=FALSE,fig.width=6,fig.height=4}
+pred <- bb_predict_recruitment(fit)
+pred_high <- bb_predict_recruitment(fit_high)
+pred_low <- bb_predict_recruitment(fit_low)
+pred_ml <- bb_predict_recruitment(fit_ml)
+
+df <- bind_rows(
+  list(
+    "Default Beta(65,35)" = pred,
+    "High Beta(80,20)" = pred_high,
+    "Low Beta(35,65)" = pred_low,
+    "Maximum Likelihood" = pred_ml
+  ),
+  .id = "model"
+)
 
 ggplot(data = df) +
-  geom_pointrange(aes(x = factor(CaribouYear), y = estimate, ymin = lower, ymax = upper, color = model), position = position_dodge(width = 0.5)) +
+  geom_pointrange(
+    aes(
+      x = factor(CaribouYear),
+      y = estimate,
+      ymin = lower,
+      ymax = upper,
+      color = model
+    ),
+    position = position_dodge(width = 0.7)
+  ) +
+  theme(legend.position = "bottom") +
+  scale_y_continuous("Recruitment") +
+  xlab("Caribou Year") +
+  scale_color_discrete("")
+```
+
+The influence of the $adult\_female\_proportion$ prior on recruitment predictions depends on the proportion of unclassified adults in the data.
+When most adults are already classified as Cows or Bulls, the prior has little practical effect on recruitment.
+
+The $adult\_female\_proportion$ can also simply be fixed.
+See `bb_fit_recruitment()` for details.
+
+#### Survival intercept
+
+A user may have prior knowledge about the expected survival rate for their population from published studies or neighboring populations.
+This can be encoded in the intercept prior `b0`.
+The default prior for survival is `b0 ~ Normal(3, 10)` on the logit scale, which is very diffuse.
+
+As an example, suppose published estimates suggest annual survival is approximately 85% for a population.
+On the logit scale, 85% annual survival corresponds to a monthly survival of approximately $0.85^{1/12} \approx 0.9865$, or $\text{logit}(0.9865) \approx 4.3$.
+A prior of `b0 ~ Normal(4.3, 0.5)` would encode this belief while still allowing the data to shift the estimate.
+
+```{r}
+set.seed(1)
+data <- bboudata::bbousurv_c
+
+# default prior: b0 ~ Normal(3, 10)
+fit_default <- bb_fit_survival(data, quiet = TRUE)
+
+# informative prior centered on ~85% annual survival
+fit_informed <- bb_fit_survival(
+  data,
+  priors = c(b0_mu = 4.3, b0_sd = 0.5),
+  quiet = TRUE
+)
+
+# maximum likelihood for comparison
+fit_ml <- bb_fit_survival_ml(data, quiet = TRUE)
+```
+
+```{r, echo=FALSE,fig.width=6,fig.height=4}
+pred_default <- bb_predict_survival(fit_default)
+pred_informed <- bb_predict_survival(fit_informed)
+pred_ml <- bb_predict_survival(fit_ml)
+
+df <- bind_rows(
+  list(
+    "Default Normal(3, 10)" = pred_default,
+    "Informed Normal(4.3, 0.5)" = pred_informed,
+    "Maximum Likelihood" = pred_ml
+  ),
+  .id = "model"
+)
+
+ggplot(data = df) +
+  geom_pointrange(
+    aes(
+      x = factor(CaribouYear),
+      y = estimate,
+      ymin = lower,
+      ymax = upper,
+      color = model
+    ),
+    position = position_dodge(width = 0.5)
+  ) +
   theme(legend.position = "bottom") +
   scale_y_continuous("Annual Survival", labels = scales::percent) +
   xlab("Caribou Year") +
   scale_color_discrete("")
 ```
 
-The Bayesian model with vague priors (default) has annual survival estimates that closely match the Maximum Likelihood estimates, whereas the Bayesian model with a tighter prior on the year fixed effect standard deviation results in estimates that are pulled in toward the mean.
-If this behaviour is desirable (i.e., to place less trust in extreme estimates), a model with a year random effect can be fit.
+The informative prior pulls survival estimates toward the prior mean, particularly in years with sparse data.
+With abundant data, the prior has less influence and the estimates converge toward the Maximum Likelihood values.
 
-As another example, the user might strongly believe (i.e., based on literature or biological understanding) that the true adult female proportion is 65%.
-We compare estimates from very informative, informative (default) and vague priors on $adult\_female\_proportion$, along with the maximum likelihood estimates.
+Rather than manually calculating intercept priors from published survival rates, `bboutools` provides functions to derive intercept priors from disturbance levels using national demographic-disturbance relationships.
+
+## National Disturbance-Informed Priors
+
+The user can specify priors informed by national demographic-disturbance relationships [@johnson_science_2020] instead of the default weakly informative priors.
+These priors link anthropogenic and fire disturbance levels to expected survival and recruitment, based on the national boreal caribou model.
+
+The functions `bb_priors_survival_national()` and `bb_priors_recruitment_national()` return intercept priors (`b0_mu` and `b0_sd`) based on the percent anthropogenic disturbance (`anthro`) and percent fire disturbance not overlapping with anthropogenic disturbance (`fire_excl_anthro`).
+All other prior parameters retain their defaults from `bb_priors_survival()` and `bb_priors_recruitment()`.
+
+```{r}
+nat_priors <- bb_priors_survival_national(anthro = 50, fire_excl_anthro = 5)
+nat_priors
+```
+
+For aggregate annual survival data, the `annual = TRUE` option returns priors on the annual survival scale.
+
+```{r}
+nat_priors_annual <- bb_priors_survival_national(
+  anthro = 50,
+  fire_excl_anthro = 5,
+  annual = TRUE
+)
+nat_priors_annual
+```
+
+As an example, we compare survival estimates from the default priors and national disturbance-informed priors.
 
 ```{r}
 set.seed(1)
-data <- bboudata::bbourecruit_c
-fit <- bb_fit_recruitment(data,
-  adult_female_proportion = NULL,
-  quiet = TRUE
-)
+data <- bboudata::bbousurv_c
 
-fit_inf <- bb_fit_recruitment(data,
-  adult_female_proportion = NULL,
-  quiet = TRUE,
-  priors = c(
-    "adult_female_proportion_alpha" = 650,
-    "adult_female_proportion_beta" = 350
-  )
-)
+fit_default <- bb_fit_survival(data, quiet = TRUE)
 
-fit_vague <- bb_fit_recruitment(data,
-  adult_female_proportion = NULL,
-  quiet = TRUE,
-  priors = c(
-    "adult_female_proportion_alpha" = 1,
-    "adult_female_proportion_beta" = 1
-  )
-)
-
-fit_ml <- bb_fit_recruitment_ml(data,
-  adult_female_proportion = NULL,
+fit_national <- bb_fit_survival(
+  data,
+  priors = bb_priors_survival_national(anthro = 50, fire_excl_anthro = 5),
   quiet = TRUE
 )
 ```
 
 ```{r, echo=FALSE,fig.width=6,fig.height=4}
-est <-
-  coef(fit) %>%
-  filter(term == "adult_female_proportion")
+pred_default <- bb_predict_survival(fit_default)
+pred_national <- bb_predict_survival(fit_national)
 
-est_inf <-
-  coef(fit_inf) %>%
-  filter(term == "adult_female_proportion")
+df <- bind_rows(
+  list(
+    "Default Priors" = pred_default,
+    "National (50% Anthro)" = pred_national
+  ),
+  .id = "model"
+)
 
-est_vague <-
-  coef(fit_vague) %>%
-  filter(term == "adult_female_proportion")
-
-est_ml <-
-  coef(fit_ml) %>%
-  filter(term == "adult_female_proportion")
-
-df <- bind_rows(list(
-  "Bayesian Default" = est,
-  "Bayesian Informative" = est_inf,
-  "Bayesian Vague" = est_vague,
-  "Maximum Likelihood" = est_ml
-), .id = "model") %>%
-  mutate(model = factor(model, levels = c(
-    "Bayesian Vague", "Bayesian Default",
-    "Bayesian Informative", "Maximum Likelihood"
-  )))
-df$prior <- c("Beta(65,35)", "Beta(650,350)", "Beta(1,1)", "ML")
 ggplot(data = df) +
-  geom_pointrange(aes(x = prior, y = estimate, ymin = lower, ymax = upper, color = model), position = position_dodge(width = 2)) +
-  scale_y_continuous("Adult Female Proportion", labels = scales::percent, limits = c(0.65, 0.8)) +
-  scale_color_discrete("") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.7)) +
-  xlab("")
+  geom_pointrange(
+    aes(
+      x = factor(CaribouYear),
+      y = estimate,
+      ymin = lower,
+      ymax = upper,
+      color = model
+    ),
+    position = position_dodge(width = 0.5)
+  ) +
+  theme(legend.position = "bottom") +
+  scale_y_continuous("Annual Survival", labels = scales::percent) +
+  xlab("Caribou Year") +
+  scale_color_discrete("")
 ```
 
+Higher anthropogenic disturbance leads to lower expected survival.
+The national priors shift the intercept accordingly, resulting in a more informative prior centered on the expected survival for the given disturbance level.
 
-As with the above example, the adult female proportion estimate for a Bayesian model with vague priors closely matches the Maximum Likelihood estimate, whereas the Bayesian model with informative prior gives less weight to the data.
+### Year Trend Prior and Data Rescaling
 
-The $adult\_female\_proportion$ can also simply be fixed. 
-See `bb_fit_recruitment()` for details.
+The `CaribouYear` variable is internally z-score standardized before model fitting.
+
+$$Rescaled\_Year = \frac{CaribouYear - mean(CaribouYear)}{sd(CaribouYear)}$$
+
+This rescaling affects the interpretation of the year trend prior `bYear`.
+The prior `bYear ~ Normal(bYear\_mu, sd = bYear\_sd)` operates on the rescaled year scale, not the original calendar year scale.
+
+The default `bYear_sd = 2` is intentionally diffuse on the rescaled scale and is generally appropriate for most datasets.
+
+If a user wants to specify an informed trend prior per calendar year, the values must be converted to the rescaled scale by multiplying by the standard deviation of the years in the dataset.
+For example, with years 2010--2015 (SD $\approx$ 1.87), a desired prior of 0.1 log-odds per calendar year with SD = 0.5 translates to `bYear_mu = 0.1 * 1.87` and `bYear_sd = 0.5 * 1.87` on the rescaled scale.
+
+The rescaling improves numerical stability during model fitting and makes the default prior behave reasonably regardless of the absolute year values.
+Both survival and recruitment models use identical rescaling.
 
 ## References

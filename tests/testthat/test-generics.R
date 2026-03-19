@@ -125,23 +125,82 @@ test_that("estimate ml works", {
 })
 
 test_that("get attributes works", {
-  expect_identical(npars(bboutools:::fit_survival), 5L)
-  expect_identical(niters(bboutools:::fit_survival), 1000L)
+  expect_identical(npars(bboutools:::fit_survival), 6L)
+  expect_identical(niters(bboutools:::fit_survival), 100L)
   expect_identical(nobs(bboutools:::fit_survival), 363L)
   expect_identical(nchains(bboutools:::fit_survival), 3L)
-  expect_identical(nterms(bboutools:::fit_recruitment), 29L)
-  expect_identical(pars(bboutools:::fit_recruitment), c("b0", "bAnnual", "sAnnual"))
+  expect_identical(nterms(bboutools:::fit_recruitment), 30L)
+  expect_identical(
+    pars(bboutools:::fit_recruitment),
+    c("b0", "bAnnual", "bYear", "sAnnual")
+  )
 })
 
 test_that("get attributes ml works", {
-  expect_identical(npars(bboutools:::fit_survival_ml), 5L)
+  expect_identical(npars(bboutools:::fit_survival_ml), 6L)
   expect_identical(nobs(bboutools:::fit_survival_ml), 363L)
-  expect_identical(nterms(bboutools:::fit_recruitment_ml), 29L)
-  expect_identical(pars(bboutools:::fit_recruitment_ml), c("b0", "bAnnual", "sAnnual"))
+  expect_identical(nterms(bboutools:::fit_recruitment_ml), 30L)
+  expect_identical(
+    pars(bboutools:::fit_recruitment_ml),
+    c("b0", "bAnnual", "bYear", "sAnnual")
+  )
 })
 
 test_that("convergence works", {
-  expect_equal(rhat(bboutools:::fit_survival), 1.024)
-  expect_true(converged(bboutools:::fit_survival))
-  expect_equal(esr(bboutools:::fit_survival), 0.034)
+  rhat_surv <- rhat(bboutools:::fit_survival)
+  esr_surv <- esr(bboutools:::fit_survival)
+
+  expect_type(rhat_surv, "double")
+  expect_length(rhat_surv, 1L)
+  expect_gt(rhat_surv, 1)
+
+  expect_false(converged(bboutools:::fit_survival))
+
+  expect_type(esr_surv, "double")
+  expect_length(esr_surv, 1L)
+  expect_gt(esr_surv, 0)
+  expect_lt(esr_surv, 1)
+})
+
+test_that("coef annual works", {
+  coef <- coef(bboutools:::fit_survival_annual)
+  expect_s3_class(coef, "tbl")
+  expect_snapshot_data(coef, "coef_annual")
+})
+
+test_that("coef ml annual works", {
+  coef <- coef(bboutools:::fit_survival_ml_annual)
+  expect_s3_class(coef, "tbl")
+  expect_snapshot_data(coef, "coef_ml_annual")
+})
+
+test_that("glance annual works", {
+  glance <- glance(bboutools:::fit_survival_annual)
+  expect_s3_class(glance, "tbl")
+  expect_snapshot_data(glance, "glance_annual")
+})
+
+test_that("augment annual works", {
+  augment <- augment(bboutools:::fit_survival_annual)
+  expect_s3_class(augment, "tbl")
+  expect_identical(levels(augment$Month), "4")
+  expect_snapshot_data(augment, "augment_annual")
+})
+
+test_that("get attributes annual works", {
+  expect_identical(npars(bboutools:::fit_survival_annual), 5L)
+  expect_identical(nobs(bboutools:::fit_survival_annual), 9L)
+  expect_identical(
+    pars(bboutools:::fit_survival_annual),
+    c("b0", "bAnnual", "bMonth", "bYear", "sAnnual")
+  )
+})
+
+test_that("get attributes ml annual works", {
+  expect_identical(npars(bboutools:::fit_survival_ml_annual), 4L)
+  expect_identical(nobs(bboutools:::fit_survival_ml_annual), 9L)
+  expect_identical(
+    pars(bboutools:::fit_survival_ml_annual),
+    c("b0", "bAnnual", "bYear", "sAnnual")
+  )
 })

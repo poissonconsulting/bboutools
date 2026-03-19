@@ -1,5 +1,54 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# bboutools 1.3.0
+
+## Breaking changes
+
+* Models now use `CaribouYear` instead of `Year` throughout (#75). This affects column names in output data frames from `predict()`, `augment()`, and all `bb_predict_*()` functions.
+* Multi-population models change parameter indexing from `bAnnual[1]` to `bAnnual[1,1]` and add a `PopulationName` column to output data frames (#77). Single-population models are also affected.
+
+## New features
+
+* `bb_fit_survival()` and `bb_fit_recruitment()` now support multiple populations in a single model fit (#77). Population-level intercepts (`b0[k]`) and year random effects (`bAnnual[i,k]`) are estimated per population, while month effects and variance components are shared.
+* `bb_fit_survival()` now accepts aggregate annual survival data (one row per population per year) when monthly collar data is unavailable (#78). Annual data is auto-detected. The model skips the month random effect and does not apply monthly-to-annual exponentiation.
+* `bb_fit_survival()` and `bb_fit_recruitment()` now support prediction of unobserved years via `allow_missing = TRUE` (#79). Users add placeholder rows with `PopulationName` and `Year` filled and all measurement columns `NA_integer_`. Predictions for unobserved years sample the year random effect from its prior, giving appropriate uncertainty.
+* Added `bb_priors_survival_national()` and `bb_priors_recruitment_national()` to generate disturbance-informed intercept priors using the bbouNationalPriors package (#80).
+* Added `bb_predict_*_samples()` variants for all `bb_predict_*()` functions to return raw MCMC samples instead of summary tables (#83).
+* `bb_fit_survival()` and `bb_fit_recruitment()` now accept `niters = 0` to build the model without MCMC sampling, useful for inspecting model structure (#85).
+* Added prior-only sampling for prior predictive checks (#91). Users provide all-placeholder data with `allow_missing = TRUE` and `niters > 0` to sample from priors without observed data.
+* Plot functions now automatically facet by `PopulationName` when multiple populations are present.
+
+## Deprecated
+
+* The `sex_ratio` argument in `bb_predict_recruitment()`, `bb_predict_growth()`, `bb_predict_population_change()`, and their `*_samples()` and `*_trend()` variants is deprecated (#72). `sex_ratio` is now stored as an attribute at model fit time and extracted automatically by predict functions.
+
+## Improvements
+
+* Placeholder row detection now uses measurement columns instead of `Month` (#94). This supports aggregate annual survival data where `Month` has a valid value.
+* `bb_fit_survival()` and `bb_fit_recruitment()` now emit an informational message listing detected unobserved CaribouYears by population when `quiet = FALSE` (#94).
+
+## Bug fixes
+
+* Predictions for unobserved years now include the year random effect (`bAnnual`) drawn from the `Normal(0, sAnnual)` prior, resulting in wider credible intervals that better represent year-to-year process variance (#93). Previously, the year random effect was zeroed out for unobserved years.
+
+* Fixed ML model fitting error with nimble >= 1.4.0 by using nimbleQuad for Laplace approximation (#88).
+* `bb_predict_growth()` and `bb_predict_population_change()` now auto-filter to shared population and CaribouYear combinations instead of erroring when survival and recruitment fits differ.
+* Fixed `bb_predict_population_change()` baseline row to use per-population minimum CaribouYear instead of global minimum.
+* Fixed CaribouYear x-axis labels in `bb_plot_year_*()` and `bb_plot_year_trend_*()` to avoid duplicate integer labels.
+* Added informative error when calling `tidy()`, `coef()`, `glance()`, `predict()`, and other downstream functions on a Bayesian fit with `niters = 0` (#89).
+* Added informative error when nimble is not attached to the search path, e.g., when using `bboutools::` instead of `library(bboutools)` (#70).
+
+## Internal
+
+* `model_code()` now shows resolved numeric prior values instead of symbolic names (e.g., `dnorm(3, sd = 10)` instead of `dnorm(b0_mu, sd = b0_sd)`) and removes redundant `{ }` blocks left by NIMBLE's if/else resolution (#69).
+* Migrated user-facing messages from `message()`/`warning()`/`abort_chk()` to cli package (#90). `.inform_unobserved_years()` and `.warn_filtered_multi()` use plain `message()` for clean display in bboushiny toast notifications.
+* Reduced `sysdata.rda` size from ~7.7 MB to ~890 KB.
+
+## Documentation
+
+* Updated Get Started, Analytical Methods, and Priors vignettes for multi-population models, annual data, and national priors (#82).
+* Added Extensions article covering multi-population analysis, aggregate annual survival, unobserved year predictions, prior-only sampling, and raw MCMC samples (#82).
+
 # bboutools 1.2.0
 
 - added `bb_plot_year_calf_cow_ratio()` and `bb_plot_year_trend_calf_cow_ratio()`.

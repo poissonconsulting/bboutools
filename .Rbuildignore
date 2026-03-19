@@ -17,3 +17,6 @@
 ^data_survival\.csv$
 ^data_recruitment\.csv$
 ^vignettes/articles$
+^CLAUDE\.md$
+^\.claude$
+^test-data$

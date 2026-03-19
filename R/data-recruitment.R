@@ -1,5 +1,8 @@
 # Copyright 2022-2023 Integrated Ecological Research and Poisson Consulting Ltd.
 # Copyright 2024 Province of Alberta
+# Copyright (c) His Majesty the King in Right of Canada as represented by the
+# Minister of the Environment 2025/(c) Sa Majeste le Roi du chef du Canada
+# representee par le ministre de l'Environnement 2025.
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -14,11 +17,16 @@
 # limitations under the License.
 
 data_clean_recruitment <- function(data, quiet = FALSE) {
-  data <- remove_missing(data,
+  data <- remove_missing(
+    data,
     quiet = quiet,
     cols = c(
-      "Yearlings", "Cows", "UnknownAdults",
-      "Year", "Month", "Day"
+      "Yearlings",
+      "Cows",
+      "UnknownAdults",
+      "Year",
+      "Month",
+      "Day"
     )
   )
   data
@@ -26,26 +34,32 @@ data_clean_recruitment <- function(data, quiet = FALSE) {
 
 data_prep_recruitment <- function(data, year_start = 4L) {
   data$CowsBulls <- data$Cows + data$Bulls
-  data$Year <- caribou_year(data$Year, data$Month, year_start = year_start)
+  data$CaribouYear <- caribou_year(
+    data$Year,
+    data$Month,
+    year_start = year_start
+  )
   data <-
-    data %>%
-    dplyr::group_by(Year) %>%
+    data |>
+    dplyr::group_by(CaribouYear, PopulationName) |>
     dplyr::summarize(
       Cows = sum(.data$Cows),
       CowsBulls = sum(.data$CowsBulls),
       UnknownAdults = sum(.data$UnknownAdults),
       Yearlings = sum(.data$Yearlings),
       Calves = sum(.data$Calves),
-      PopulationName = dplyr::first(.data$PopulationName)
-    ) %>%
-    dplyr::ungroup()
-  data$Annual <- factor(data$Year)
+      .groups = "drop"
+    )
+  data$Annual <- factor(data$CaribouYear)
+  data$PopulationName <- factor(data$PopulationName)
 
   data
 }
 
 data_list_recruitment <- function(data, model) {
-  data <- rescale(data, scale = "Year")
+  if (nrow(data) > 0) {
+    data <- rescale(data, scale = "CaribouYear")
+  }
   x <- list(
     nObs = nrow(data),
     Cows = data$Cows,
@@ -53,9 +67,11 @@ data_list_recruitment <- function(data, model) {
     UnknownAdults = data$UnknownAdults,
     Yearlings = data$Yearlings,
     Calves = data$Calves,
-    nAnnual = length(unique(data$Annual)),
-    Year = data$Year,
-    Annual = as.integer(data$Annual)
+    nAnnual = length(levels(data$Annual)),
+    CaribouYear = data$CaribouYear,
+    Annual = as.integer(data$Annual),
+    PopulationName = as.integer(data$PopulationName),
+    nPopulation = length(levels(data$PopulationName))
   )
   x
 }

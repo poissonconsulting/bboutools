@@ -20,7 +20,9 @@ test_that("bb_plot_year_trend_calf_cow_ratio.bboufit_recruitment works", {
 })
 
 test_that("bb_plot_year_trend_calf_cow_ratio.data.frame works", {
-  prediction <- bb_predict_calf_cow_ratio_trend(bboutools:::fit_recruitment_trend)
+  prediction <- bb_predict_calf_cow_ratio_trend(
+    bboutools:::fit_recruitment_trend
+  )
   plot <- bb_plot_year_trend_calf_cow_ratio(prediction)
   expect_s3_class(plot, "ggplot")
   expect_snapshot_plot(plot, "plot_year_trend_calf_cow_ratio_df")

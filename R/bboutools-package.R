@@ -18,5 +18,6 @@
 
 ## usethis namespace: start
 #' @importFrom lifecycle deprecated
+#' @importFrom nimbleQuad buildLaplace
 ## usethis namespace: end
 NULL

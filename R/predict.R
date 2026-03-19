@@ -14,7 +14,8 @@
 # limitations under the License.
 
 .predict <- function(new_data, samples, derived_expr) {
-  derived <- mcmcderive::mcmc_derive(samples,
+  derived <- mcmcderive::mcmc_derive(
+    samples,
     expr = derived_expr,
     monitor = "prediction",
     values = new_data,
@@ -26,42 +27,69 @@
 }
 
 predict_survival <- function(fit, year, month) {
+  .chk_has_samples(fit)
+  if (month && length(levels(augment(fit)$Month)) == 1) {
+    chk::abort_chk("`month` must be FALSE for annual survival data.")
+  }
   samples <- samples(fit)
   data <- augment(fit)
   new <- new_data_ym(data, year = year, month = month)
   derived <- derived_expr_survival(fit, year, month)
   x <- .predict(new_data = new, samples = samples, derived_expr = derived)
-  if (!month) x$data$Month <- NA
-  if (!year) x$data$Annual <- NA
+  if (!month) {
+    x$data$Month <- NA
+  }
+  if (!year) {
+    x$data$Annual <- NA
+  }
   x
 }
 
 predict_calf_cow <- function(fit, year) {
+  .chk_has_samples(fit)
   samples <- samples(fit)
   data <- augment(fit)
   new <- new_data_ym(data, year = year, month = FALSE)
   derived <- derived_expr_recruitment(fit, year)
   x <- .predict(new_data = new, samples = samples, derived_expr = derived)
   x$data$Month <- NA
-  if (!year) x$data$Annual <- NA
+  if (!year) {
+    x$data$Annual <- NA
+  }
   x
 }
 
 new_data_ym <- function(x, year, month) {
-  seq <- c("Annual", "Month")[c(year, month)]
+  seq <- c("PopulationName", "Annual", "Month")[c(TRUE, year, month)]
   df <- newdata::new_data(
     data = x,
     seq = seq
   )
-  df$Year <- factor_to_integer(df$Annual)
-  df <- rescale(df, data2 = x, scale = "Year")
+  df$CaribouYear <- factor_to_integer(df$Annual)
+  if (nrow(x) > 0) {
+    df <- rescale(df, data2 = x, scale = "CaribouYear")
+  } else {
+    df <- rescale(df, scale = "CaribouYear")
+  }
   df
 }
 
-predict_coef <- function(samples, new_data, conf_level = 0.95,
-                         estimate = median, include_pop = TRUE,
-                         sig_fig = 3) {
-  cols <- c("PopulationName", "CaribouYear", "Month", "estimate", "lower", "upper")
+predict_coef <- function(
+  samples,
+  new_data,
+  conf_level = 0.95,
+  estimate = median,
+  include_pop = TRUE,
+  sig_fig = 3
+) {
+  cols <- c(
+    "PopulationName",
+    "CaribouYear",
+    "Month",
+    "estimate",
+    "lower",
+    "upper"
+  )
   if (!include_pop) {
     cols <- setdiff(cols, "PopulationName")
   }
@@ -86,20 +114,34 @@ stats::predict
 #' @inheritParams params
 #' @export
 #' @seealso [`bb_predict_recruitment()`]
-predict.bboufit_recruitment <- function(object,
-                                        year = TRUE,
-                                        sex_ratio = 0.5,
-                                        conf_level = 0.95,
-                                        estimate = median,
-                                        sig_fig = 3, ...) {
+predict.bboufit_recruitment <- function(
+  object,
+  year = TRUE,
+  sex_ratio = deprecated(),
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 3,
+  ...
+) {
   chk_unused(...)
-  bb_predict_recruitment(object,
-    year = year,
-    sex_ratio = sex_ratio,
-    conf_level = conf_level,
-    estimate = estimate,
-    sig_fig = sig_fig
-  )
+  if (lifecycle::is_present(sex_ratio)) {
+    bb_predict_recruitment(
+      object,
+      year = year,
+      sex_ratio = sex_ratio,
+      conf_level = conf_level,
+      estimate = estimate,
+      sig_fig = sig_fig
+    )
+  } else {
+    bb_predict_recruitment(
+      object,
+      year = year,
+      conf_level = conf_level,
+      estimate = estimate,
+      sig_fig = sig_fig
+    )
+  }
 }
 
 #' Predict Survival
@@ -109,14 +151,38 @@ predict.bboufit_recruitment <- function(object,
 #' @inheritParams params
 #' @export
 #' @seealso [`bb_predict_survival()`]
-predict.bboufit_survival <- function(object,
-                                     year = TRUE,
-                                     month = FALSE,
-                                     conf_level = 0.95,
-                                     estimate = median,
-                                     sig_fig = 3, ...) {
+predict.bboufit_survival <- function(
+  object,
+  year = TRUE,
+  month = FALSE,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 3,
+  ...
+) {
   chk_unused(...)
   bb_predict_survival(object, year, month, conf_level, estimate, sig_fig)
+}
+
+#' Predict Calf-Cow Ratio Samples
+#'
+#' Predict calves per adult female by year.
+#' If year is FALSE, predictions are made for a 'typical' year.
+#'
+#' @inheritParams params
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
+#' @export
+#' @family analysis
+bb_predict_calf_cow_ratio_samples <- function(recruitment, year = TRUE) {
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
+  chk_s3_class(recruitment, "bboufit_recruitment")
+  chk_flag(year)
+
+  predict_calf_cow(fit = recruitment, year = year)
 }
 
 #' Predict Calf-Cow Ratio
@@ -128,19 +194,18 @@ predict.bboufit_survival <- function(object,
 #' @return A tibble of the predicted estimates.
 #' @export
 #' @family analysis
-bb_predict_calf_cow_ratio <- function(recruitment,
-                                      year = TRUE,
-                                      conf_level = 0.95,
-                                      estimate = median,
-                                      sig_fig = 3) {
-  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
-  chk_s3_class(recruitment, "bboufit_recruitment")
-  chk_flag(year)
+bb_predict_calf_cow_ratio <- function(
+  recruitment,
+  year = TRUE,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 3
+) {
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
 
-  predicted <- predict_calf_cow(fit = recruitment, year = year)
+  predicted <- bb_predict_calf_cow_ratio_samples(recruitment, year = year)
   coef <- predict_coef(
     samples = predicted$samples,
     new_data = predicted$data,
@@ -149,6 +214,55 @@ bb_predict_calf_cow_ratio <- function(recruitment,
     sig_fig = sig_fig
   )
   coef
+}
+
+#' Predict Recruitment Samples
+#'
+#' Predict adjusted recruitment by year using DeCesare et al. (2012) methods.
+#' If year is FALSE, predictions are made for a 'typical' year.
+#' See [bb_predict_calf_cow_ratio()] for unadjusted recruitment.
+#'
+#' @inheritParams params
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
+#' @export
+#' @references
+#'   DeCesare, Nicholas J., Mark Hebblewhite, Mark Bradley, Kirby G. Smith,
+#'   David Hervieux, and Lalenia Neufeld. 2012 “Estimating Ungulate Recruitment
+#'   and Growth Rates Using Age Ratios.” The Journal of Wildlife Management
+#'   76 (1): 144–53 https://doi.org/10.1002/jwmg.244.
+#' @family analysis
+bb_predict_recruitment_samples <- function(
+  recruitment,
+  year = TRUE,
+  sex_ratio = deprecated()
+) {
+  chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
+  chk_s3_class(recruitment, "bboufit_recruitment")
+  chk_flag(year)
+  if (lifecycle::is_present(sex_ratio)) {
+    lifecycle::deprecate_warn(
+      "1.0.0",
+      "bb_predict_recruitment_samples(sex_ratio)",
+      details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
+      id = "sex_ratio"
+    )
+    chk_number(sex_ratio)
+    chk_range(sex_ratio)
+  } else {
+    sex_ratio <- .sex_ratio_bboufit(recruitment)
+  }
+
+  predicted <- predict_calf_cow(fit = recruitment, year = year)
+  rec <- predicted$samples
+  class(rec) <- "mcmcarray"
+  rec <- rec * sex_ratio
+  rec <- rec / (1 + rec)
+  predicted$samples <- rec
+  predicted
 }
 
 #' Predict Recruitment
@@ -166,17 +280,29 @@ bb_predict_calf_cow_ratio <- function(recruitment,
 #'   and Growth Rates Using Age Ratios.” The Journal of Wildlife Management
 #'   76 (1): 144–53 https://doi.org/10.1002/jwmg.244.
 #' @family analysis
-bb_predict_recruitment <- function(recruitment,
-                                   year = TRUE,
-                                   sex_ratio = 0.5,
-                                   conf_level = 0.95,
-                                   estimate = median,
-                                   sig_fig = 3) {
+bb_predict_recruitment <- function(
+  recruitment,
+  year = TRUE,
+  sex_ratio = deprecated(),
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 3
+) {
   chkor_vld(.vld_fit(recruitment), .vld_fit_ml(recruitment))
   chk_s3_class(recruitment, "bboufit_recruitment")
   chk_flag(year)
-  chk_number(sex_ratio)
-  chk_range(sex_ratio)
+  if (lifecycle::is_present(sex_ratio)) {
+    lifecycle::deprecate_warn(
+      "1.0.0",
+      "bb_predict_recruitment(sex_ratio)",
+      details = "Specify `sex_ratio` in `bb_fit_recruitment()` instead.",
+      id = "sex_ratio"
+    )
+    chk_number(sex_ratio)
+    chk_range(sex_ratio)
+  } else {
+    sex_ratio <- .sex_ratio_bboufit(recruitment)
+  }
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
@@ -197,6 +323,28 @@ bb_predict_recruitment <- function(recruitment,
   coef
 }
 
+#' Predict Survival Samples
+#'
+#' Predict survival by year and/or month.
+#' If year and month are FALSE, predictions are made for a 'typical' year and month.
+#'
+#' @inheritParams params
+#' @return A list with elements:
+#' \itemize{
+#'   \item \code{samples}: An \code{mcmcarray} with the MCMC samples.
+#'   \item \code{data}: A \code{data.frame} containing the associated prediction data.
+#' }
+#' @export
+#' @family analysis
+bb_predict_survival_samples <- function(survival, year = TRUE, month = FALSE) {
+  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival))
+  chk_s3_class(survival, "bboufit_survival")
+  chk_flag(year)
+  chk_flag(month)
+
+  predict_survival(survival, year = year, month = month)
+}
+
 #' Predict Survival
 #'
 #' Predict survival by year and/or month.
@@ -206,21 +354,19 @@ bb_predict_recruitment <- function(recruitment,
 #' @return A tibble of the predicted estimates.
 #' @export
 #' @family analysis
-bb_predict_survival <- function(survival,
-                                year = TRUE,
-                                month = FALSE,
-                                conf_level = 0.95,
-                                estimate = median,
-                                sig_fig = 3) {
-  chkor_vld(.vld_fit(survival), .vld_fit_ml(survival))
-  chk_s3_class(survival, "bboufit_survival")
-  chk_flag(year)
-  chk_flag(month)
+bb_predict_survival <- function(
+  survival,
+  year = TRUE,
+  month = FALSE,
+  conf_level = 0.95,
+  estimate = median,
+  sig_fig = 3
+) {
   chk_range(conf_level)
   chk_function(estimate)
   chk_whole_number(sig_fig)
 
-  predicted <- predict_survival(survival, year = year, month = month)
+  predicted <- bb_predict_survival_samples(survival, year = year, month = month)
   coef <- predict_coef(
     samples = predicted$samples,
     new_data = predicted$data,

@@ -29,39 +29,38 @@ knitr::opts_chunk$set(
 
 ## Bayesian vs Frequentist Framework
 
-The frequentist (Maximum Likelihood) framework selects the parameter values which if they were true would be most likely to give rise to the data.
-It assumes that all possible survival and recruitment values are equally likely to be true.
-The confidence intervals (CIs) are invalid with small sample size.
+The frequentist (Maximum Likelihood) framework selects the parameter values which, if they were true, would be most likely to give rise to the data.
+It assumes that all possible survival and recruitment values are equally likely to be true prior to observing the data.
+The confidence intervals (CIs) rely on asymptotic assumptions and may be unreliable with small sample sizes.
 
-The Bayesian framework selects parameter values which are most likely to be true given the data. 
-It allows incorporation of biological knowledge.
-The credible intervals (CIs) represent the actual uncertainty irrespective of the sample size.
+The Bayesian framework combines the likelihood with prior probability distributions to obtain the posterior probability of the parameter values given the data [@mcelreath_statistical_2016].
+It allows incorporation of biological knowledge through the specification of informative priors.
+The credible intervals (CIs) represent the actual uncertainty in the parameter values given the data and the priors, irrespective of the sample size.
 
 Most models can be fit in a Bayesian or frequentist framework.
 
 ## Fixed vs Random Effects
 
-When a categorical variable is treated as a fixed effect each parameter value is estimated in isolation.
-In contrast, when it is treated as a random effect the parameter values are assumed to be drawn from a common underlying distribution which allows the typical values to be estimated and each parameter estimate to be influenced by the other ones.  
+When a categorical variable is treated as a fixed effect, each parameter value is estimated independently.
+In contrast, when it is treated as a random effect, the parameter values are assumed to be drawn from a common normal distribution (with mean zero and an estimated standard deviation) which allows the typical values to be estimated and each parameter estimate to be informed by the others [@kery_bayesian_2011].
 
-The use of random effects is especially beneficial when some months/years have sparse or missing data. 
+The use of random effects is especially beneficial when some months/years have sparse or missing data.
 In the case of sparse data or extreme values, estimates will tend to be pulled toward the grand mean, a behaviour known as 'shrinkage' [@kery_bayesian_2011].
-For missing data, the estimate will be equal to the mean. 
-Shrinkage may not be desired if extreme values are likely to represent the true value (e.g., numerous wolf attacks in one year). 
-In this case, a fixed effect model would yield more reliable estimates. 
+For missing data, the estimate will be equal to the mean.
+Shrinkage may not be desired if extreme values are likely to represent the true value (e.g., numerous wolf attacks in one year).
+In this case, a fixed effect model would yield more reliable estimates.
 
-Fixed and random effects can be used in Bayesian or frequentist models. 
+Fixed and random effects can be used in Bayesian or frequentist models.
 
 ## Maximum Likelihood vs Posterior Probability
 
-The frequentist approach simply identifies the parameter values that maximize the likelihood, i.e., have the greatest probability of having produced the data if they were true.
-It does this by searching parameter space for the combination of parameter values with the Maximum Likelihood.
-Parameter estimates for random effects can be estimated using the Laplace approximation (i.e., with software packages [TMB](https://arxiv.org/pdf/1509.00660.pdf) or [Nimble](https://r-nimble.org/html_manual/cha-AD.html#how-to-use-laplace-approximation)). 
-The CIs are calculated using the standard errors, assuming that the likelihood is normally distributed.
+The frequentist approach identifies the parameter values that maximize the likelihood, i.e., the parameter values with the greatest probability of having produced the observed data.
+Parameter estimates for random effects can be obtained using the Laplace approximation, which integrates over the random effects (i.e., with software packages [TMB](https://arxiv.org/pdf/1509.00660.pdf) or [Nimble](https://r-nimble.org/html_manual/cha-AD.html#how-to-use-laplace-approximation)).
+The CIs are calculated from the standard errors using a normal approximation to the likelihood surface.
 This approach has the advantage of being fast.
 
-The Bayesian approach multiplies the likelihood by the prior probability of the parameter values being true to get the posterior probability of the parameter values being true based on the data.
-Bayesian methods repeatedly sample from the posterior probability distributions using MCMC (Monte Carlo Markov Chain) methods.
+The Bayesian approach multiplies the likelihood by the prior probability of the parameter values to obtain the posterior probability distribution of the parameter values given the data [@mcelreath_statistical_2016].
+Bayesian methods repeatedly sample from the posterior distributions using MCMC (Markov Chain Monte Carlo) methods.
 This approach has the advantage of allowing derived parameters such as the population growth rate to be easily estimated with full uncertainty from the primary survival and recruitment parameters.
 
 To demonstrate, we use an anonymized data set to compare annual survival estimates from a:  
@@ -80,16 +79,21 @@ library(ggplot2)
 
 set.seed(1)
 surv <- bboudata::bbousurv_a
-data <- bboutools:::model_data_survival(surv, year_start = 4L, include_uncertain_morts = TRUE, quiet = FALSE)$data
+data <- bboutools:::model_data_survival(
+  surv,
+  year_start = 4L,
+  include_uncertain_morts = TRUE,
+  quiet = FALSE
+)$data
 obs <-
-  data %>%
-  group_by(Year, Month) %>%
+  data |>
+  group_by(CaribouYear, Month) |>
   summarise(
     survival = 1 - (MortalitiesCertain) / StartTotal,
     weight = StartTotal^(1 / 2)
-  ) %>%
-  ungroup() %>%
-  group_by(Year) %>%
+  ) |>
+  ungroup() |>
+  group_by(CaribouYear) |>
   summarise(
     mean_survival = weighted.mean(survival, weight)^12,
     mean_weight = mean(weight)
@@ -105,12 +109,15 @@ pred2 <- bb_predict_survival(fit2)
 pred3 <- bb_predict_survival(fit3)
 pred4 <- bb_predict_survival(fit4)
 
-df <- dplyr::bind_rows(list(
-  "ML Random" = pred,
-  "ML Fixed" = pred2,
-  "Bayes Fixed" = pred3,
-  "Bayes Random" = pred4
-), .id = "model") %>%
+df <- dplyr::bind_rows(
+  list(
+    "ML Random" = pred,
+    "ML Fixed" = pred2,
+    "Bayes Fixed" = pred3,
+    "Bayes Random" = pred4
+  ),
+  .id = "model"
+) |>
   mutate(
     method = if_else(grepl("ML", model), "Frequentist", "Bayesian"),
     year = if_else(grepl("Fixed", model), "Fixed", "Random")
@@ -130,8 +137,9 @@ gp <-
     position = position_dodge(width = 0.7)
   ) +
   geom_point(
-    data = obs, aes(
-      x = Year,
+    data = obs,
+    aes(
+      x = CaribouYear,
       y = mean_survival,
       alpha = mean_weight
     ),
@@ -155,7 +163,7 @@ This is a more straightforward task with Bayesian models.
 
 `bboutools` provides the option to estimate parameter values using a Maximum Likelihood or a fully Bayesian approach. 
 Random effects are used where appropriate by default. 
-The Bayesian approach also uses biologically reasonable, weakly informative priors by default. 
+The Bayesian approach also uses biologically reasonable, weakly informative priors by default (see the [priors article](https://poissonconsulting.github.io/bboutools/articles/priors.html) for details).
 `bboutools` provides relatively simple general models that can be used to compare survival, recruitment and population growth estimates across jurisdictions.
 
 By default, the `bboutools` Bayesian method saves 1,000 MCMC samples from each of three chains (after discarding the first halves). 
@@ -167,41 +175,67 @@ This process is automated in the Shiny app.
 
 The survival model with annual random effect and trend is specified below in a simplified form of the BUGS language for readability.
 The same model code is used for both the Bayesian and frequentist methods.
+The model is indexed by population (`k`); for single-population data, `nPopulation = 1` and the model reduces to the original single-population form.
+The standard deviations of the annual (`sAnnual`) and month (`sMonth`) random effects are shared across populations, allowing groups of populations to share interannual and seasonal variation.
+Population-specific intercepts (`b0`), year trends (`bYear`), annual deviations (`bAnnual`) and month deviations (`bMonth`) are estimated independently for each population.
 
 ```
-b0 ~ Normal(3, 10)
-bYear ~ Normal(0, 2)
+for(k in 1:nPopulation) {
+  b0[k] ~ Normal(3, 10)
+  bYear[k] ~ Normal(0, 2)
+}
 
-sMonth ~  Exponential(1)
-for(i in 1:nMonth)  bMonth[i] ~ Normal(0, sMonth)
+sMonth ~ Exponential(1)
+for(i in 1:nMonth) {
+  for(k in 1:nPopulation) {
+    bMonth[i, k] ~ Normal(0, sMonth)
+  }
+}
 
 sAnnual ~ Exponential(1)
-for(i in 1:nAnnual)  bAnnual[i] ~ Normal(0, sAnnual)
+for(i in 1:nAnnual) {
+  for(k in 1:nPopulation) {
+    bAnnual[i, k] ~ Normal(0, sAnnual)
+  }
+}
 
 for(i in 1:nObs) {
-  logit(eSurvival[i]) = b0 + bMonth[Month[i]] + bAnnual[Annual[i]] + bYear * Year[i]
+  logit(eSurvival[i]) = b0[PopulationName[i]] + bMonth[Month[i], PopulationName[i]]
+                        + bAnnual[Annual[i], PopulationName[i]]
+                        + bYear[PopulationName[i]] * Year[i]
   Mortalities[i] ~ Binomial(1 - eSurvival[i], StartTotal[i])
 }
 ```
 
+When aggregate annual survival data is provided (one row per population per year), `nMonth = 1`, `bMonth` is fixed to zero and the `^12` annualization used to convert monthly to annual survival is skipped.
+
 ### Recruitment Model
 
-The recruitment model with annual random effect and year trend is specified below in a simplified form of the BUGS language for readability. Group-level observations are aggregated by caribou year prior to model fitting. 
+The recruitment model with annual random effect and year trend is specified below in a simplified form of the BUGS language for readability.
+Group-level observations are aggregated by caribou year prior to model fitting.
+As with the survival model, the recruitment model is indexed by population (`k`) and the standard deviation of the annual random effect (`sAnnual`) is shared across populations.
 
 ```
-b0 ~ Normal(-1, 5)
-bYear ~ Normal(0, 1)
+for(k in 1:nPopulation) {
+  b0[k] ~ Normal(-1, 5)
+  bYear[k] ~ Normal(0, 1)
+}
 
 adult_female_proportion ~ Beta(65, 35)
 
-sAnnual ~  Exponential(1)
-for(i in 1:nAnnual)  bAnnual[i] ~ Normal(0, sAnnual)
-
+sAnnual ~ Exponential(1)
 for(i in 1:nAnnual) {
+  for(k in 1:nPopulation) {
+    bAnnual[i, k] ~ Normal(0, sAnnual)
+  }
+}
+
+for(i in 1:nObs) {
   FemaleYearlings[i] ~ Binomial(sex_ratio, Yearlings[i])
   Cows[i] ~ Binomial(adult_female_proportion, CowsBulls[i])
   OtherAdultsFemales[i] ~ Binomial(adult_female_proportion, UnknownAdults[i])
-  log(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
+  logit(eRecruitment[i]) <- b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]]
+                            + bYear[PopulationName[i]] * Year[i]
   AdultsFemales[i] <- max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
   Calves[i] ~ Binomial(eRecruitment[i], AdultsFemales[i])
 }
@@ -212,18 +246,25 @@ This has a minimal effect on estimates.
 The adjusted model with no demographic stochasticity is specified below.
 
 ```
-bYear ~ Normal(0, 1)
+for(k in 1:nPopulation) {
+  bYear[k] ~ Normal(0, 1)
+}
 
 adult_female_proportion ~ Beta(65, 35)
 
-sAnnual ~  Exponential(1)
-for(i in 1:nAnnual)  bAnnual[i] ~ Normal(0, sAnnual)
-
+sAnnual ~ Exponential(1)
 for(i in 1:nAnnual) {
+  for(k in 1:nPopulation) {
+    bAnnual[i, k] ~ Normal(0, sAnnual)
+  }
+}
+
+for(i in 1:nObs) {
   Cows[i] ~ Binomial(adult_female_proportion, CowsBulls[i])
   FemaleYearlings[i] <- round(sex_ratio * Yearlings[i])
   OtherAdultsFemales[i] <- round(adult_female_proportion * UnknownAdults[i])
-  logit(eRecruitment[i]) <- b0 + bAnnual[Annual[i]] + bYear * Year[i]
+  logit(eRecruitment[i]) <- b0[PopulationName[i]] + bAnnual[Annual[i], PopulationName[i]]
+                            + bYear[PopulationName[i]] * Year[i]
   AdultsFemales[i] <- max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
   Calves[i] ~ Binomial(eRecruitment[i], AdultsFemales[i])
 }
@@ -254,6 +295,10 @@ where $S$ is the annual survival.
 $\lambda$ is calculated from $R_\Delta$ and $S$ as
 
 $$\lambda = \frac{S}{1-R_\Delta}$$
+
+When survival and recruitment fits contain different populations or year ranges, `bb_predict_growth()` auto-filters to the intersection of shared population and year combinations.
+An informative message reports what was excluded.
+
 More reliable estimates may be produced with an Integrated Population Model (IPM). 
 See for example methods used in @lamb_2024.
 However, an IPM is beyond the scope of this software as it requires estimates of abundance $N$, which is not typically available in all jurisdictions. 

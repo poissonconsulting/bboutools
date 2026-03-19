@@ -21,7 +21,20 @@
   all(
     vld_s3_class(x, "bboufit"),
     vld_subset(names(x), c("model", "samples", "data", "model_code")),
-    vld_true(all(names(attributes(x)) %in% c("names", "nthin", "model", "nobs", "niters", "year_trend", "year_start", "class"))),
+    vld_true(all(
+      names(attributes(x)) %in%
+        c(
+          "names",
+          "nthin",
+          "model",
+          "nobs",
+          "niters",
+          "year_trend",
+          "year_start",
+          "sex_ratio",
+          "class"
+        )
+    )),
     vld_s3_class(x$samples, "mcmcr")
   )
 }
@@ -41,6 +54,10 @@
 
 .vld_year_trend <- function(x) {
   attr(x, "year_trend")
+}
+
+.vld_disturbance <- function(anthro, fire_excl_anthro) {
+  anthro + fire_excl_anthro <= 100
 }
 
 .vld_year_start_equal <- function(survival, recruitment) {

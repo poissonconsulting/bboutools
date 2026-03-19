@@ -37,18 +37,25 @@
 #'   fit <- bb_fit_recruitment(bboudata::bbourecruit_a)
 #' }
 bb_fit_recruitment <- function(
-    data,
-    adult_female_proportion = 0.65,
-    sex_ratio = 0.5,
-    min_random_year = 5,
-    year_trend = FALSE,
-    year_start = 4L,
-    nthin = 10,
-    niters = 1000,
-    priors = NULL,
-    quiet = FALSE) {
+  data,
+  adult_female_proportion = 0.65,
+  sex_ratio = 0.5,
+  min_random_year = 5,
+  year_trend = FALSE,
+  year_start = 4L,
+  nthin = 10,
+  niters = 1000,
+  priors = NULL,
+  allow_missing = FALSE,
+  quiet = FALSE
+) {
   chk_data(data)
-  bbd_chk_data_recruitment(data)
+  chk_flag(allow_missing)
+  bbd_chk_data_recruitment(
+    data,
+    multi_population = TRUE,
+    allow_missing = allow_missing
+  )
   chk_null_or(adult_female_proportion, vld = vld_range)
   chk_range(sex_ratio)
   chk_whole_number(min_random_year)
@@ -59,14 +66,26 @@ bb_fit_recruitment <- function(
   chk_whole_number(nthin)
   chk_gt(nthin)
   chk_whole_number(niters)
-  chk_gt(niters)
+  chk_gte(niters)
   default_priors <- priors_recruitment()
   .chk_priors(priors, names(default_priors))
   chk_flag(quiet)
+  .check_attached()
 
   priors <- replace_priors(default_priors, priors)
-  data <- model_data_recruitment(data, year_start = year_start, quiet = quiet)
-  year_random <- data$datal$nAnnual >= min_random_year
+  data <- model_data_recruitment(
+    data,
+    year_start = year_start,
+    allow_missing = allow_missing,
+    quiet = quiet
+  )
+  nAnnual <- if (allow_missing) data$nAnnualObserved else data$datal$nAnnual
+  year_random <- nAnnual >= min_random_year || (allow_missing && nAnnual == 0)
+  if (allow_missing && !year_random) {
+    abort_chk(
+      "`allow_missing` requires year to be fit as a random effect. Increase the number of observed years or decrease `min_random_year`."
+    )
+  }
   if (!year_random && year_trend) {
     message_trend_fixed()
   }
@@ -81,17 +100,21 @@ bb_fit_recruitment <- function(
     priors = priors
   )
 
-  vars <- model$getVarNames()
   params <- params_recruitment()
+  vars <- model$getVarNames()
   monitor <- params[params %in% vars]
   if (!is.null(adult_female_proportion)) {
     monitor <- monitor[monitor != "adult_female_proportion"]
   }
 
   fit <- run_nimble(
-    model = model, monitor = monitor,
-    inits = NULL, niters = niters, nchains = 3L,
-    nthin = nthin, quiet = quiet
+    model = model,
+    monitor = monitor,
+    inits = NULL,
+    niters = niters,
+    nchains = 3L,
+    nthin = nthin,
+    quiet = quiet
   )
 
   attrs <- list(
@@ -99,12 +122,17 @@ bb_fit_recruitment <- function(
     niters = niters,
     nobs = nrow(data$data),
     year_trend = year_trend,
-    year_start = year_start
+    year_start = year_start,
+    sex_ratio = sex_ratio
   )
 
   .attrs_bboufit(fit) <- attrs
   fit$data <- data$data
-  fit$model_code <- model$getCode()
+  code_constants <- c(priors, sex_ratio = sex_ratio)
+  if (!is.null(adult_female_proportion)) {
+    code_constants <- c(code_constants, adult_female_prop = adult_female_proportion)
+  }
+  fit$model_code <- clean_model_code(substitute_prior_values(model$getCode(), code_constants))
   class(fit) <- c("bboufit_recruitment", "bboufit")
   fit
 }

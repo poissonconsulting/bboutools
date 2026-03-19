@@ -1,3 +1,115 @@
 url: https://poissonconsulting.github.io/bboutools/
 template:
   package: poissontemplate
+
+articles:
+- title: Articles
+  contents:
+    - bboutools
+    - articles/methods
+    - articles/priors
+    - articles/extensions
+
+reference:
+- title: "Fitting Models"
+  desc: "Fit Bayesian and Maximum Likelihood survival and recruitment models."
+  contents:
+    - bb_fit_survival
+    - bb_fit_survival_ml
+    - bb_fit_recruitment
+    - bb_fit_recruitment_ml
+
+- title: "Priors"
+  desc: "Specify Bayesian priors for model parameters."
+  contents:
+    - bb_priors_survival
+    - bb_priors_survival_national
+    - bb_priors_recruitment
+    - bb_priors_recruitment_national
+
+- title: "Predictions"
+  desc: "Predict survival, recruitment, calf-cow ratio, growth, and population change."
+  contents:
+    - bb_predict_survival
+    - bb_predict_survival_samples
+    - bb_predict_recruitment
+    - bb_predict_recruitment_samples
+    - bb_predict_calf_cow_ratio
+    - bb_predict_calf_cow_ratio_samples
+    - bb_predict_growth
+    - bb_predict_growth_samples
+    - bb_predict_population_change
+    - bb_predict_population_change_samples
+
+- title: "Trend Predictions"
+  desc: "Predict trend lines for models fit with year_trend = TRUE."
+  contents:
+    - bb_predict_survival_trend
+    - bb_predict_survival_trend_samples
+    - bb_predict_recruitment_trend
+    - bb_predict_recruitment_trend_samples
+    - bb_predict_calf_cow_ratio_trend
+    - bb_predict_calf_cow_ratio_trend_samples
+
+- title: "Plotting"
+  desc: "Visualize model estimates and trends."
+  contents:
+    - bb_plot_year_survival
+    - bb_plot_year_recruitment
+    - bb_plot_year_calf_cow_ratio
+    - bb_plot_year_growth
+    - bb_plot_year_population_change
+    - bb_plot_year_trend_survival
+    - bb_plot_year_trend_recruitment
+    - bb_plot_year_trend_calf_cow_ratio
+    - bb_plot_month_survival
+    - bb_plot_year
+    - bb_plot_month
+
+- title: "Model Summaries"
+  desc: "Extract coefficients, estimates, and model summaries."
+  contents:
+    - coef
+    - tidy
+    - glance
+    - estimates
+    - augment
+    - predict
+    - logLik
+
+- title: "Convergence Diagnostics"
+  desc: "Assess MCMC convergence for Bayesian models."
+  contents:
+    - converged
+    - rhat
+    - esr
+
+- title: "Model Properties"
+  desc: "Query model dimensions and extract components."
+  contents:
+    - samples
+    - model_code
+    - pars
+    - npars
+    - nterms
+    - nobs
+    - nchains
+    - niters
+
+- title: "Model Code"
+  desc: "Build NIMBLE model code."
+  contents:
+    - model_survival
+    - model_recruitment
+
+- title: "Deprecated"
+  contents:
+    - bb_predict_lambda
+
+- title: "Utilities"
+  contents:
+    - licensing_md
+
+- title: "S3 Methods"
+  contents:
+    - matches("\\.")

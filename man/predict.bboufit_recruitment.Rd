@@ -7,7 +7,7 @@
 \method{predict}{bboufit_recruitment}(
   object,
   year = TRUE,
-  sex_ratio = 0.5,
+  sex_ratio = deprecated(),
   conf_level = 0.95,
   estimate = median,
   sig_fig = 3,
@@ -19,7 +19,7 @@
 
 \item{year}{A flag indicating whether to predict by year.}
 
-\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth.}
+\item{sex_ratio}{A number between 0 and 1 of the proportion of females at birth. Deprecated for \code{bb_fit_recruitment(sex_ratio)}. \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{conf_level}{A number between 0 and 1 of the confidence level.}
 

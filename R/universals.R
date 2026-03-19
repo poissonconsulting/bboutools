@@ -37,13 +37,73 @@ summary_ml <- function(x) {
     parameter = pars_ml(x),
     estimate = estimates_ml(x)
   )
-  if (!("bAnnual[1]" %in% y$term) && any(grepl("bAnnual", y$term))) {
-    y <- bind_rows(y, tibble(
-      term = term::as_term("bAnnual[1]"),
-      parameter = "bAnnual",
-      estimate = 0
+
+  # Remap 1D terms to 2D for multi-pop model compatibility.
+  # Old single-pop ML fits have names like "bAnnual[2]", "bMonth[3]", "b0"
+  # but model code now uses 2D: bAnnual[i,k], bMonth[i,k], b0[k].
+  multipop_params <- c("b0", "bAnnual", "bMonth", "bYear")
+  needs_remap <- y$parameter %in% multipop_params & !grepl(",", y$term)
+  if (any(needs_remap)) {
+    y$term[needs_remap] <- term::as_term(vapply(
+      as.character(y$term[needs_remap]),
+      function(t) {
+        if (grepl("\\[", t)) {
+          sub("\\]$", ", 1]", t)
+        } else {
+          paste0(t, "[1]")
+        }
+      },
+      character(1),
+      USE.NAMES = FALSE
     ))
   }
+
+  nPop <- max(term::pdims(y$term[y$parameter == "b0"])$b0)
+  nAnnual <- nlevels(x$data$Annual)
+
+  # Add bAnnual = 0 for trend-only models (needed by derived expressions)
+  if (!any(y$parameter == "bAnnual")) {
+    bAnnual_terms <- paste0(
+      "bAnnual[",
+      rep(seq_len(nAnnual), nPop),
+      ", ",
+      rep(seq_len(nPop), each = nAnnual),
+      "]"
+    )
+    y <- bind_rows(
+      y,
+      tibble(
+        term = term::as_term(bAnnual_terms),
+        parameter = "bAnnual",
+        estimate = 0
+      )
+    )
+  }
+
+  if (!("bAnnual[1, 1]" %in% y$term) && any(grepl("bAnnual", y$term))) {
+    y <- bind_rows(
+      y,
+      tibble(
+        term = term::as_term("bAnnual[1, 1]"),
+        parameter = "bAnnual",
+        estimate = 0
+      )
+    )
+  }
+
+  # Add bYear = 0 for non-trend models (needed by derived expressions)
+  if (!any(y$parameter == "bYear")) {
+    bYear_terms <- paste0("bYear[", seq_len(nPop), "]")
+    y <- bind_rows(
+      y,
+      tibble(
+        term = term::as_term(bYear_terms),
+        parameter = "bYear",
+        estimate = 0
+      )
+    )
+  }
+
   arrange(y, .data$term)
 }
 
@@ -68,6 +128,7 @@ universals::estimates
 #'   estimates(fit)
 #' }
 estimates.bboufit <- function(x, term = NULL, ...) {
+  .chk_has_samples(x)
   chkor_vld(vld_null(term), vld_character(term))
   if (!length(term)) {
     return(mcmcr::estimates(samples(x)))
@@ -96,7 +157,12 @@ estimates.bboufit_ml <- function(x, term = NULL, original_scale = FALSE, ...) {
     terms_exp <- y$term[y$term %in% c("sAnnual", "sMonth")]
     terms_ilogit <- y$term[y$term %in% c("adult_female_proportion")]
     y <- transform_cols(y, terms_exp, transform = exp, cols = "estimate")
-    y <- transform_cols(y, terms_ilogit, transform = nimble::ilogit, cols = "estimate")
+    y <- transform_cols(
+      y,
+      terms_ilogit,
+      transform = nimble::ilogit,
+      cols = "estimate"
+    )
   }
   y <- map(split(y, y$parameter), \(x) x$estimate)
   if (!length(term)) {
@@ -180,6 +246,7 @@ universals::rhat
 #' @return A number of rhat value.
 #' @export
 rhat.bboufit <- function(x, ...) {
+  .chk_has_samples(x)
   mcmcr::rhat(samples(x), ...)
 }
 
@@ -192,6 +259,7 @@ universals::esr
 #' @return A number of the number of chains.
 #' @export
 esr.bboufit <- function(x, ...) {
+  .chk_has_samples(x)
   mcmcr::esr(samples(x), ...)
 }
 
@@ -204,6 +272,7 @@ universals::converged
 #' @return A flag indicating convergence.
 #' @export
 converged.bboufit <- function(x, rhat = 1.05, ...) {
+  .chk_has_samples(x)
   chk_range(rhat, c(1, 10))
   mcmcr::converged(samples(x), rhat = rhat, esr = 0, ...)
 }

@@ -37,16 +37,17 @@
 #'   fit <- bb_fit_recruitment_ml(bboudata::bbourecruit_a)
 #' }
 bb_fit_recruitment_ml <- function(
-    data,
-    adult_female_proportion = 0.65,
-    sex_ratio = 0.5,
-    min_random_year = 5,
-    year_trend = FALSE,
-    year_start = 4L,
-    inits = NULL,
-    quiet = FALSE) {
+  data,
+  adult_female_proportion = 0.65,
+  sex_ratio = 0.5,
+  min_random_year = 5,
+  year_trend = FALSE,
+  year_start = 4L,
+  inits = NULL,
+  quiet = FALSE
+) {
   chk_data(data)
-  bbd_chk_data_recruitment(data)
+  bbd_chk_data_recruitment(data, multi_population = FALSE)
   chk_null_or(adult_female_proportion, vld = vld_range)
   chk_range(sex_ratio)
   chk_whole_number(min_random_year)
@@ -57,6 +58,7 @@ bb_fit_recruitment_ml <- function(
   chk_null_or(inits, vld = vld_vector)
   chk_null_or(inits, vld = vld_named)
   chk_flag(quiet)
+  .check_attached()
 
   data <- model_data_recruitment(data, year_start = year_start, quiet = quiet)
   year_random <- data$datal$nAnnual >= min_random_year
@@ -94,13 +96,20 @@ bb_fit_recruitment_ml <- function(
     nobs = nrow(data$data),
     converged = !convergence_fail,
     year_trend = year_trend,
-    year_start = year_start
+    year_start = year_start,
+    sex_ratio = sex_ratio
   )
 
   .attrs_bboufit_ml(fit) <- attrs
 
   fit$data <- data$data
-  fit$model_code <- model$getCode()
+  code_constants <- c(priors_recruitment(), sex_ratio = sex_ratio)
+  if (!is.null(adult_female_proportion)) {
+    code_constants <- c(code_constants, adult_female_prop = adult_female_proportion)
+  }
+  fit$model_code <- clean_model_code(
+    substitute_prior_values(model$getCode(), code_constants)
+  )
   class(fit) <- c("bboufit_recruitment", "bboufit_ml")
   fit
 }

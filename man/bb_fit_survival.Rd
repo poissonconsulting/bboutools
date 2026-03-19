@@ -13,6 +13,7 @@ bb_fit_survival(
   nthin = 10,
   niters = 1000,
   priors = NULL,
+  allow_missing = FALSE,
   quiet = FALSE
 )
 }
@@ -35,6 +36,11 @@ Year trend cannot be fit if there is also a fixed year effect (as opposed to ran
 \item{priors}{A named vector of the parameter prior distribution values.
 Any missing values are assigned their default values in \code{priors_survival()} and \code{priors_recruitment()}.
 If NULL, all parameters are assigned their default priors.}
+
+\item{allow_missing}{A flag indicating whether to allow unobserved years (placeholder rows with NA measurement columns).
+When TRUE, the year random effects for unobserved years are sampled from the prior distribution rather than being informed by data, giving predictions that reflect the population-level mean with appropriate uncertainty.
+Requires year to be fit as a random effect (i.e., not supported with fixed year effects).
+Not supported with Maximum Likelihood models.}
 
 \item{quiet}{A flag indicating whether to suppress messages and progress bars.}
 }

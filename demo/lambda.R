@@ -33,7 +33,11 @@ fit_recruitment <- bb_fit_recruitment(data_recruitment, nthin = 1)
 glance(fit_recruitment)
 
 # predict and plot monthly survival in a typical year
-monthly_survival <- bb_predict_survival(fit_survival, month = TRUE, year = FALSE)
+monthly_survival <- bb_predict_survival(
+  fit_survival,
+  month = TRUE,
+  year = FALSE
+)
 bb_plot_month_survival(monthly_survival)
 
 # predict and plot annual survival in a typical month

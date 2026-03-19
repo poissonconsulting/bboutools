@@ -14,16 +14,35 @@
 # limitations under the License.
 
 utils::globalVariables(c(
-  "Cows", "Month", "UnknownAdults", "Year", "Annual", "Yearlings",
-  "adult_female_prop", "b0", "bMonth", "bYear", "fixed_proportion",
-  "log<-", "logit<-", "nMonth", "nObs", "nAnnual", "year_random"
+  "Cows",
+  "Month",
+  "UnknownAdults",
+  "Year",
+  "CaribouYear",
+  "Annual",
+  "Yearlings",
+  "adult_female_prop",
+  "b0",
+  "bMonth",
+  "bYear",
+  "fixed_proportion",
+  "log<-",
+  "logit<-",
+  "nMonth",
+  "nObs",
+  "nAnnual",
+  "nPopulation",
+  "PopulationName",
+  "year_random"
 ))
 
 .rndm_seed <- function() as.integer(Sys.time())
 
 glue2 <- function(x) {
-  as.character(glue::glue(x,
-    .open = "<<", .close = ">>",
+  as.character(glue::glue(
+    x,
+    .open = "<<",
+    .close = ">>",
     .envir = parent.frame()
   ))
 }
@@ -32,17 +51,29 @@ factor_to_integer <- function(x) {
   as.integer(as.character(x))
 }
 
-signif_cols <- function(x, sig_fig = 3, cols = c("estimate", "lower", "upper")) {
+signif_cols <- function(
+  x,
+  sig_fig = 3,
+  cols = c("estimate", "lower", "upper")
+) {
   x[cols] <- map(x[cols], \(x) signif(x, sig_fig))
   x
 }
 
 message_trend_fixed <- function() {
-  message("Year trend and year fixed effect cannot be fit simultaneously. Model will be fit with a year trend. To fit year fixed effect instead, set `year_trend = FALSE`")
+  cli::cli_inform(c(
+    "Year trend and year fixed effect cannot be fit simultaneously.",
+    "i" = "Model will be fit with a year trend.",
+    "i" = "To fit year fixed effect instead, set {.code year_trend = FALSE}."
+  ))
 }
 
 message_convergence_fail <- function() {
-  message("Warning: Model is failing to converge. This is likely caused by poor initial values or failure to estimate year effect. Try setting initial values, fit model with a year random effect or fit Bayesian model.")
+  cli::cli_warn(c(
+    "Model is failing to converge.",
+    "i" = "This is likely caused by poor initial values or failure to estimate year effect.",
+    "i" = "Try setting initial values, fitting with a year random effect, or fitting a Bayesian model."
+  ))
 }
 
 exclude_random <- function(x, term_col = "term") {
@@ -71,24 +102,24 @@ month_levels <- function(first, n) {
 
 year_intercept <- function(x) {
   y <-
-    x %>%
-    dplyr::group_by(Year) %>%
+    x |>
+    dplyr::group_by(CaribouYear) |>
     dplyr::summarize(
       mean_start = mean(.data$StartTotal),
       any_morts = sum(.data$Mortalities) >= 1
-    ) %>%
-    dplyr::ungroup() %>%
+    ) |>
+    dplyr::ungroup() |>
     dplyr::filter(.data$any_morts)
 
   if (nrow(y) == 0) {
-    message("Warning: All years have 0 mortalities. Estimation of Confidence Intervals may not be reliable.")
-    return(min(x$Year))
+    cli::cli_warn("All years have 0 mortalities. Estimation of confidence intervals may not be reliable.")
+    return(min(x$CaribouYear))
   }
 
   y <-
-    y %>%
-    arrange(.data$mean_start) %>%
+    y |>
+    arrange(.data$mean_start) |>
     dplyr::slice(dplyr::n())
 
-  y$Year
+  y$CaribouYear
 }

@@ -19,7 +19,8 @@ test_that("recruitment default works", {
   x <- bboudata::bbourecruit_a
   set.seed(101)
   fit <- bb_fit_recruitment(
-    data = x, nthin = 1,
+    data = x,
+    nthin = 1,
     quiet = TRUE
   )
 
@@ -28,7 +29,7 @@ test_that("recruitment default works", {
   expect_identical(names(fit), c("model", "samples", "data", "model_code"))
   expect_s3_class(fit$samples, "mcmcr")
   expect_s3_class(fit$data, "data.frame")
-  expect_setequal(pars(fit), c("b0", "bAnnual", "sAnnual"))
+  expect_setequal(pars(fit), c("b0", "bAnnual", "bYear", "sAnnual"))
   expect_snapshot_data(coef(fit), "default")
 })
 
@@ -37,10 +38,60 @@ test_that("fails with wrong prior", {
 
   x <- bboudata::bbourecruit_a
   wrong_prior <- list(bInterce = 1)
-  expect_chk_error(bb_fit_recruitment(x, nthin = 1L, priors = wrong_prior, quiet = TRUE), "Names in `priors` must match 'adult_female_proportion_alpha', 'adult_female_proportion_beta', 'b0_mu', 'b0_sd', 'bAnnual_sd', 'bYear_mu', 'bYear_sd' or 'sAnnual_rate', not 'bInterce'.")
+  expect_chk_error(
+    bb_fit_recruitment(x, nthin = 1L, priors = wrong_prior, quiet = TRUE),
+    "Names in `priors` must match 'adult_female_proportion_alpha', 'adult_female_proportion_beta', 'b0_mu', 'b0_sd', 'bAnnual_sd', 'bYear_mu', 'bYear_sd' or 'sAnnual_rate', not 'bInterce'."
+  )
 })
 
-test_that("fails with multiple populations", {
-  x <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
-  expect_chk_error(bb_fit_recruitment(x, nthin = 1L, quiet = TRUE), "'PopulationName' can only contain one unique value.")
+test_that("recruitment allow_missing works", {
+  skip_on_covr()
+
+  x <- bboudata::bbourecruit_missing
+  set.seed(101)
+  fit <- bb_fit_recruitment(
+    data = x,
+    nthin = 1,
+    allow_missing = TRUE,
+    quiet = TRUE
+  )
+
+  expect_s3_class(fit, "bboufit")
+  expect_s3_class(fit, "bboufit_recruitment")
+  expect_s3_class(fit$samples, "mcmcr")
+
+  pred <- bb_predict_recruitment(fit)
+  caribou_years <- unique(pred$CaribouYear)
+  expect_true(length(caribou_years) > length(unique(fit$data$CaribouYear)))
+})
+
+test_that("recruitment allow_missing errors with fixed year", {
+  x <- bboudata::bbourecruit_missing
+  expect_chk_error(
+    bb_fit_recruitment(
+      data = x,
+      allow_missing = TRUE,
+      min_random_year = Inf,
+      quiet = TRUE
+    )
+  )
+})
+
+test_that("recruitment multi population", {
+  skip_on_covr()
+
+  x <- bboudata::bbourecruit_multi[!is.na(bboudata::bbourecruit_multi$Month), ]
+  set.seed(101)
+  fit <- bb_fit_recruitment(
+    data = x,
+    nthin = 1,
+    quiet = TRUE
+  )
+
+  expect_s3_class(fit, "bboufit")
+  expect_s3_class(fit, "bboufit_recruitment")
+  expect_identical(names(fit), c("model", "samples", "data", "model_code"))
+  expect_s3_class(fit$samples, "mcmcr")
+  expect_s3_class(fit$data, "data.frame")
+  expect_snapshot_data(coef(fit), "multi_pop")
 })

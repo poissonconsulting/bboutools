@@ -15,6 +15,7 @@
 
 #' @export
 plot.bboufit <- function(x, term = character(0), ...) {
+  .chk_has_samples(x)
   mcmc <- samples(x)
   if (length(term)) {
     mcmc <- mcmc[[term]]

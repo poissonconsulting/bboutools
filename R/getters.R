@@ -67,14 +67,33 @@
   attr(fit, "year_start", exact = TRUE)
 }
 
+`.sex_ratio_bboufit<-` <- function(fit, value) {
+  attr(fit, "sex_ratio") <- value
+  fit
+}
+
+.sex_ratio_bboufit <- function(fit) {
+  sex_ratio <- attr(fit, "sex_ratio", exact = TRUE)
+  if (is.null(sex_ratio)) {
+    cli::cli_inform(
+      c(
+        "!" = "The recruitment fit object does not have a {.arg sex_ratio} attribute.",
+        "i" = "Defaulting to {.val 0.5}. Re-fit the recruitment model to store {.arg sex_ratio} on the fit object."
+      )
+    )
+    sex_ratio <- 0.5
+  }
+  sex_ratio
+}
+
 .attrs_bboufit <- function(fit) {
   attrs <- attributes(fit)
-  attrs[c("nthin", "nobs", "niters", "year_trend", "year_start")]
+  attrs[c("nthin", "nobs", "niters", "year_trend", "year_start", "sex_ratio")]
 }
 
 .attrs_bboufit_ml <- function(fit) {
   attrs <- attributes(fit)
-  attrs[c("nobs", "converged", "year_trend", "year_start")]
+  attrs[c("nobs", "converged", "year_trend", "year_start", "sex_ratio")]
 }
 
 `.attrs_bboufit<-` <- function(fit, value) {
@@ -83,6 +102,7 @@
   .nobs_bboufit(fit) <- value$nobs
   .year_trend_bboufit(fit) <- value$year_trend
   .year_start_bboufit(fit) <- value$year_start
+  .sex_ratio_bboufit(fit) <- value$sex_ratio
   fit
 }
 
@@ -91,5 +111,6 @@
   .nobs_bboufit(fit) <- value$nobs
   .year_trend_bboufit(fit) <- value$year_trend
   .year_start_bboufit(fit) <- value$year_start
+  .sex_ratio_bboufit(fit) <- value$sex_ratio
   fit
 }
