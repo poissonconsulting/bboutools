@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bboutools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,11 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/bboutools.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/methods.html">Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth</a></li>
-    <li><a class="dropdown-item" href="../articles/priors.html">Prior Selection and Influence</a></li>
-  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -38,12 +34,418 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="fitting-models">Fitting Models<a class="anchor" aria-label="anchor" href="#fitting-models"></a></h2>
+
+      <div class="section-desc"><p>Fit Bayesian and Maximum Likelihood survival and recruitment models.</p></div>
+
+      <dl></dl></div><div class="section level2">
 
 
 
 
-    </div><div class="section level2">
+      <dl><dt>
+
+          <code><a href="bb_fit_survival.html">bb_fit_survival()</a></code>
+
+        </dt>
+        <dd>Fit Survival Model</dd>
+
+        <dt>
+
+          <code><a href="bb_fit_survival_ml.html">bb_fit_survival_ml()</a></code>
+
+        </dt>
+        <dd>Fit Survival Model with Maximum Likelihood</dd>
+
+        <dt>
+
+          <code><a href="bb_fit_recruitment.html">bb_fit_recruitment()</a></code>
+
+        </dt>
+        <dd>Fit Recruitment Model</dd>
+
+        <dt>
+
+          <code><a href="bb_fit_recruitment_ml.html">bb_fit_recruitment_ml()</a></code>
+
+        </dt>
+        <dd>Fit Recruitment Model with Maximum Likelihood</dd>
+      </dl></div><div class="section level2">
+      <h2 id="priors">Priors<a class="anchor" aria-label="anchor" href="#priors"></a></h2>
+
+      <div class="section-desc"><p>Specify Bayesian priors for model parameters.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="bb_priors_survival.html">bb_priors_survival()</a></code>
+
+        </dt>
+        <dd>Survival model default priors</dd>
+
+        <dt>
+
+          <code><a href="bb_priors_survival_national.html">bb_priors_survival_national()</a></code>
+
+        </dt>
+        <dd>Disturbance-informed national survival priors</dd>
+
+        <dt>
+
+          <code><a href="bb_priors_recruitment.html">bb_priors_recruitment()</a></code>
+
+        </dt>
+        <dd>Recruitment model default priors</dd>
+
+        <dt>
+
+          <code><a href="bb_priors_recruitment_national.html">bb_priors_recruitment_national()</a></code>
+
+        </dt>
+        <dd>Disturbance-informed national recruitment priors</dd>
+      </dl></div><div class="section level2">
+      <h2 id="predictions">Predictions<a class="anchor" aria-label="anchor" href="#predictions"></a></h2>
+
+      <div class="section-desc"><p>Predict survival, recruitment, calf-cow ratio, growth, and population change.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="bb_predict_survival.html">bb_predict_survival()</a></code>
+
+        </dt>
+        <dd>Predict Survival</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_survival_samples.html">bb_predict_survival_samples()</a></code>
+
+        </dt>
+        <dd>Predict Survival Samples</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_recruitment.html">bb_predict_recruitment()</a></code>
+
+        </dt>
+        <dd>Predict Recruitment</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_recruitment_samples.html">bb_predict_recruitment_samples()</a></code>
+
+        </dt>
+        <dd>Predict Recruitment Samples</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_calf_cow_ratio.html">bb_predict_calf_cow_ratio()</a></code>
+
+        </dt>
+        <dd>Predict Calf-Cow Ratio</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_calf_cow_ratio_samples.html">bb_predict_calf_cow_ratio_samples()</a></code>
+
+        </dt>
+        <dd>Predict Calf-Cow Ratio Samples</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_growth.html">bb_predict_growth()</a></code> <code><a href="bb_predict_growth.html">bb_predict_lambda()</a></code>
+
+        </dt>
+        <dd>Predict Population Growth Lambda</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_growth_samples.html">bb_predict_growth_samples()</a></code>
+
+        </dt>
+        <dd>Predict Population Growth Lambda Samples</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_population_change.html">bb_predict_population_change()</a></code>
+
+        </dt>
+        <dd>Predict Population Change</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_population_change_samples.html">bb_predict_population_change_samples()</a></code>
+
+        </dt>
+        <dd>Predict Population Change Samples</dd>
+      </dl></div><div class="section level2">
+      <h2 id="trend-predictions">Trend Predictions<a class="anchor" aria-label="anchor" href="#trend-predictions"></a></h2>
+
+      <div class="section-desc"><p>Predict trend lines for models fit with year_trend = TRUE.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="bb_predict_survival_trend.html">bb_predict_survival_trend()</a></code>
+
+        </dt>
+        <dd>Predict Survival Trend</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_survival_trend_samples.html">bb_predict_survival_trend_samples()</a></code>
+
+        </dt>
+        <dd>Predict Survival Trend Samples</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_recruitment_trend.html">bb_predict_recruitment_trend()</a></code>
+
+        </dt>
+        <dd>Predict Recruitment Trend</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_recruitment_trend_samples.html">bb_predict_recruitment_trend_samples()</a></code>
+
+        </dt>
+        <dd>Predict Recruitment Trend Samples</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_calf_cow_ratio_trend.html">bb_predict_calf_cow_ratio_trend()</a></code>
+
+        </dt>
+        <dd>Predict Calf-Cow Ratio Trend</dd>
+
+        <dt>
+
+          <code><a href="bb_predict_calf_cow_ratio_trend_samples.html">bb_predict_calf_cow_ratio_trend_samples()</a></code>
+
+        </dt>
+        <dd>Predict Calf-Cow Ratio Trend Samples</dd>
+      </dl></div><div class="section level2">
+      <h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a></h2>
+
+      <div class="section-desc"><p>Visualize model estimates and trends.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="bb_plot_year_survival.html">bb_plot_year_survival()</a></code>
+
+        </dt>
+        <dd>Plot Year Survival</dd>
+
+        <dt>
+
+          <code><a href="bb_plot_year_recruitment.html">bb_plot_year_recruitment()</a></code>
+
+        </dt>
+        <dd>Plot Year Recruitment</dd>
+
+        <dt>
+
+          <code><a href="bb_plot_year_calf_cow_ratio.html">bb_plot_year_calf_cow_ratio()</a></code>
+
+        </dt>
+        <dd>Plot Year Calf-Cow Ratio</dd>
+
+        <dt>
+
+          <code><a href="bb_plot_year_growth.html">bb_plot_year_growth()</a></code>
+
+        </dt>
+        <dd>Plot Year Population Growth</dd>
+
+        <dt>
+
+          <code><a href="bb_plot_year_population_change.html">bb_plot_year_population_change()</a></code>
+
+        </dt>
+        <dd>Plot Year Population Change</dd>
+
+        <dt>
+
+          <code><a href="bb_plot_year_trend_survival.html">bb_plot_year_trend_survival()</a></code>
+
+        </dt>
+        <dd>Plot Annual Survival Trend</dd>
+
+        <dt>
+
+          <code><a href="bb_plot_year_trend_recruitment.html">bb_plot_year_trend_recruitment()</a></code>
+
+        </dt>
+        <dd>Plot Annual Recruitment Trend</dd>
+
+        <dt>
+
+          <code><a href="bb_plot_year_trend_calf_cow_ratio.html">bb_plot_year_trend_calf_cow_ratio()</a></code>
+
+        </dt>
+        <dd>Plot Annual Calf-Cow Ratio Trend</dd>
+
+        <dt>
+
+          <code><a href="bb_plot_month_survival.html">bb_plot_month_survival()</a></code>
+
+        </dt>
+        <dd>Plot Monthly Survival</dd>
+
+        <dt>
+
+          <code><a href="bb_plot_year.html">bb_plot_year()</a></code>
+
+        </dt>
+        <dd>Plot Year</dd>
+
+        <dt>
+
+          <code><a href="bb_plot_month.html">bb_plot_month()</a></code>
+
+        </dt>
+        <dd>Plot Month</dd>
+      </dl></div><div class="section level2">
+      <h2 id="model-summaries">Model Summaries<a class="anchor" aria-label="anchor" href="#model-summaries"></a></h2>
+
+      <div class="section-desc"><p>Extract coefficients, estimates, and model summaries.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="reexports.html">reexports</a></code> <code><a href="reexports.html">augment</a></code> <code><a href="reexports.html">coef</a></code> <code><a href="reexports.html">glance</a></code> <code><a href="reexports.html">logLik</a></code> <code><a href="reexports.html">nobs</a></code> <code><a href="reexports.html">predict</a></code> <code><a href="reexports.html">tidy</a></code> <code><a href="reexports.html">estimates</a></code> <code><a href="reexports.html">nchains</a></code> <code><a href="reexports.html">npars</a></code> <code><a href="reexports.html">nterms</a></code> <code><a href="reexports.html">niters</a></code> <code><a href="reexports.html">rhat</a></code> <code><a href="reexports.html">esr</a></code> <code><a href="reexports.html">converged</a></code> <code><a href="reexports.html">pars</a></code>
+
+        </dt>
+        <dd>Objects exported from other packages</dd>
+      </dl></div><div class="section level2">
+      <h2 id="convergence-diagnostics">Convergence Diagnostics<a class="anchor" aria-label="anchor" href="#convergence-diagnostics"></a></h2>
+
+      <div class="section-desc"><p>Assess MCMC convergence for Bayesian models.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="reexports.html">reexports</a></code> <code><a href="reexports.html">augment</a></code> <code><a href="reexports.html">coef</a></code> <code><a href="reexports.html">glance</a></code> <code><a href="reexports.html">logLik</a></code> <code><a href="reexports.html">nobs</a></code> <code><a href="reexports.html">predict</a></code> <code><a href="reexports.html">tidy</a></code> <code><a href="reexports.html">estimates</a></code> <code><a href="reexports.html">nchains</a></code> <code><a href="reexports.html">npars</a></code> <code><a href="reexports.html">nterms</a></code> <code><a href="reexports.html">niters</a></code> <code><a href="reexports.html">rhat</a></code> <code><a href="reexports.html">esr</a></code> <code><a href="reexports.html">converged</a></code> <code><a href="reexports.html">pars</a></code>
+
+        </dt>
+        <dd>Objects exported from other packages</dd>
+      </dl></div><div class="section level2">
+      <h2 id="model-properties">Model Properties<a class="anchor" aria-label="anchor" href="#model-properties"></a></h2>
+
+      <div class="section-desc"><p>Query model dimensions and extract components.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="samples.html">samples()</a></code>
+
+        </dt>
+        <dd>Get MCMC samples</dd>
+
+        <dt>
+
+          <code><a href="model_code.html">model_code()</a></code>
+
+        </dt>
+        <dd>Get Model Code</dd>
+
+        <dt>
+
+          <code><a href="reexports.html">reexports</a></code> <code><a href="reexports.html">augment</a></code> <code><a href="reexports.html">coef</a></code> <code><a href="reexports.html">glance</a></code> <code><a href="reexports.html">logLik</a></code> <code><a href="reexports.html">nobs</a></code> <code><a href="reexports.html">predict</a></code> <code><a href="reexports.html">tidy</a></code> <code><a href="reexports.html">estimates</a></code> <code><a href="reexports.html">nchains</a></code> <code><a href="reexports.html">npars</a></code> <code><a href="reexports.html">nterms</a></code> <code><a href="reexports.html">niters</a></code> <code><a href="reexports.html">rhat</a></code> <code><a href="reexports.html">esr</a></code> <code><a href="reexports.html">converged</a></code> <code><a href="reexports.html">pars</a></code>
+
+        </dt>
+        <dd>Objects exported from other packages</dd>
+      </dl></div><div class="section level2">
+      <h2 id="model-code">Model Code<a class="anchor" aria-label="anchor" href="#model-code"></a></h2>
+
+      <div class="section-desc"><p>Build NIMBLE model code.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="model_survival.html">model_survival()</a></code>
+
+        </dt>
+        <dd>Build Nimble survival model.</dd>
+
+        <dt>
+
+          <code><a href="model_recruitment.html">model_recruitment()</a></code>
+
+        </dt>
+        <dd>Build Nimble recruitment model.</dd>
+      </dl></div><div class="section level2">
+      <h2 id="deprecated">Deprecated<a class="anchor" aria-label="anchor" href="#deprecated"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="bb_predict_growth.html">bb_predict_growth()</a></code> <code><a href="bb_predict_growth.html">bb_predict_lambda()</a></code>
+
+        </dt>
+        <dd>Predict Population Growth Lambda</dd>
+      </dl></div><div class="section level2">
+      <h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="licensing_md.html">licensing_md()</a></code>
+
+        </dt>
+        <dd>Licensing Markdown</dd>
+      </dl></div><div class="section level2">
+      <h2 id="s-methods">S3 Methods<a class="anchor" aria-label="anchor" href="#s-methods"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -54,320 +456,247 @@
 
         </dt>
         <dd>Get Augmented Data from bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="augment.bboufit_ml.html">augment(<i>&lt;bboufit_ml&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Augmented Data from bboufit_ml Object</dd>
-      </dl><dl><dt>
 
-          <code><a href="bb_fit_recruitment.html">bb_fit_recruitment()</a></code>
-
-        </dt>
-        <dd>Fit Recruitment Model</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_fit_recruitment_ml.html">bb_fit_recruitment_ml()</a></code>
-
-        </dt>
-        <dd>Fit Recruitment Model with Maximum Likelihood</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_fit_survival.html">bb_fit_survival()</a></code>
-
-        </dt>
-        <dd>Fit Survival Model</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_fit_survival_ml.html">bb_fit_survival_ml()</a></code>
-
-        </dt>
-        <dd>Fit Survival Model with Maximum Likelihood</dd>
-      </dl><dl><dt>
+        <dt>
 
           <code><a href="bb_plot_month.html">bb_plot_month()</a></code>
 
         </dt>
         <dd>Plot Month</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="bb_plot_month_survival.html">bb_plot_month_survival()</a></code>
 
         </dt>
         <dd>Plot Monthly Survival</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="bb_plot_year.html">bb_plot_year()</a></code>
 
         </dt>
         <dd>Plot Year</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="bb_plot_year_calf_cow_ratio.html">bb_plot_year_calf_cow_ratio()</a></code>
 
         </dt>
         <dd>Plot Year Calf-Cow Ratio</dd>
-      </dl><dl><dt>
 
-          <code><a href="bb_plot_year_growth.html">bb_plot_year_growth()</a></code>
-
-        </dt>
-        <dd>Plot Year Population Growth</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_plot_year_population_change.html">bb_plot_year_population_change()</a></code>
-
-        </dt>
-        <dd>Plot Year Population Change</dd>
-      </dl><dl><dt>
+        <dt>
 
           <code><a href="bb_plot_year_recruitment.html">bb_plot_year_recruitment()</a></code>
 
         </dt>
         <dd>Plot Year Recruitment</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="bb_plot_year_survival.html">bb_plot_year_survival()</a></code>
 
         </dt>
         <dd>Plot Year Survival</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="bb_plot_year_trend_calf_cow_ratio.html">bb_plot_year_trend_calf_cow_ratio()</a></code>
 
         </dt>
         <dd>Plot Annual Calf-Cow Ratio Trend</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="bb_plot_year_trend_recruitment.html">bb_plot_year_trend_recruitment()</a></code>
 
         </dt>
         <dd>Plot Annual Recruitment Trend</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="bb_plot_year_trend_survival.html">bb_plot_year_trend_survival()</a></code>
 
         </dt>
         <dd>Plot Annual Survival Trend</dd>
-      </dl><dl><dt>
 
-          <code><a href="bb_predict_calf_cow_ratio.html">bb_predict_calf_cow_ratio()</a></code>
-
-        </dt>
-        <dd>Predict Calf-Cow Ratio</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_predict_calf_cow_ratio_trend.html">bb_predict_calf_cow_ratio_trend()</a></code>
-
-        </dt>
-        <dd>Predict Calf-Cow Ratio Trend</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_predict_growth.html">bb_predict_growth()</a></code> <code><a href="bb_predict_growth.html">bb_predict_lambda()</a></code>
-
-        </dt>
-        <dd>Predict Population Growth Lambda</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_predict_population_change.html">bb_predict_population_change()</a></code>
-
-        </dt>
-        <dd>Predict Population Change</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_predict_recruitment.html">bb_predict_recruitment()</a></code>
-
-        </dt>
-        <dd>Predict Recruitment</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_predict_recruitment_trend.html">bb_predict_recruitment_trend()</a></code>
-
-        </dt>
-        <dd>Predict Recruitment Trend</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_predict_survival.html">bb_predict_survival()</a></code>
-
-        </dt>
-        <dd>Predict Survival</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_predict_survival_trend.html">bb_predict_survival_trend()</a></code>
-
-        </dt>
-        <dd>Predict Survival Trend</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_priors_recruitment.html">bb_priors_recruitment()</a></code>
-
-        </dt>
-        <dd>Recruitment model default priors</dd>
-      </dl><dl><dt>
-
-          <code><a href="bb_priors_survival.html">bb_priors_survival()</a></code>
-
-        </dt>
-        <dd>Survival model default priors</dd>
-      </dl><dl><dt>
+        <dt>
 
           <code><a href="coef.bboufit.html">coef(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Tidy Tibble from bboufit Object.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="coef.bboufit_ml.html">coef(<i>&lt;bboufit_ml&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Tidy Tibble from bboufit_ml Object.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="converged.bboufit.html">converged(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Convergence of bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="converged.bboufit_ml.html">converged(<i>&lt;bboufit_ml&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Convergence of bboufit_ml Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="esr.bboufit.html">esr(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Effective Sample Rate of bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="estimates.bboufit.html">estimates(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Estimates for bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="estimates.bboufit_ml.html">estimates(<i>&lt;bboufit_ml&gt;</i>)</a></code>
 
         </dt>
         <dd>Estimates for bboufit_ml Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="glance.bboufit.html">glance(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get a Glance Summary of bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="glance.bboufit_ml.html">glance(<i>&lt;bboufit_ml&gt;</i>)</a></code>
 
         </dt>
         <dd>Get a Glance Summary of bboufit_ml Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="model_code.html">model_code()</a></code>
 
         </dt>
         <dd>Get Model Code</dd>
-      </dl><dl><dt>
 
-          <code><a href="model_recruitment.html">model_recruitment()</a></code>
-
-        </dt>
-        <dd>Build Nimble recruitment model.</dd>
-      </dl><dl><dt>
-
-          <code><a href="model_survival.html">model_survival()</a></code>
-
-        </dt>
-        <dd>Build Nimble survival model.</dd>
-      </dl><dl><dt>
+        <dt>
 
           <code><a href="nchains.bboufit.html">nchains(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Number of Chains from bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="niters.bboufit.html">niters(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Number of Iterations from bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="npars.bboufit.html">npars(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Number of Parameters from bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="npars.bboufit_ml.html">npars(<i>&lt;bboufit_ml&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Number of Parameters from bboufit_ml Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="nterms.bboufit.html">nterms(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Number of Terms from bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="nterms.bboufit_ml.html">nterms(<i>&lt;bboufit_ml&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Number of Terms from bboufit_ml Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="pars.bboufit.html">pars(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Parameters from bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="pars.bboufit_ml.html">pars(<i>&lt;bboufit_ml&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Parameters from bboufit_ml Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="predict.bboufit_recruitment.html">predict(<i>&lt;bboufit_recruitment&gt;</i>)</a></code>
 
         </dt>
         <dd>Predict Recruitment</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="predict.bboufit_survival.html">predict(<i>&lt;bboufit_survival&gt;</i>)</a></code>
 
         </dt>
         <dd>Predict Survival</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="rhat.bboufit.html">rhat(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Rhat of bboufit Object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="samples.html">samples()</a></code>
 
         </dt>
         <dd>Get MCMC samples</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="tidy.bboufit.html">tidy(<i>&lt;bboufit&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Tidy Tibble from bboufit Object.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="tidy.bboufit_ml.html">tidy(<i>&lt;bboufit_ml&gt;</i>)</a></code>
 
         </dt>
         <dd>Get Tidy Tibble from bboufit_ml Object.</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -375,7 +704,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bboutools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,11 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/bboutools.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/methods.html">Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth</a></li>
-    <li><a class="dropdown-item" href="../articles/priors.html">Prior Selection and Influence</a></li>
-  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -38,6 +34,61 @@
       <small>Source: <a href="https://github.com/poissonconsulting/bboutools/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.0" id="bboutools-130">bboutools 1.3.0<a class="anchor" aria-label="anchor" href="#bboutools-130"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-1-3-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-3-0"></a></h3>
+<ul><li>Models now use <code>CaribouYear</code> instead of <code>Year</code> throughout (<a href="https://github.com/poissonconsulting/bboutools/issues/75" class="external-link">#75</a>). This affects column names in output data frames from <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>, <code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code>, and all <code>bb_predict_*()</code> functions.</li>
+<li>Multi-population models change parameter indexing from <code>bAnnual[1]</code> to <code>bAnnual[1,1]</code> and add a <code>PopulationName</code> column to output data frames (<a href="https://github.com/poissonconsulting/bboutools/issues/77" class="external-link">#77</a>). Single-population models are also affected.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-1-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-3-0"></a></h3>
+<ul><li>
+<code><a href="../reference/bb_fit_survival.html">bb_fit_survival()</a></code> and <code><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment()</a></code> now support multiple populations in a single model fit (<a href="https://github.com/poissonconsulting/bboutools/issues/77" class="external-link">#77</a>). Population-level intercepts (<code>b0[k]</code>) and year random effects (<code>bAnnual[i,k]</code>) are estimated per population, while month effects and variance components are shared.</li>
+<li>
+<code><a href="../reference/bb_fit_survival.html">bb_fit_survival()</a></code> now accepts aggregate annual survival data (one row per population per year) when monthly collar data is unavailable (<a href="https://github.com/poissonconsulting/bboutools/issues/78" class="external-link">#78</a>). Annual data is auto-detected. The model skips the month random effect and does not apply monthly-to-annual exponentiation.</li>
+<li>
+<code><a href="../reference/bb_fit_survival.html">bb_fit_survival()</a></code> and <code><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment()</a></code> now support prediction of unobserved years via <code>allow_missing = TRUE</code> (<a href="https://github.com/poissonconsulting/bboutools/issues/79" class="external-link">#79</a>). Users add placeholder rows with <code>PopulationName</code> and <code>Year</code> filled and all measurement columns <code>NA_integer_</code>. Predictions for unobserved years sample the year random effect from its prior, giving appropriate uncertainty.</li>
+<li>Added <code><a href="../reference/bb_priors_survival_national.html">bb_priors_survival_national()</a></code> and <code><a href="../reference/bb_priors_recruitment_national.html">bb_priors_recruitment_national()</a></code> to generate disturbance-informed intercept priors using the bbouNationalPriors package (<a href="https://github.com/poissonconsulting/bboutools/issues/80" class="external-link">#80</a>).</li>
+<li>Added <code>bb_predict_*_samples()</code> variants for all <code>bb_predict_*()</code> functions to return raw MCMC samples instead of summary tables (<a href="https://github.com/poissonconsulting/bboutools/issues/83" class="external-link">#83</a>).</li>
+<li>
+<code><a href="../reference/bb_fit_survival.html">bb_fit_survival()</a></code> and <code><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment()</a></code> now accept <code>niters = 0</code> to build the model without MCMC sampling, useful for inspecting model structure (<a href="https://github.com/poissonconsulting/bboutools/issues/85" class="external-link">#85</a>).</li>
+<li>Added prior-only sampling for prior predictive checks (<a href="https://github.com/poissonconsulting/bboutools/issues/91" class="external-link">#91</a>). Users provide all-placeholder data with <code>allow_missing = TRUE</code> and <code>niters &gt; 0</code> to sample from priors without observed data.</li>
+<li>Plot functions now automatically facet by <code>PopulationName</code> when multiple populations are present.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="deprecated-1-3-0">Deprecated<a class="anchor" aria-label="anchor" href="#deprecated-1-3-0"></a></h3>
+<ul><li>The <code>sex_ratio</code> argument in <code><a href="../reference/bb_predict_recruitment.html">bb_predict_recruitment()</a></code>, <code><a href="../reference/bb_predict_growth.html">bb_predict_growth()</a></code>, <code><a href="../reference/bb_predict_population_change.html">bb_predict_population_change()</a></code>, and their <code>*_samples()</code> and <code>*_trend()</code> variants is deprecated (<a href="https://github.com/poissonconsulting/bboutools/issues/72" class="external-link">#72</a>). <code>sex_ratio</code> is now stored as an attribute at model fit time and extracted automatically by predict functions.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="improvements-1-3-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-1-3-0"></a></h3>
+<ul><li>Placeholder row detection now uses measurement columns instead of <code>Month</code> (<a href="https://github.com/poissonconsulting/bboutools/issues/94" class="external-link">#94</a>). This supports aggregate annual survival data where <code>Month</code> has a valid value.</li>
+<li>
+<code><a href="../reference/bb_fit_survival.html">bb_fit_survival()</a></code> and <code><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment()</a></code> now emit an informational message listing detected unobserved CaribouYears by population when <code>quiet = FALSE</code> (<a href="https://github.com/poissonconsulting/bboutools/issues/94" class="external-link">#94</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-3-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-0"></a></h3>
+<ul><li><p>Predictions for unobserved years now include the year random effect (<code>bAnnual</code>) drawn from the <code>Normal(0, sAnnual)</code> prior, resulting in wider credible intervals that better represent year-to-year process variance (<a href="https://github.com/poissonconsulting/bboutools/issues/93" class="external-link">#93</a>). Previously, the year random effect was zeroed out for unobserved years.</p></li>
+<li><p>Fixed ML model fitting error with nimble &gt;= 1.4.0 by using nimbleQuad for Laplace approximation (<a href="https://github.com/poissonconsulting/bboutools/issues/88" class="external-link">#88</a>).</p></li>
+<li><p><code><a href="../reference/bb_predict_growth.html">bb_predict_growth()</a></code> and <code><a href="../reference/bb_predict_population_change.html">bb_predict_population_change()</a></code> now auto-filter to shared population and CaribouYear combinations instead of erroring when survival and recruitment fits differ.</p></li>
+<li><p>Fixed <code><a href="../reference/bb_predict_population_change.html">bb_predict_population_change()</a></code> baseline row to use per-population minimum CaribouYear instead of global minimum.</p></li>
+<li><p>Fixed CaribouYear x-axis labels in <code>bb_plot_year_*()</code> and <code>bb_plot_year_trend_*()</code> to avoid duplicate integer labels.</p></li>
+<li><p>Added informative error when calling <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>, <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code>, <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance()</a></code>, <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>, and other downstream functions on a Bayesian fit with <code>niters = 0</code> (<a href="https://github.com/poissonconsulting/bboutools/issues/89" class="external-link">#89</a>).</p></li>
+<li><p>Added informative error when nimble is not attached to the search path, e.g., when using <code>bboutools::</code> instead of <code><a href="https://github.com/poissonconsulting/bboutools" class="external-link">library(bboutools)</a></code> (<a href="https://github.com/poissonconsulting/bboutools/issues/70" class="external-link">#70</a>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="internal-1-3-0">Internal<a class="anchor" aria-label="anchor" href="#internal-1-3-0"></a></h3>
+<ul><li>
+<code><a href="../reference/model_code.html">model_code()</a></code> now shows resolved numeric prior values instead of symbolic names (e.g., <code>dnorm(3, sd = 10)</code> instead of <code>dnorm(b0_mu, sd = b0_sd)</code>) and removes redundant <code><a href="https://rdrr.io/r/base/Paren.html" class="external-link">{ }</a></code> blocks left by NIMBLE’s if/else resolution (<a href="https://github.com/poissonconsulting/bboutools/issues/69" class="external-link">#69</a>).</li>
+<li>Migrated user-facing messages from <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code>/<code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>/<code>abort_chk()</code> to cli package (<a href="https://github.com/poissonconsulting/bboutools/issues/90" class="external-link">#90</a>). <code>.inform_unobserved_years()</code> and <code>.warn_filtered_multi()</code> use plain <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> for clean display in bboushiny toast notifications.</li>
+<li>Reduced <code>sysdata.rda</code> size from ~7.7 MB to ~890 KB.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-1-3-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-3-0"></a></h3>
+<ul><li>Updated Get Started, Analytical Methods, and Priors vignettes for multi-population models, annual data, and national priors (<a href="https://github.com/poissonconsulting/bboutools/issues/82" class="external-link">#82</a>).</li>
+<li>Added Extensions article covering multi-population analysis, aggregate annual survival, unobserved year predictions, prior-only sampling, and raw MCMC samples (<a href="https://github.com/poissonconsulting/bboutools/issues/82" class="external-link">#82</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="bboutools-120">bboutools 1.2.0<a class="anchor" aria-label="anchor" href="#bboutools-120"></a></h2>
 <ul><li>added <code><a href="../reference/bb_plot_year_calf_cow_ratio.html">bb_plot_year_calf_cow_ratio()</a></code> and <code><a href="../reference/bb_plot_year_trend_calf_cow_ratio.html">bb_plot_year_trend_calf_cow_ratio()</a></code>.</li>
@@ -142,7 +193,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

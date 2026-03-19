@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="index.html">bboutools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,13 +37,7 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="articles/bboutools.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/methods.html">Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth</a></li>
-    <li><a class="dropdown-item" href="articles/priors.html">Prior Selection and Influence</a></li>
-  </ul>
-</li>
+<li class="nav-item"><a class="nav-link" href="articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -68,9 +62,8 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>To install the latest development version:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"poissonconsulting/bboutools"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages("remotes")</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"poissonconsulting/bboutools"</span>)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -78,104 +71,99 @@
 <div class="section level3">
 <h3 id="survival">Survival<a class="anchor" aria-label="anchor" href="#survival"></a>
 </h3>
-<p><code>bboutools</code> accepts survival data for a single population in a specific format.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span> <span class="co"># for printing data frames</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span> <span class="co"># for plotting</span></span>
-<span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/" class="external-link">bboudata</a></span><span class="op">)</span> <span class="co"># for boreal caribou datasets</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'bboudata'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:bboutools':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     licensing_md</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/poissonconsulting/bboutools" class="external-link">bboutools</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">surv_data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bbousurv_a</a></span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">surv_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 6</span></span>
-<span><span class="co">#&gt;   PopulationName  Year Month StartTotal MortalitiesCertain MortalitiesUncertain</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;int&gt; &lt;int&gt;      &lt;int&gt;              &lt;int&gt;                &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1 A               1986     1          0                  0                    0</span></span>
-<span><span class="co">#&gt; 2 A               1986     2          8                  0                    0</span></span>
-<span><span class="co">#&gt; 3 A               1986     3          8                  0                    0</span></span>
-<span><span class="co">#&gt; 4 A               1986     4          8                  0                    0</span></span>
-<span><span class="co">#&gt; 5 A               1986     5          8                  0                    0</span></span>
-<span><span class="co">#&gt; 6 A               1986     6          8                  0                    0</span></span></code></pre></div>
+<p><code>bboutools</code> accepts survival data in a specific format.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(tibble) <span class="co"># for printing data frames</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; Warning: package 'tibble' was built under R version 4.5.3</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># for plotting</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">library</span>(bboudata) <span class="co"># for boreal caribou datasets</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; Attaching package: 'bboudata'</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; The following object is masked from 'package:bboutools':</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;     licensing_md</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="fu">library</span>(bboutools)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>surv_data <span class="ot">&lt;-</span> bboudata<span class="sc">::</span>bbousurv_a</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="fu">head</span>(surv_data)</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 6</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;   PopulationName  Year Month StartTotal MortalitiesCertain MortalitiesUncertain</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;          &lt;int&gt; &lt;int&gt;      &lt;int&gt;              &lt;int&gt;                &lt;int&gt;</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt; 1 A               1986     1          0                  0                    0</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; 2 A               1986     2          8                  0                    0</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; 3 A               1986     3          8                  0                    0</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt; 4 A               1986     4          8                  0                    0</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt; 5 A               1986     5          8                  0                    0</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt; 6 A               1986     6          8                  0                    0</span></span></code></pre></div>
 <p>The survival model, which includes a random effect of month, is fitted using <code><a href="reference/bb_fit_survival.html">bb_fit_survival()</a></code>. To achieve convergence increase <code>nthin</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">99</span><span class="op">)</span></span>
-<span><span class="va">surv_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">surv_data</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance</a></span><span class="op">(</span><span class="va">surv_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 8</span></span>
-<span><span class="co">#&gt;       n     K nchains niters nthin   ess  rhat converged</span></span>
-<span><span class="co">#&gt;   &lt;int&gt; &lt;int&gt;   &lt;int&gt;  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;lgl&gt;    </span></span>
-<span><span class="co">#&gt; 1   363     5       3   1000    10   111  1.03 TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">99</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>surv_fit <span class="ot">&lt;-</span> <span class="fu">bb_fit_survival</span>(surv_data, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">glance</span>(surv_fit)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 8</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;       n     K nchains niters nthin   ess  rhat converged</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt;   &lt;int&gt;  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;lgl&gt;    </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 1   363     6       3   1000    10   111  1.03 TRUE</span></span></code></pre></div>
 <p>Predictions can then be generated using <code><a href="reference/bb_predict_survival.html">bb_predict_survival()</a></code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">surv_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_predict_survival.html">bb_predict_survival</a></span><span class="op">(</span><span class="va">surv_fit</span><span class="op">)</span></span>
-<span><span class="va">surv_pred</span></span>
-<span><span class="co">#&gt; # A tibble: 32 × 6</span></span>
-<span><span class="co">#&gt;    PopulationName CaribouYear Month estimate lower upper</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;                &lt;int&gt; &lt;int&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 A                     1985    NA    0.872 0.762 0.947</span></span>
-<span><span class="co">#&gt;  2 A                     1986    NA    0.881 0.791 0.952</span></span>
-<span><span class="co">#&gt;  3 A                     1987    NA    0.841 0.645 0.908</span></span>
-<span><span class="co">#&gt;  4 A                     1988    NA    0.887 0.813 0.96 </span></span>
-<span><span class="co">#&gt;  5 A                     1989    NA    0.874 0.785 0.943</span></span>
-<span><span class="co">#&gt;  6 A                     1990    NA    0.872 0.785 0.936</span></span>
-<span><span class="co">#&gt;  7 A                     1991    NA    0.877 0.801 0.936</span></span>
-<span><span class="co">#&gt;  8 A                     1992    NA    0.889 0.822 0.956</span></span>
-<span><span class="co">#&gt;  9 A                     1993    NA    0.87  0.793 0.927</span></span>
-<span><span class="co">#&gt; 10 A                     1994    NA    0.849 0.756 0.909</span></span>
-<span><span class="co">#&gt; # ℹ 22 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>surv_pred <span class="ot">&lt;-</span> <span class="fu">bb_predict_survival</span>(surv_fit)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>surv_pred</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 6</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;    PopulationName CaribouYear Month estimate lower upper</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;    &lt;fct&gt;                &lt;int&gt; &lt;int&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;  1 A                     1985    NA    0.872 0.762 0.947</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;  2 A                     1986    NA    0.881 0.791 0.952</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;  3 A                     1987    NA    0.841 0.645 0.908</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;  4 A                     1988    NA    0.887 0.813 0.96 </span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt;  5 A                     1989    NA    0.874 0.785 0.943</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt;  6 A                     1990    NA    0.872 0.785 0.936</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;  7 A                     1991    NA    0.877 0.801 0.936</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;  8 A                     1992    NA    0.889 0.822 0.956</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;  9 A                     1993    NA    0.87  0.793 0.927</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; 10 A                     1994    NA    0.849 0.756 0.909</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; # ℹ 22 more rows</span></span></code></pre></div>
 <p>And plotted using <code><a href="reference/bb_plot_year.html">bb_plot_year()</a></code></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/bb_plot_year_survival.html">bb_plot_year_survival</a></span><span class="op">(</span><span class="va">surv_pred</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expand_limits.html" class="external-link">expand_limits</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-5-1.png"><!-- --></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">bb_plot_year_survival</span>(surv_pred) <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">expand_limits</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png"></p>
 <p>The survival in each month can be plotted using <code><a href="reference/bb_plot_month.html">bb_plot_month()</a></code></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/bb_plot_month_survival.html">bb_plot_month_survival</a></span><span class="op">(</span><span class="va">surv_fit</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-6-1.png"><!-- --></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">bb_plot_month_survival</span>(surv_fit)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png"></p>
 <p>These estimates represent the annual survival rate if that month lasted the whole year.</p>
 </div>
 <div class="section level3">
 <h3 id="recruitment">Recruitment<a class="anchor" aria-label="anchor" href="#recruitment"></a>
 </h3>
 <p>The equivalent functions for recruitment data are</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">recruit_data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">recruit_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 9</span></span>
-<span><span class="co">#&gt;   PopulationName  Year Month   Day  Cows Bulls UnknownAdults Yearlings Calves</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;int&gt;     &lt;int&gt;  &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1 A               1990     3     9     1     1             0         0      0</span></span>
-<span><span class="co">#&gt; 2 A               1990     3     9     5     1             0         0      0</span></span>
-<span><span class="co">#&gt; 3 A               1990     3     9     4     1             0         0      0</span></span>
-<span><span class="co">#&gt; 4 A               1990     3     9     2     0             0         0      0</span></span>
-<span><span class="co">#&gt; 5 A               1990     3     9     6     0             0         0      0</span></span>
-<span><span class="co">#&gt; 6 A               1990     3     9     4     1             0         0      0</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">99</span><span class="op">)</span></span>
-<span><span class="va">recruit_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">recruit_data</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/bb_plot_year_recruitment.html">bb_plot_year_recruitment</a></span><span class="op">(</span><span class="va">recruit_fit</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-7-1.png"><!-- --></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>recruit_data <span class="ot">&lt;-</span> bboudata<span class="sc">::</span>bbourecruit_a</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">head</span>(recruit_data)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 9</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;   PopulationName  Year Month   Day  Cows Bulls UnknownAdults Yearlings Calves</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;          &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;int&gt;     &lt;int&gt;  &lt;int&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; 1 A               1990     3     9     1     1             0         0      0</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 2 A               1990     3     9     5     1             0         0      0</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 3 A               1990     3     9     4     1             0         0      0</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; 4 A               1990     3     9     2     0             0         0      0</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; 5 A               1990     3     9     6     0             0         0      0</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 6 A               1990     3     9     4     1             0         0      0</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">99</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>recruit_fit <span class="ot">&lt;-</span> <span class="fu">bb_fit_recruitment</span>(recruit_data, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="fu">bb_plot_year_recruitment</span>(recruit_fit)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png"></p>
 </div>
 <div class="section level3">
 <h3 id="population-growth">Population Growth<a class="anchor" aria-label="anchor" href="#population-growth"></a>
 </h3>
 <p>The function <code><a href="reference/bb_predict_growth.html">bb_predict_growth()</a></code> predicts the annual population growth (lambda) rate from the survival and recruitment models.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_predict_growth.html">bb_predict_growth</a></span><span class="op">(</span><span class="va">surv_fit</span>, <span class="va">recruit_fit</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/bb_plot_year_growth.html">bb_plot_year_growth</a></span><span class="op">(</span><span class="va">lambda</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-8-1.png"><!-- --></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fu">bb_predict_growth</span>(surv_fit, recruit_fit)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; Filtering to shared population and year combinations. CaribouYears in survival only: 1985, 1986, 1987, 1988, 2016.</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">bb_plot_year_growth</span>(lambda)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-8-1.png"></p>
 <p><code><a href="reference/bb_predict_population_change.html">bb_predict_population_change()</a></code> calculates the population change (%) with uncertainty as the cumulative product of population growth.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">change</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bb_predict_population_change.html">bb_predict_population_change</a></span><span class="op">(</span><span class="va">surv_fit</span>, <span class="va">recruit_fit</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/bb_plot_year_population_change.html">bb_plot_year_population_change</a></span><span class="op">(</span><span class="va">change</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-9-1.png"><!-- --></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>change <span class="ot">&lt;-</span> <span class="fu">bb_predict_population_change</span>(surv_fit, recruit_fit)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; Filtering to shared population and year combinations. CaribouYears in survival only: 1985, 1986, 1987, 1988, 2016.</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">bb_plot_year_population_change</span>(change)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-9-1.png"></p>
 </div>
 </div>
 <div class="section level2">
@@ -184,7 +172,7 @@
 <p>Additional information is available from the <a href="https://poissonconsulting.github.io/bboutools/">bboutools website</a>, which includes the following articles:<br>
 - <a href="https://poissonconsulting.github.io/bboutools/articles/bboutools.html">Get Started</a>.<br>
 - <a href="https://poissonconsulting.github.io/bboutools/articles/bbmethods.html">Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth</a>.<br>
-- <a href="https://poissonconsulting.github.io/bboutools/articles/priors.html">Prior Selection and Influence</a>.</p>
+- <a href="https://poissonconsulting.github.io/bboutools/articles/priors.html">Prior Selection and Influence</a>. - <a href="https://poissonconsulting.github.io/bboutools/articles/extensions.html">Multi-Population Analysis and Other Extensions</a>.</p>
 <p>There is also a <a href="https://poissonconsulting.shinyapps.io/bboushiny/" class="external-link">user-friendly graphical interface</a>, called <a href="https://github.com/poissonconsulting/bboushiny" class="external-link"><code>bboushiny</code></a>, for non-R users.</p>
 </div>
 <div class="section level2">
@@ -280,7 +268,7 @@ Copyright 2024 Province of Alberta</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bboutools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,13 +35,7 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../articles/bboutools.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/methods.html">Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth</a></li>
-    <li><a class="dropdown-item" href="../articles/priors.html">Prior Selection and Influence</a></li>
-  </ul>
-</li>
+<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -85,10 +79,20 @@
 <!-- # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. -->
 <!-- # See the License for the specific language governing permissions and -->
 <!-- # limitations under the License. -->
-<p>A prior distribution represents the existing uncertainty in the value
-of an unknown parameter. The influence of a prior on the posterior
-distribution will decrease as the number of observations increases.
-<code>bboutools</code> uses weakly informative priors by default <span class="citation">(Gelman, Simpson, and Betancourt 2017; McElreath
+<p>In Bayesian analysis, a prior distribution encodes what is known or
+assumed about a parameter before observing the data. The prior is
+combined with the likelihood of the data to produce the posterior
+distribution, which represents the updated knowledge about the parameter
+after observing the data. When the data are abundant, the posterior is
+dominated by the likelihood and the choice of prior has little practical
+effect. When the data are sparse, the prior has more influence on the
+posterior, which can be beneficial if the prior reflects genuine
+biological knowledge, or problematic if the prior is poorly chosen.</p>
+<p>Priors range from uninformative (assigning equal probability to all
+values) to strongly informative (concentrating probability near a
+specific value). <code>bboutools</code> uses weakly informative priors
+by default, which rule out biologically implausible values but remain
+diffuse enough to let the data drive the estimates <span class="citation">(Gelman, Simpson, and Betancourt 2017; McElreath
 2016)</span>.</p>
 <p>If the user is interested in fitting models without priors, see
 <code><a href="../reference/bb_fit_recruitment_ml.html">bb_fit_recruitment_ml()</a></code> and
@@ -106,20 +110,16 @@ categorical year on the intercept on the log-odds scale and <span class="math in
 <p>This model has the following default priors in
 <code>bboutools</code></p>
 <ul>
-<li>Intercept (log-odds scale) <span class="math display">b0 \sim
-Normal(3, sd = 10)</span>
-</li>
-<li>Year fixed effect <span class="math display">bAnnual[i] \sim
-Normal(0, sd = 10)</span>
-</li>
-<li>Year random effect</li>
-</ul>
-<p><span class="math display">sAnnual \sim Exponential(1) \\
-bAnnual \sim Normal(0, sd = sAnnual)</span></p>
-<ul>
+<li><p>Intercept (log-odds scale) <span class="math display">b0 \sim
+Normal(3, sd = 10)</span></p></li>
+<li><p>Year fixed effect <span class="math display">bAnnual[i] \sim
+Normal(0, sd = 10)</span></p></li>
+<li><p>Year random effect <span class="math display">sAnnual \sim
+Exponential(1)</span> <span class="math display">bAnnual \sim Normal(0,
+sd = sAnnual)</span></p></li>
 <li><p>Month random effect <span class="math display">sMonth \sim
-Exponential(1)\\
-bMonth \sim Normal(0, sd = sMonth)</span></p></li>
+Exponential(1)</span> <span class="math display">bMonth \sim Normal(0,
+sd = sMonth)</span></p></li>
 <li><p>Year continuous effect <span class="math display">bYear \sim
 Normal(0, sd = 2)</span></p></li>
 </ul>
@@ -140,8 +140,8 @@ continuous year.</p>
 Normal(-1, sd = 5)</span></p></li>
 <li><p>Categorical year fixed effect <span class="math display">bAnnual[i] \sim Normal(0, sd = 5)</span></p></li>
 <li><p>Categorical year random effect <span class="math display">sAnnual
-\sim Exponential(1)\\
-bAnnual \sim Normal(0, sd = sAnnual)</span></p></li>
+\sim Exponential(1)</span> <span class="math display">bAnnual \sim
+Normal(0, sd = sAnnual)</span></p></li>
 <li><p>Continuous year effect <span class="math display">bYear \sim
 Normal(0, sd = 2)</span></p></li>
 </ul>
@@ -155,85 +155,195 @@ Beta(65, 35)</span></p>
 <div class="section level3">
 <h3 id="prior-selection-and-influence">Prior selection and influence<a class="anchor" aria-label="anchor" href="#prior-selection-and-influence"></a>
 </h3>
-<p>As an example of the influence of priors on parameter estimates, we
-tighten the standard deviation for the fixed effect of categorical year
-on the intercept of monthly survival probability. The equivalent maximum
-likelihood model is also fit for comparison.</p>
+<p>The default weakly informative priors are appropriate for most
+analyses. A user may wish to adjust priors in several situations: when
+strong biological knowledge exists for a parameter (e.g., adult female
+proportion from published studies), when the dataset is small and the
+user wants to constrain estimates to a plausible range, or when
+comparing the sensitivity of results to different prior assumptions. The
+examples below illustrate how tightening or relaxing priors affects
+parameter estimates relative to the Maximum Likelihood baseline.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/poissonconsulting/bboutools" class="external-link">bboutools</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="adult-female-proportion">Adult female proportion<a class="anchor" aria-label="anchor" href="#adult-female-proportion"></a>
+</h4>
+<p>To illustrate the effect, we construct a dataset where a large
+proportion of adults are unclassified by moving half of observed Cows
+and Bulls into <code>UnknownAdults</code>. We then compare recruitment
+estimates from priors centered on high (80%) and low (35%) adult female
+proportions, along with the default and maximum likelihood
+estimates.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_c.html" class="external-link">bbousurv_c</a></span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;=</span> <span class="fl">2005</span>, <span class="va">Year</span> <span class="op">&lt;=</span> <span class="fl">2010</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    UnknownAdults <span class="op">=</span> <span class="va">UnknownAdults</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Cows</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Bulls</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    Cows <span class="op">=</span> <span class="va">Cows</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Cows</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    Bulls <span class="op">=</span> <span class="va">Bulls</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Bulls</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="co"># force model to fit fixed year effect, use default priors</span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">data</span>,</span>
-<span>  min_random_year <span class="op">=</span> <span class="cn">Inf</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># default prior: Beta(65, 35), mode at 65%</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">data</span>, adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># tighten prior on bAnnual by changing SD from default 10 to 1</span></span>
-<span><span class="va">fit_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">data</span>,</span>
-<span>  min_random_year <span class="op">=</span> <span class="cn">Inf</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  priors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bAnnual_sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># fit maximum likelihood model for comparison</span></span>
-<span><span class="va">fit_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival_ml.html">bb_fit_survival_ml</a></span><span class="op">(</span><span class="va">data</span>,</span>
-<span>  min_random_year <span class="op">=</span> <span class="cn">Inf</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="priors_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
-<p>The Bayesian model with vague priors (default) has annual survival
-estimates that closely match the Maximum Likelihood estimates, whereas
-the Bayesian model with a tighter prior on the year fixed effect
-standard deviation results in estimates that are pulled in toward the
-mean. If this behaviour is desirable (i.e., to place less trust in
-extreme estimates), a model with a year random effect can be fit.</p>
-<p>As another example, the user might strongly believe (i.e., based on
-literature or biological understanding) that the true adult female
-proportion is 65%. We compare estimates from very informative,
-informative (default) and vague priors on <span class="math inline">adult\_female\_proportion</span>, along with the
-maximum likelihood estimates.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_c.html" class="external-link">bbourecruit_c</a></span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">data</span>,</span>
-<span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fit_inf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span><span class="co"># high prior: Beta(80, 20), mode at ~81%</span></span>
+<span><span class="va">fit_high</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
 <span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  priors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"adult_female_proportion_alpha"</span> <span class="op">=</span> <span class="fl">650</span>,</span>
-<span>    <span class="st">"adult_female_proportion_beta"</span> <span class="op">=</span> <span class="fl">350</span></span>
+<span>    <span class="st">"adult_female_proportion_alpha"</span> <span class="op">=</span> <span class="fl">80</span>,</span>
+<span>    <span class="st">"adult_female_proportion_beta"</span> <span class="op">=</span> <span class="fl">20</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit_vague</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span><span class="co"># low prior: Beta(35, 65), mode at ~35%</span></span>
+<span><span class="va">fit_low</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment</a></span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
 <span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  priors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"adult_female_proportion_alpha"</span> <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>    <span class="st">"adult_female_proportion_beta"</span> <span class="op">=</span> <span class="fl">1</span></span>
+<span>    <span class="st">"adult_female_proportion_alpha"</span> <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>    <span class="st">"adult_female_proportion_beta"</span> <span class="op">=</span> <span class="fl">65</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment_ml.html">bb_fit_recruitment_ml</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span><span class="co"># maximum likelihood for comparison</span></span>
+<span><span class="va">fit_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_recruitment_ml.html">bb_fit_recruitment_ml</a></span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
 <span>  adult_female_proportion <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="priors_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
-<p>As with the above example, the adult female proportion estimate for a
-Bayesian model with vague priors closely matches the Maximum Likelihood
-estimate, whereas the Bayesian model with informative prior gives less
-weight to the data.</p>
+<p>The choice of prior on <span class="math inline">adult\_female\_proportion</span> affects the
+predicted recruitment.</p>
+<p><img src="priors_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="576"></p>
+<p>The influence of the <span class="math inline">adult\_female\_proportion</span> prior on
+recruitment predictions depends on the proportion of unclassified adults
+in the data. When most adults are already classified as Cows or Bulls,
+the prior has little practical effect on recruitment.</p>
 <p>The <span class="math inline">adult\_female\_proportion</span> can
 also simply be fixed. See <code><a href="../reference/bb_fit_recruitment.html">bb_fit_recruitment()</a></code> for
 details.</p>
+</div>
+<div class="section level4">
+<h4 id="survival-intercept">Survival intercept<a class="anchor" aria-label="anchor" href="#survival-intercept"></a>
+</h4>
+<p>A user may have prior knowledge about the expected survival rate for
+their population from published studies or neighboring populations. This
+can be encoded in the intercept prior <code>b0</code>. The default prior
+for survival is <code>b0 ~ Normal(3, 10)</code> on the logit scale,
+which is very diffuse.</p>
+<p>As an example, suppose published estimates suggest annual survival is
+approximately 85% for a population. On the logit scale, 85% annual
+survival corresponds to a monthly survival of approximately <span class="math inline">0.85^{1/12} \approx 0.9865</span>, or <span class="math inline">\text{logit}(0.9865) \approx 4.3</span>. A prior of
+<code>b0 ~ Normal(4.3, 0.5)</code> would encode this belief while still
+allowing the data to shift the estimate.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_c.html" class="external-link">bbousurv_c</a></span></span>
+<span></span>
+<span><span class="co"># default prior: b0 ~ Normal(3, 10)</span></span>
+<span><span class="va">fit_default</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">data</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># informative prior centered on ~85% annual survival</span></span>
+<span><span class="va">fit_informed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  priors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>b0_mu <span class="op">=</span> <span class="fl">4.3</span>, b0_sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># maximum likelihood for comparison</span></span>
+<span><span class="va">fit_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival_ml.html">bb_fit_survival_ml</a></span><span class="op">(</span><span class="va">data</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="priors_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="576"></p>
+<p>The informative prior pulls survival estimates toward the prior mean,
+particularly in years with sparse data. With abundant data, the prior
+has less influence and the estimates converge toward the Maximum
+Likelihood values.</p>
+<p>Rather than manually calculating intercept priors from published
+survival rates, <code>bboutools</code> provides functions to derive
+intercept priors from disturbance levels using national
+demographic-disturbance relationships.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="national-disturbance-informed-priors">National Disturbance-Informed Priors<a class="anchor" aria-label="anchor" href="#national-disturbance-informed-priors"></a>
+</h2>
+<p>The user can specify priors informed by national
+demographic-disturbance relationships <span class="citation">(Johnson et
+al. 2020)</span> instead of the default weakly informative priors. These
+priors link anthropogenic and fire disturbance levels to expected
+survival and recruitment, based on the national boreal caribou
+model.</p>
+<p>The functions <code><a href="../reference/bb_priors_survival_national.html">bb_priors_survival_national()</a></code> and
+<code><a href="../reference/bb_priors_recruitment_national.html">bb_priors_recruitment_national()</a></code> return intercept priors
+(<code>b0_mu</code> and <code>b0_sd</code>) based on the percent
+anthropogenic disturbance (<code>anthro</code>) and percent fire
+disturbance not overlapping with anthropogenic disturbance
+(<code>fire_excl_anthro</code>). All other prior parameters retain their
+defaults from <code><a href="../reference/bb_priors_survival.html">bb_priors_survival()</a></code> and
+<code><a href="../reference/bb_priors_recruitment.html">bb_priors_recruitment()</a></code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nat_priors</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_priors_survival_national.html">bb_priors_survival_national</a></span><span class="op">(</span>anthro <span class="op">=</span> <span class="fl">50</span>, fire_excl_anthro <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">nat_priors</span></span>
+<span><span class="co">#&gt;     b0_mu     b0_sd </span></span>
+<span><span class="co">#&gt; 4.3321205 0.5152558</span></span></code></pre></div>
+<p>For aggregate annual survival data, the <code>annual = TRUE</code>
+option returns priors on the annual survival scale.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nat_priors_annual</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_priors_survival_national.html">bb_priors_survival_national</a></span><span class="op">(</span></span>
+<span>  anthro <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  fire_excl_anthro <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  annual <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">nat_priors_annual</span></span>
+<span><span class="co">#&gt;     b0_mu     b0_sd </span></span>
+<span><span class="co">#&gt; 1.7665175 0.5437549</span></span></code></pre></div>
+<p>As an example, we compare survival estimates from the default priors
+and national disturbance-informed priors.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_c.html" class="external-link">bbousurv_c</a></span></span>
+<span></span>
+<span><span class="va">fit_default</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span><span class="va">data</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit_national</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_fit_survival.html">bb_fit_survival</a></span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  priors <span class="op">=</span> <span class="fu"><a href="../reference/bb_priors_survival_national.html">bb_priors_survival_national</a></span><span class="op">(</span>anthro <span class="op">=</span> <span class="fl">50</span>, fire_excl_anthro <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="priors_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="576"></p>
+<p>Higher anthropogenic disturbance leads to lower expected survival.
+The national priors shift the intercept accordingly, resulting in a more
+informative prior centered on the expected survival for the given
+disturbance level.</p>
+<div class="section level3">
+<h3 id="year-trend-prior-and-data-rescaling">Year Trend Prior and Data Rescaling<a class="anchor" aria-label="anchor" href="#year-trend-prior-and-data-rescaling"></a>
+</h3>
+<p>The <code>CaribouYear</code> variable is internally z-score
+standardized before model fitting.</p>
+<p><span class="math display">Rescaled\_Year = \frac{CaribouYear -
+mean(CaribouYear)}{sd(CaribouYear)}</span></p>
+<p>This rescaling affects the interpretation of the year trend prior
+<code>bYear</code>. The prior
+<code>bYear ~ Normal(bYear\_mu, sd = bYear\_sd)</code> operates on the
+rescaled year scale, not the original calendar year scale.</p>
+<p>The default <code>bYear_sd = 2</code> is intentionally diffuse on the
+rescaled scale and is generally appropriate for most datasets.</p>
+<p>If a user wants to specify an informed trend prior per calendar year,
+the values must be converted to the rescaled scale by multiplying by the
+standard deviation of the years in the dataset. For example, with years
+2010–2015 (SD <span class="math inline">\approx</span> 1.87), a desired
+prior of 0.1 log-odds per calendar year with SD = 0.5 translates to
+<code>bYear_mu = 0.1 * 1.87</code> and
+<code>bYear_sd = 0.5 * 1.87</code> on the rescaled scale.</p>
+<p>The rescaling improves numerical stability during model fitting and
+makes the default prior behave reasonably regardless of the absolute
+year values. Both survival and recruitment models use identical
+rescaling.</p>
+</div>
 </div>
 <div class="section level2 unnumbered">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -244,6 +354,13 @@ Gelman, Andrew, Daniel Simpson, and Michael Betancourt. 2017. <span>“The
 <span>Prior</span> <span>Can</span> <span>Often</span> <span>Only</span>
 <span>Be</span> <span>Understood</span> in the <span>Context</span> of
 the <span>Likelihood</span>.”</span> <em>Entropy</em> 19 (10). <a href="https://doi.org/10.3390/e19100555" class="external-link">https://doi.org/10.3390/e19100555</a>.
+</div>
+<div id="ref-johnson_science_2020" class="csl-entry">
+Johnson, C. A., G. D. Sutherland, E. Neave, M. Leblond, P. Kirby, C.
+Superbie, and P. D. McLoughlin. 2020. <span>“Science to Inform Policy:
+Linking Population Dynamics to Habitat for a Threatened Species in
+<span>Canada</span>.”</span> <em>Journal of Applied Ecology</em> 57 (7):
+1314–27. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link">https://doi.org/10.1111/1365-2664.13637</a>.
 </div>
 <div id="ref-mcelreath_statistical_2016" class="csl-entry">
 McElreath, Richard. 2016. <em>Statistical Rethinking: A
@@ -265,7 +382,7 @@ Texts in Statistical Science Series 122. Boca Raton: CRC Press/Taylor
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
