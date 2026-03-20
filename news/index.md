@@ -9,11 +9,17 @@
   This affects column names in output data frames from
   [`predict()`](https://rdrr.io/r/stats/predict.html),
   [`augment()`](https://generics.r-lib.org/reference/augment.html), and
-  all `bb_predict_*()` functions.
+  all `bb_predict_*()` functions. Existing bboutools code (e.g.,
+  [`bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.md),
+  [`bb_predict_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival.md))
+  is unaffected, but custom code that references `Year` columns in
+  output data frames will need updating.
 - Multi-population models change parameter indexing from `bAnnual[1]` to
   `bAnnual[1,1]` and add a `PopulationName` column to output data frames
   ([\#77](https://github.com/poissonconsulting/bboutools/issues/77)).
-  Single-population models are also affected.
+  Single-population models are also affected. As above, this does not
+  break standard bboutools workflows but may affect custom code that
+  extracts parameters or manipulates output data frames directly.
 
 ### New features
 
@@ -25,6 +31,11 @@
   Population-level intercepts (`b0[k]`) and year random effects
   (`bAnnual[i,k]`) are estimated per population, while month effects and
   variance components are shared.
+  [`bb_predict_growth()`](https://poissonconsulting.github.io/bboutools/reference/bb_predict_growth.md)
+  and
+  [`bb_predict_population_change()`](https://poissonconsulting.github.io/bboutools/reference/bb_predict_population_change.md)
+  auto-filter to shared population and CaribouYear combinations when
+  survival and recruitment fits differ.
 - [`bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.md)
   now accepts aggregate annual survival data (one row per population per
   year) when monthly collar data is unavailable
@@ -38,8 +49,9 @@
   ([\#79](https://github.com/poissonconsulting/bboutools/issues/79)).
   Users add placeholder rows with `PopulationName` and `Year` filled and
   all measurement columns `NA_integer_`. Predictions for unobserved
-  years sample the year random effect from its prior, giving appropriate
-  uncertainty.
+  years draw the year random effect from its `Normal(0, sAnnual)` prior,
+  giving appropriate uncertainty. An informational message lists
+  detected unobserved CaribouYears by population when `quiet = FALSE`.
 - Added
   [`bb_priors_survival_national()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival_national.md)
   and
@@ -74,56 +86,11 @@
   `sex_ratio` is now stored as an attribute at model fit time and
   extracted automatically by predict functions.
 
-### Improvements
-
-- Placeholder row detection now uses measurement columns instead of
-  `Month`
-  ([\#94](https://github.com/poissonconsulting/bboutools/issues/94)).
-  This supports aggregate annual survival data where `Month` has a valid
-  value.
-- [`bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.md)
-  and
-  [`bb_fit_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.md)
-  now emit an informational message listing detected unobserved
-  CaribouYears by population when `quiet = FALSE`
-  ([\#94](https://github.com/poissonconsulting/bboutools/issues/94)).
-
 ### Bug fixes
-
-- Predictions for unobserved years now include the year random effect
-  (`bAnnual`) drawn from the `Normal(0, sAnnual)` prior, resulting in
-  wider credible intervals that better represent year-to-year process
-  variance
-  ([\#93](https://github.com/poissonconsulting/bboutools/issues/93)).
-  Previously, the year random effect was zeroed out for unobserved
-  years.
 
 - Fixed ML model fitting error with nimble \>= 1.4.0 by using nimbleQuad
   for Laplace approximation
   ([\#88](https://github.com/poissonconsulting/bboutools/issues/88)).
-
-- [`bb_predict_growth()`](https://poissonconsulting.github.io/bboutools/reference/bb_predict_growth.md)
-  and
-  [`bb_predict_population_change()`](https://poissonconsulting.github.io/bboutools/reference/bb_predict_population_change.md)
-  now auto-filter to shared population and CaribouYear combinations
-  instead of erroring when survival and recruitment fits differ.
-
-- Fixed
-  [`bb_predict_population_change()`](https://poissonconsulting.github.io/bboutools/reference/bb_predict_population_change.md)
-  baseline row to use per-population minimum CaribouYear instead of
-  global minimum.
-
-- Fixed CaribouYear x-axis labels in `bb_plot_year_*()` and
-  `bb_plot_year_trend_*()` to avoid duplicate integer labels.
-
-- Added informative error when calling
-  [`tidy()`](https://generics.r-lib.org/reference/tidy.html),
-  [`coef()`](https://rdrr.io/r/stats/coef.html),
-  [`glance()`](https://generics.r-lib.org/reference/glance.html),
-  [`predict()`](https://rdrr.io/r/stats/predict.html), and other
-  downstream functions on a Bayesian fit with `niters = 0`
-  ([\#89](https://github.com/poissonconsulting/bboutools/issues/89)).
-
 - Added informative error when nimble is not attached to the search
   path, e.g., when using `bboutools::` instead of
   [`library(bboutools)`](https://github.com/poissonconsulting/bboutools)
