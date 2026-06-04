@@ -1,6 +1,7 @@
 # Getting Started with bboutools
 
 ``` r
+
 library(bboutools)
 library(bboudata)
 ```
@@ -37,6 +38,7 @@ Once R is installed, the `bboutools` package can be installed from
 GitHub by executing the following code at the R console
 
 ``` r
+
 install.packages("remotes")
 remotes::install_github("poissonconsulting/bboutools")
 ```
@@ -45,6 +47,7 @@ The `bboutools` package can then be loaded into the current session
 using
 
 ``` r
+
 library(bboutools)
 ```
 
@@ -74,6 +77,7 @@ checked to confirm it is in the correct format by using the `bboudata`
 functions:
 
 ``` r
+
 # Recruitment data
 bboudata::bbd_chk_data_recruitment(bboudata::bbourecruit_a)
 bboudata::bbourecruit_a
@@ -94,6 +98,7 @@ bboudata::bbourecruit_a
 ```
 
 ``` r
+
 # Survival data
 bboudata::bbd_chk_data_survival(bboudata::bbousurv_a)
 bboudata::bbousurv_a
@@ -126,6 +131,7 @@ for details.
 The `.csv` file can then be read into R using the following
 
 ``` r
+
 data <- read_csv(file = "path/to/file.csv")
 ```
 
@@ -179,6 +185,7 @@ The user can set `quiet = FALSE` argument to see messages and sampling
 progress.
 
 ``` r
+
 recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a, year_start = 4, year_trend = TRUE, quiet = TRUE)
 ```
 
@@ -188,6 +195,7 @@ Model convergence can be checked with the
 [`glance()`](https://generics.r-lib.org/reference/glance.html) function.
 
 ``` r
+
 glance(recruitment)
 #> Registered S3 method overwritten by 'mcmcr':
 #>   method         from 
@@ -236,6 +244,7 @@ The user can exclude individual random effect estimates from coefficient
 output.
 
 ``` r
+
 tidy(recruitment, include_random_effects = FALSE)
 #> # A tibble: 3 × 4
 #>   term    estimate  lower   upper
@@ -251,9 +260,9 @@ the fitting functions.
 
 ### Priors
 
-In general, weakly informative priors are used by default (Gelman,
-Simpson, and Betancourt 2017; McElreath 2016). The default prior
-distribution parameter values can be accessed from
+In general, weakly informative priors are used by default (Gelman et al.
+2017; McElreath 2016). The default prior distribution parameter values
+can be accessed from
 [`bb_priors_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.md)
 and
 [`bb_priors_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.md).
@@ -262,6 +271,7 @@ article](https://poissonconsulting.github.io/bboutools/articles/priors.html)
 for more information.
 
 ``` r
+
 bb_priors_recruitment()
 #>                         b0_mu                         b0_sd 
 #>                            -1                             5 
@@ -285,6 +295,7 @@ For example, less informative priors for `adult_female_proportion`
 follows.
 
 ``` r
+
 recruitment <- bb_fit_recruitment(bboudata::bbourecruit_a, priors = c(adult_female_proportion_alpha = 1, adult_female_proportion_beta = 1, b0_mu = 0, b0_sd = 5))
 ```
 
@@ -297,6 +308,7 @@ These functions return intercept priors based on the level of
 anthropogenic and fire disturbance.
 
 ``` r
+
 nat_priors <- bb_priors_recruitment_national(anthro = 50, fire_excl_anthro = 5)
 recruitment_nat <- bb_fit_recruitment(bboudata::bbourecruit_a, priors = nat_priors, quiet = TRUE)
 ```
@@ -337,10 +349,12 @@ sum of the certain mortalities and uncertain mortalities
 only certain mortalities are used to fit the model.
 
 ``` r
+
 survival <- bb_fit_survival(bboudata::bbousurv_a, year_start = 4, quiet = TRUE)
 ```
 
 ``` r
+
 tidy(survival, include_random_effects = FALSE)
 #> # A tibble: 4 × 4
 #>   term    estimate  lower upper
@@ -371,6 +385,7 @@ and is automatically extracted by predict functions.
 #### Recruitment by year
 
 ``` r
+
 predict_recruitment <- bb_predict_recruitment(recruitment, year = TRUE)
 bb_plot_year_recruitment(predict_recruitment)
 ```
@@ -380,6 +395,7 @@ bb_plot_year_recruitment(predict_recruitment)
 #### Recruitment for a ‘typical’ year
 
 ``` r
+
 predict_recruitment_1 <- bb_predict_recruitment(recruitment, year = FALSE)
 predict_recruitment_1
 #> # A tibble: 1 × 6
@@ -391,6 +407,7 @@ predict_recruitment_1
 #### Recruitment trend
 
 ``` r
+
 predict_recruitment_trend <- bb_predict_recruitment_trend(recruitment)
 bb_plot_year_trend_recruitment(predict_recruitment_trend)
 ```
@@ -400,6 +417,7 @@ bb_plot_year_trend_recruitment(predict_recruitment_trend)
 #### Survival by year for a ‘typical’ month
 
 ``` r
+
 predict_survival <- bb_predict_survival(survival, year = TRUE, month = FALSE)
 bb_plot_year_survival(predict_survival)
 ```
@@ -412,6 +430,7 @@ The estimates show annual survival, i.e., if that month lasted the
 duration of the year.
 
 ``` r
+
 predict_survival_month <- bb_predict_survival(survival, year = FALSE, month = TRUE)
 bb_plot_month_survival(predict_survival_month)
 ```
@@ -434,6 +453,7 @@ methods
 article](https://poissonconsulting.github.io/bboutools/articles/methods.html).
 
 ``` r
+
 predict_lambda <- bb_predict_growth(survival = survival, recruitment = recruitment)
 #> Filtering to shared population and year combinations. CaribouYears in survival only: 1985, 1986, 1987, 1988, 2016.
 
@@ -449,6 +469,7 @@ Population change (%) is calculated with uncertainty as the cumulative
 product of population growth.
 
 ``` r
+
 predict_change <- bb_predict_population_change(survival = survival, recruitment = recruitment)
 #> Filtering to shared population and year combinations. CaribouYears in survival only: 1985, 1986, 1987, 1988, 2016.
 bb_plot_year_population_change(predict_change)
@@ -464,12 +485,14 @@ simultaneously. The function
 auto-detects multiple populations from the `PopulationName` column.
 
 ``` r
+
 survival_multi <- bb_fit_survival(bboudata::bbousurv_multi, allow_missing = TRUE, quiet = TRUE)
 ```
 
 Prediction plots are automatically faceted by population.
 
 ``` r
+
 pred_multi <- bb_predict_survival(survival_multi)
 bb_plot_year_survival(pred_multi)
 ```
@@ -501,10 +524,12 @@ fits, generic functions (e.g.,
 on ML fit objects (class ‘bboufit_ml’).
 
 ``` r
+
 recruitment_ml <- bb_fit_recruitment_ml(bboudata::bbourecruit_a, year_start = 4, year_trend = TRUE, quiet = TRUE)
 ```
 
 ``` r
+
 glance(recruitment_ml)
 #> # A tibble: 1 × 4
 #>       n     K loglik converged
@@ -513,6 +538,7 @@ glance(recruitment_ml)
 ```
 
 ``` r
+
 survival_ml <- bb_fit_survival_ml(bboudata::bbousurv_a, year_start = 4, quiet = TRUE)
 ```
 
@@ -522,6 +548,7 @@ Bayesian models with uninformative (e.g., uniform) priors (McElreath
 2016).
 
 ``` r
+
 tidy(recruitment_ml, include_random_effects = FALSE)
 #> # A tibble: 29 × 4
 #>    term          estimate lower upper
@@ -540,6 +567,7 @@ tidy(recruitment_ml, include_random_effects = FALSE)
 ```
 
 ``` r
+
 tidy(survival_ml, include_random_effects = FALSE)
 #> # A tibble: 4 × 4
 #>   term     estimate  lower upper
@@ -556,6 +584,7 @@ to get confidence intervals on predictions. This is a more
 straightforward task with Bayesian models.
 
 ``` r
+
 bb_predict_survival(survival_ml)
 #> # A tibble: 32 × 6
 #>    PopulationName CaribouYear Month estimate lower upper
@@ -574,6 +603,7 @@ bb_predict_survival(survival_ml)
 ```
 
 ``` r
+
 growth <- bb_predict_growth(survival_ml, recruitment_ml)
 #> Filtering to shared population and year combinations. CaribouYears in survival only: 1985, 1986, 1987, 1988, 2016.
 bb_plot_year_growth(growth)
@@ -596,6 +626,7 @@ used for parameters in the Bayesian models. The user can replace initial
 values for parameters using `inits`.
 
 ``` r
+
 inits_ml <- bb_fit_recruitment_ml(bboudata::bbourecruit_a, inits = c(b0 = 1, sAnnual = 0.3))
 ```
 
@@ -660,30 +691,29 @@ Gelman, Andrew, Daniel Simpson, and Michael Betancourt. 2017. “The Prior
 Can Often Only Be Understood in the Context of the Likelihood.”
 *Entropy* 19 (10). <https://doi.org/10.3390/e19100555>.
 
-Johnson, C. A., G. D. Sutherland, E. Neave, M. Leblond, P. Kirby, C.
-Superbie, and P. D. McLoughlin. 2020. “Science to Inform Policy: Linking
-Population Dynamics to Habitat for a Threatened Species in Canada.”
-*Journal of Applied Ecology* 57 (7): 1314–27.
+Johnson, C. A., G. D. Sutherland, E. Neave, et al. 2020. “Science to
+Inform Policy: Linking Population Dynamics to Habitat for a Threatened
+Species in Canada.” *Journal of Applied Ecology* 57 (7): 1314–27.
 <https://doi.org/10.1111/1365-2664.13637>.
 
 Kery, Marc, and Michael Schaub. 2011. *Bayesian Population Analysis
-Using WinBUGS : A Hierarchical Perspective*. Boston: Academic Press.
+Using WinBUGS : A Hierarchical Perspective*. Academic Press.
 [http://www.vogelwarte.ch/bpa.html](http://www.vogelwarte.ch/bpa.md).
 
 McElreath, Richard. 2016. *Statistical Rethinking: A Bayesian Course
 with Examples in R and Stan*. Chapman & Hall/CRC Texts in Statistical
-Science Series 122. Boca Raton: CRC Press/Taylor & Francis Group.
+Science Series 122. CRC Press/Taylor & Francis Group.
 
 R Core Team. 2023. *R: A Language and Environment for Statistical
-Computing*. Vienna, Austria: R Foundation for Statistical Computing.
+Computing*. R Foundation for Statistical Computing.
 <https://www.R-project.org/>.
 
-Smith, Kirby Gordon. 2004. “Woodland Caribou Demography and Persistence
-Relative to Landscape Change in West-Central Alberta.” 125.
+Smith, Kirby Gordon. 2004. *Woodland Caribou Demography and Persistence
+Relative to Landscape Change in West-Central Alberta.* 125.
 
 Wickham, Hadley. 2016. *ggplot2: Elegant Graphics for Data Analysis*.
 Springer-Verlag New York. <https://ggplot2.tidyverse.org>.
 
 Wickham, Hadley, and Garrett Grolemund. 2016. *R for Data Science:
 Import, Tidy, Transform, Visualize, and Model Data*. First edition.
-Sebastopol, CA: O’Reilly. <https://r4ds.had.co.nz>.
+O’Reilly. <https://r4ds.had.co.nz>.

@@ -1,6 +1,7 @@
 # Multi-Population Analysis and Other Extensions
 
 ``` r
+
 library(bboutools)
 library(dplyr)
 library(ggplot2)
@@ -24,6 +25,7 @@ Multi-population data has the same columns as single-population data,
 with different values in `PopulationName`.
 
 ``` r
+
 surv_multi <- bboudata::bbousurv_multi[!is.na(bboudata::bbousurv_multi$Month), ]
 head(surv_multi)
 #> # A tibble: 6 × 6
@@ -40,6 +42,7 @@ head(surv_multi)
 Populations can have different year ranges.
 
 ``` r
+
 surv_multi |>
   group_by(PopulationName) |>
   summarise(min_year = min(Year), max_year = max(Year))
@@ -59,6 +62,7 @@ detects multiple populations and fits a single model with
 population-indexed parameters.
 
 ``` r
+
 set.seed(101)
 survival_multi <- bb_fit_survival(surv_multi, quiet = TRUE)
 ```
@@ -70,6 +74,7 @@ estimated for each population. The standard deviations `sAnnual` and
 `sMonth` are shared across populations.
 
 ``` r
+
 tidy(survival_multi, include_random_effects = FALSE)
 #> # A tibble: 8 × 4
 #>   term     estimate lower upper
@@ -90,6 +95,7 @@ Prediction and plot functions work as with single-population models.
 Plots are automatically faceted by `PopulationName`.
 
 ``` r
+
 pred_multi <- bb_predict_survival(survival_multi)
 bb_plot_year_survival(pred_multi)
 ```
@@ -100,12 +106,14 @@ The default faceting can be overridden since all plot functions return
 `ggplot2` objects.
 
 ``` r
+
 bb_plot_year_survival(pred_multi) + facet_wrap(~PopulationName, ncol = 3)
 ```
 
 The recruitment model supports the same multi-population structure.
 
 ``` r
+
 rec_multi <- bboudata::bbourecruit_multi[
   !is.na(bboudata::bbourecruit_multi$Month),
 ]
@@ -114,6 +122,7 @@ recruitment_multi <- bb_fit_recruitment(rec_multi, quiet = TRUE)
 ```
 
 ``` r
+
 pred_rec_multi <- bb_predict_recruitment(recruitment_multi)
 bb_plot_year_recruitment(pred_rec_multi)
 ```
@@ -138,6 +147,7 @@ Annual survival data uses the same columns as monthly data. Set `Month`
 to the `year_start` value (default `4L` for April).
 
 ``` r
+
 surv_annual <- bboudata::bbousurv_annual
 surv_annual_c <- surv_annual[surv_annual$PopulationName == "C", ]
 head(surv_annual_c)
@@ -158,6 +168,7 @@ Annual data is auto-detected from the input. No special argument is
 needed.
 
 ``` r
+
 set.seed(101)
 survival_annual <- bb_fit_survival(surv_annual_c, quiet = TRUE)
 ```
@@ -173,6 +184,7 @@ The function
 works as normal for annual fits.
 
 ``` r
+
 bb_predict_survival(survival_annual)
 #> # A tibble: 9 × 6
 #>   PopulationName CaribouYear Month estimate lower upper
@@ -205,6 +217,7 @@ A placeholder row has `PopulationName` and `Year` filled in, with all
 measurement columns set to `NA_integer_`.
 
 ``` r
+
 surv_missing <- bboudata::bbousurv_missing
 head(surv_missing)
 #> # A tibble: 6 × 6
@@ -219,6 +232,7 @@ head(surv_missing)
 ```
 
 ``` r
+
 # Placeholder rows have NA in the Month column
 surv_missing[is.na(surv_missing$Month), ]
 #> # A tibble: 4 × 6
@@ -233,6 +247,7 @@ surv_missing[is.na(surv_missing$Month), ]
 ### Fitting
 
 ``` r
+
 set.seed(101)
 survival_missing <- bb_fit_survival(
   surv_missing,
@@ -251,6 +266,7 @@ wider credible intervals than observed years where the data constrains
 the year effect.
 
 ``` r
+
 pred_missing <- bb_predict_survival(survival_missing)
 bb_plot_year_survival(pred_missing)
 ```
@@ -275,6 +291,7 @@ Provide a data frame where `PopulationName` and `Year` are filled in but
 all measurement columns are `NA`. Set `allow_missing = TRUE`.
 
 ``` r
+
 # Build placeholder data
 recruit_prior <- data.frame(
   PopulationName = "A",
@@ -326,11 +343,13 @@ and recruitment fits cover different ranges. An informative message
 reports what was excluded.
 
 ``` r
+
 growth <- bb_predict_growth(survival_multi, recruitment_multi)
 #> Filtering to shared population and year combinations. CaribouYears in survival only: 2000, 2001.
 ```
 
 ``` r
+
 bb_plot_year_growth(growth)
 ```
 
@@ -346,6 +365,7 @@ counterparts that return raw MCMC samples instead of summarized
 estimates. These are useful for custom uncertainty analyses.
 
 ``` r
+
 x <- bb_predict_survival_samples(survival_annual)
 names(x)
 #> [1] "samples" "data"

@@ -260,19 +260,18 @@ David Hervieux, and Lalenia Neufeld. 2012. “Estimating Ungulate
 Recruitment and Growth Rates Using Age Ratios.” *The Journal of Wildlife
 Management* 76 (1): 144–53. <https://doi.org/10.1002/jwmg.244>.
 
-Hatter, Ian, and Wendy Bergerud. 1991. “Moose Recuriment Adult Mortality
-and Rate of Change” 27: 65–73.
+Hatter, Ian, and Wendy Bergerud. 1991. *Moose Recuriment Adult Mortality
+and Rate of Change*. 27: 65–73.
 
 Kery, Marc, and Michael Schaub. 2011. *Bayesian Population Analysis
-Using WinBUGS : A Hierarchical Perspective*. Boston: Academic Press.
+Using WinBUGS : A Hierarchical Perspective*. Academic Press.
 [http://www.vogelwarte.ch/bpa.html](http://www.vogelwarte.ch/bpa.md).
 
-Lamb, Clayton T., Sara Williams, Stan Boutin, Michael Bridger, Deborah
-Cichowski, Kristina Cornhill, Craig DeMars, et al. 2024. “Effectiveness
-of Population-Based Recovery Actions for Threatened Southern Mountain
-Caribou.” *Ecological Applications* 34 (4): e2965.
+Lamb, Clayton T., Sara Williams, Stan Boutin, et al. 2024.
+“Effectiveness of Population-Based Recovery Actions for Threatened
+Southern Mountain Caribou.” *Ecological Applications* 34 (4): e2965.
 https://doi.org/<https://doi.org/10.1002/eap.2965>.
 
 McElreath, Richard. 2016. *Statistical Rethinking: A Bayesian Course
 with Examples in R and Stan*. Chapman & Hall/CRC Texts in Statistical
-Science Series 122. Boca Raton: CRC Press/Taylor & Francis Group.
+Science Series 122. CRC Press/Taylor & Francis Group.

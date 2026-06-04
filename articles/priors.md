@@ -14,8 +14,8 @@ Priors range from uninformative (assigning equal probability to all
 values) to strongly informative (concentrating probability near a
 specific value). `bboutools` uses weakly informative priors by default,
 which rule out biologically implausible values but remain diffuse enough
-to let the data drive the estimates (Gelman, Simpson, and Betancourt
-2017; McElreath 2016).
+to let the data drive the estimates (Gelman et al. 2017; McElreath
+2016).
 
 If the user is interested in fitting models without priors, see
 [`bb_fit_recruitment_ml()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment_ml.md)
@@ -84,6 +84,7 @@ examples below illustrate how tightening or relaxing priors affects
 parameter estimates relative to the Maximum Likelihood baseline.
 
 ``` r
+
 library(bboutools)
 library(dplyr)
 library(ggplot2)
@@ -98,6 +99,7 @@ from priors centered on high (80%) and low (35%) adult female
 proportions, along with the default and maximum likelihood estimates.
 
 ``` r
+
 set.seed(1)
 data <- bboudata::bbourecruit_a |>
   filter(Year >= 2005, Year <= 2010) |>
@@ -170,6 +172,7 @@ survival corresponds to a monthly survival of approximately 0.85^{1/12}
 the data to shift the estimate.
 
 ``` r
+
 set.seed(1)
 data <- bboudata::bbousurv_c
 
@@ -220,6 +223,7 @@ and
 [`bb_priors_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.md).
 
 ``` r
+
 nat_priors <- bb_priors_survival_national(anthro = 50, fire_excl_anthro = 5)
 nat_priors
 #>     b0_mu     b0_sd 
@@ -230,6 +234,7 @@ For aggregate annual survival data, the `annual = TRUE` option returns
 priors on the annual survival scale.
 
 ``` r
+
 nat_priors_annual <- bb_priors_survival_national(
   anthro = 50,
   fire_excl_anthro = 5,
@@ -244,6 +249,7 @@ As an example, we compare survival estimates from the default priors and
 national disturbance-informed priors.
 
 ``` r
+
 set.seed(1)
 data <- bboudata::bbousurv_c
 
@@ -295,12 +301,11 @@ Gelman, Andrew, Daniel Simpson, and Michael Betancourt. 2017. “The Prior
 Can Often Only Be Understood in the Context of the Likelihood.”
 *Entropy* 19 (10). <https://doi.org/10.3390/e19100555>.
 
-Johnson, C. A., G. D. Sutherland, E. Neave, M. Leblond, P. Kirby, C.
-Superbie, and P. D. McLoughlin. 2020. “Science to Inform Policy: Linking
-Population Dynamics to Habitat for a Threatened Species in Canada.”
-*Journal of Applied Ecology* 57 (7): 1314–27.
+Johnson, C. A., G. D. Sutherland, E. Neave, et al. 2020. “Science to
+Inform Policy: Linking Population Dynamics to Habitat for a Threatened
+Species in Canada.” *Journal of Applied Ecology* 57 (7): 1314–27.
 <https://doi.org/10.1111/1365-2664.13637>.
 
 McElreath, Richard. 2016. *Statistical Rethinking: A Bayesian Course
 with Examples in R and Stan*. Chapman & Hall/CRC Texts in Statistical
-Science Series 122. Boca Raton: CRC Press/Taylor & Francis Group.
+Science Series 122. CRC Press/Taylor & Francis Group.
