@@ -14,7 +14,7 @@
 
 - **[Ayla
   Pearson](https://www.poissonconsulting.ca/author/ayla-pearson/)**.
-  Author.
+  Author. [](https://orcid.org/0000-0001-7388-1222)
 
 - **Josie Hughes**. Contributor.  
   Multi-population and other extensions based on
