@@ -1,3 +1,15 @@
+<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
+
+# bboutools 1.3.0.9000
+
+* Add fledge-bump workflow
+* Add fledge-tag-on-merge workflow
+- Adding nimbleQuad to Depends so it is attached on load
+- Using nimbleQuad::buildLaplace via getExportedValue
+- Compiling the Laplace object in globalenv context so nimbleQuad
+- Patching transformed-scale summary names from the original-scale
+
+
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
 # bboutools 1.3.0
