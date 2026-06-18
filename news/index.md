@@ -1,5 +1,14 @@
 # Changelog
 
+## bboutools 1.3.0.9000
+
+- Add fledge-bump workflow
+- Add fledge-tag-on-merge workflow
+- Adding nimbleQuad to Depends so it is attached on load
+- Using nimbleQuad::buildLaplace via getExportedValue
+- Compiling the Laplace object in globalenv context so nimbleQuad
+- Patching transformed-scale summary names from the original-scale
+
 ## bboutools 1.3.0
 
 ### Breaking changes

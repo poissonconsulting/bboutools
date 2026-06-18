@@ -29,12 +29,12 @@ Source:
 
 Dalgarno S, Thorley J, Boulanger J, Pearson A (2026). *bboutools: Boreal
 Caribou Survival, Recruitment and Population Growth*. R package version
-1.3.0, <https://github.com/poissonconsulting/bboutools>.
+1.3.0.9000, <https://github.com/poissonconsulting/bboutools>.
 
     @Manual{,
       title = {bboutools: Boreal Caribou Survival, Recruitment and Population Growth},
       author = {Seb Dalgarno and Joe Thorley and John Boulanger and Ayla Pearson},
       year = {2026},
-      note = {R package version 1.3.0},
+      note = {R package version 1.3.0.9000},
       url = {https://github.com/poissonconsulting/bboutools},
     }
