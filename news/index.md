@@ -1,5 +1,9 @@
 # Changelog
 
+## bboutools 1.3.0.9004
+
+- Same as previous version.
+
 ## bboutools 1.3.0.9003
 
 - Same as previous version.
