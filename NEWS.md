@@ -1,4 +1,9 @@
-<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
+<!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
+
+# bboutools 1.3.0.9004
+
+- Same as previous version.
+
 
 # bboutools 1.3.0.9003
 
